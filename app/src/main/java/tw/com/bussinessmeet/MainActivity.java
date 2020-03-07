@@ -46,95 +46,95 @@ public class MainActivity extends AppCompatActivity /*implements ThematicListAda
 //    private List<DeviceItem> deviceItems ;
 //    private ThematicListAdapter thematicListAdapter;
     private BluetoothAdapter mBluetoothAdapter;
-    Handler mBLHandler = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            super.handleMessage(msg);
-            switch (msg.what) {
-                case 1:
-                    available.setText("");
-
-                    matchedDevices();
-                    scanBluth();
-                    break;
-                default:
-                    break;
-            }
-        }
-    };
-    private final BroadcastReceiver receiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            // 收到的廣播型別
-            String action = intent.getAction();
-
-            if (BluetoothDevice.ACTION_FOUND.equals(action)) {
-                // 從intent中獲取裝置
-
-                BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
-
-                String aa = "";
-
-
-//                for(int i = 0; i < deviceItems.size(); i++) {
-////                    matched = recyclerViewThrmatic.findViewHolderForAdapterPosition(i).itemView.findViewById(R.id.matched);
-//                    if(matched.getText() !=null) {
-//                        aa = matched.getText().toString();
-//                        break;
+//    Handler mBLHandler = new Handler() {
+//        @Override
+//        public void handleMessage(Message msg) {
+//            super.handleMessage(msg);
+//            switch (msg.what) {
+//                case 1:
+//                    available.setText("");
 //
+//                    matchedDevices();
+//                    scanBluth();
+//                    break;
+//                default:
+//                    break;
+//            }
+//        }
+//    };
+//    private final BroadcastReceiver receiver = new BroadcastReceiver() {
+//        @Override
+//        public void onReceive(Context context, Intent intent) {
+//            // 收到的廣播型別
+//            String action = intent.getAction();
+//
+//            if (BluetoothDevice.ACTION_FOUND.equals(action)) {
+//                // 從intent中獲取裝置
+//
+//                BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
+//
+//                String aa = "";
+//
+//
+////                for(int i = 0; i < deviceItems.size(); i++) {
+//////                    matched = recyclerViewThrmatic.findViewHolderForAdapterPosition(i).itemView.findViewById(R.id.matched);
+////                    if(matched.getText() !=null) {
+////                        aa = matched.getText().toString();
+////                        break;
+////
+////                    }
+////                }
+//
+//                if (aa.contains(device.getAddress())) {
+//                    return;
+//                } else {
+//                    // 判斷是否配對過
+////                    Log.d(TAG,device.getName());
+//                    if (device.getBondState() != BluetoothDevice.BOND_BONDED) {
+//
+//                        // 新增到列表
+//                        short rssi = intent.getExtras().getShort(BluetoothDevice.EXTRA_RSSI);
+//                        int iRssi = abs(rssi);
+//                        // 將藍芽訊號強度換算為距離
+//                        double power = (iRssi - 59) / 25.0;
+//                        String mm = new Formatter().format("%.2f", pow(10, power)).toString();
+////                        DeviceItem deviceItem = new DeviceItem();
+//
+////                        deviceItem.setDeviceAddress(device.getAddress());
+////                        if(device.getName()==null){
+////                            deviceItem.setDeviceStatus("連線後獲取該裝置名稱");
+////                        }else{
+////                            deviceItem.setDeviceName(device.getName());
+////                        }
+////                        deviceItems.add(deviceItem);
+//                        available.append(device.getName() + " - " + device.getAddress() + " - " + mm + "m" +device.getBluetoothClass()+"\n");
 //                    }
 //                }
-
-                if (aa.contains(device.getAddress())) {
-                    return;
-                } else {
-                    // 判斷是否配對過
-//                    Log.d(TAG,device.getName());
-                    if (device.getBondState() != BluetoothDevice.BOND_BONDED) {
-
-                        // 新增到列表
-                        short rssi = intent.getExtras().getShort(BluetoothDevice.EXTRA_RSSI);
-                        int iRssi = abs(rssi);
-                        // 將藍芽訊號強度換算為距離
-                        double power = (iRssi - 59) / 25.0;
-                        String mm = new Formatter().format("%.2f", pow(10, power)).toString();
-//                        DeviceItem deviceItem = new DeviceItem();
-
-//                        deviceItem.setDeviceAddress(device.getAddress());
-//                        if(device.getName()==null){
-//                            deviceItem.setDeviceStatus("連線後獲取該裝置名稱");
-//                        }else{
-//                            deviceItem.setDeviceName(device.getName());
-//                        }
-//                        deviceItems.add(deviceItem);
-                        available.append(device.getName() + " - " + device.getAddress() + " - " + mm + "m" +device.getBluetoothClass()+"\n");
-                    }
-                }
-            } else if (BluetoothAdapter.ACTION_DISCOVERY_FINISHED.equals(action)) {
-                // 關閉進度條
-                setProgressBarIndeterminateVisibility(true);
-                setTitle("搜尋完成！");
-//                Log.d("MainActivity",String.valueOf(deviceItems.size()));
-//                createRecyclerViewWeather();
-                // 用於迴圈掃描藍芽的handler
-                mBLHandler.sendEmptyMessageDelayed(1, 10000);
-            }else if(BluetoothAdapter.ACTION_STATE_CHANGED.equals(action)){
-                int state = intent.getIntExtra(BluetoothAdapter.EXTRA_STATE, -1);
-                switch (state) {
-                    case BluetoothAdapter.STATE_TURNING_ON:
-                        break;
-                    case BluetoothAdapter.STATE_ON:
-                        scanBluth();
-                        break;
-                    case BluetoothAdapter.STATE_TURNING_OFF:
-                        break;
-                    case BluetoothAdapter.STATE_OFF:
-                        bluetooth(MainActivity.this);
-                        break;
-                }
-            }
-        }
-    };
+//            } else if (BluetoothAdapter.ACTION_DISCOVERY_FINISHED.equals(action)) {
+//                // 關閉進度條
+//                setProgressBarIndeterminateVisibility(true);
+//                setTitle("搜尋完成！");
+////                Log.d("MainActivity",String.valueOf(deviceItems.size()));
+////                createRecyclerViewWeather();
+//                // 用於迴圈掃描藍芽的handler
+//                mBLHandler.sendEmptyMessageDelayed(1, 10000);
+//            }else if(BluetoothAdapter.ACTION_STATE_CHANGED.equals(action)){
+//                int state = intent.getIntExtra(BluetoothAdapter.EXTRA_STATE, -1);
+//                switch (state) {
+//                    case BluetoothAdapter.STATE_TURNING_ON:
+//                        break;
+//                    case BluetoothAdapter.STATE_ON:
+//                        scanBluth();
+//                        break;
+//                    case BluetoothAdapter.STATE_TURNING_OFF:
+//                        break;
+//                    case BluetoothAdapter.STATE_OFF:
+//                        bluetooth(MainActivity.this);
+//                        break;
+//                }
+//            }
+//        }
+//    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -149,40 +149,55 @@ public class MainActivity extends AppCompatActivity /*implements ThematicListAda
 //        tvDevices.append("測試測試~~\n");
         mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         available.setText("");
-        if (mBluetoothAdapter == null) {
-            //裝置不支援藍芽
-            Toast.makeText(this, "裝置不支援藍芽", Toast.LENGTH_SHORT).show();
-            finish();
-        } else{
 
-            IntentFilter filter = new IntentFilter();
-            filter.addAction(BluetoothDevice.ACTION_FOUND);
-            filter.addAction(BluetoothAdapter.ACTION_DISCOVERY_STARTED);
-            filter.addAction(BluetoothAdapter.ACTION_DISCOVERY_FINISHED);
-            filter.addAction(BluetoothAdapter.ACTION_STATE_CHANGED);
-
-            registerReceiver(receiver, filter);
-
-
-
-
-//            while(!isGpsEnable(this) && !mBluetoothAdapter.isEnabled()){
-            if (isGpsEnable(this)) {
-                openGPS(this);
+        new Thread() {
+            public void run() {
+                try {
+                    ConnectDataBase connectDataBase = new ConnectDataBase();
+                    connectDataBase.connect();   //上傳調用
+                } catch (Exception e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
             }
-            if (!mBluetoothAdapter.isEnabled()) {
-                bluetooth(this);
-//                Intent intent = new Intent(BluetoothAdapter.ACTION_REQUEST_DISCOVERABLE);
-//                   intent.putExtra(BluetoothAdapter.EXTRA_DISCOVERABLE_DURATION, 200);
-//        startActivityForResult(intent, 2);
-                ActivityCompat.requestPermissions( this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 3 );
-            } else {
-                mBluetoothAdapter.enable();
-            }
+            // delete(8);                        //刪除調用
+           //  update("ca","ca",1);            //修改調用
+        }.start();
+
+//        if (mBluetoothAdapter == null) {
+//            //裝置不支援藍芽
+//            Toast.makeText(this, "裝置不支援藍芽", Toast.LENGTH_SHORT).show();
+//            finish();
+//        } else{
+//
+//            IntentFilter filter = new IntentFilter();
+//            filter.addAction(BluetoothDevice.ACTION_FOUND);
+//            filter.addAction(BluetoothAdapter.ACTION_DISCOVERY_STARTED);
+//            filter.addAction(BluetoothAdapter.ACTION_DISCOVERY_FINISHED);
+//            filter.addAction(BluetoothAdapter.ACTION_STATE_CHANGED);
+//
+//            registerReceiver(receiver, filter);
+//
+//
+//
+//
+////            while(!isGpsEnable(this) && !mBluetoothAdapter.isEnabled()){
+//            if (isGpsEnable(this)) {
+//                openGPS(this);
 //            }
-            matchedDevices();
-            scanBluth();
-        }
+//            if (!mBluetoothAdapter.isEnabled()) {
+//                bluetooth(this);
+////                Intent intent = new Intent(BluetoothAdapter.ACTION_REQUEST_DISCOVERABLE);
+////                   intent.putExtra(BluetoothAdapter.EXTRA_DISCOVERABLE_DURATION, 200);
+////        startActivityForResult(intent, 2);
+//                ActivityCompat.requestPermissions( this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 3 );
+//            } else {
+//                mBluetoothAdapter.enable();
+//            }
+////            }
+//            matchedDevices();
+//            scanBluth();
+//        }
 
 
     }
@@ -202,10 +217,10 @@ public class MainActivity extends AppCompatActivity /*implements ThematicListAda
 
         mBluetoothAdapter.startDiscovery();
     }
-    @Override
-    protected void onDestroy() {
-        unregisterReceiver(receiver); super.onDestroy();
-    }
+//    @Override
+//    protected void onDestroy() {
+////        unregisterReceiver(receiver); super.onDestroy();
+//    }
     public static final boolean isGpsEnable(final Context context) {
         LocationManager locationManager
                 = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
