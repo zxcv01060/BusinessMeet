@@ -139,17 +139,17 @@ public class MainActivity extends AppCompatActivity /*implements ThematicListAda
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.add_introduction);
 //        recyclerViewThrmatic = (RecyclerView) findViewById(R.id.recycleViewThematic);
 //        deviceItems = new ArrayList<>();
         Log.d("MainActivity","success");
 //        tvDevices = (TextView) findViewById(R.id.tvDecives);
 //        matched = (TextView) findViewById(R.id.matched);
-        available = (TextView) findViewById(R.id.available) ;
+     /*   available = (TextView) findViewById(R.id.available) ;
 //        tvDevices.append("測試測試~~\n");
         mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-        available.setText("");
-        if (mBluetoothAdapter == null) {
+        available.setText("");*/
+     /*   if (mBluetoothAdapter == null) {
             //裝置不支援藍芽
             Toast.makeText(this, "裝置不支援藍芽", Toast.LENGTH_SHORT).show();
             finish();
@@ -182,7 +182,7 @@ public class MainActivity extends AppCompatActivity /*implements ThematicListAda
 //            }
             matchedDevices();
             scanBluth();
-        }
+        }*/
 
 
     }
