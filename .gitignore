@@ -1,4 +1,3 @@
-
-.idea/
-
-.gradle/
+﻿.gradle
+.idea
+*.iml
