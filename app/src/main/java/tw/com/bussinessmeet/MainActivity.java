@@ -151,21 +151,21 @@ public class MainActivity extends AppCompatActivity /*implements ThematicListAda
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.self_introduction);
+        setContentView(R.layout.add_introduction);
 //        recyclerViewThrmatic = (RecyclerView) findViewById(R.id.recycleViewThematic);
 //        deviceItems = new ArrayList<>();
         Log.d("MainActivity","success");
 //        tvDevices = (TextView) findViewById(R.id.tvDecives);
-////        matched = (TextView) findViewById(R.id.matched);
-//        available = (TextView) findViewById(R.id.available) ;
-////        mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-//        available.setText("");
-        confirm = (Button)findViewById(R.id.confirm_introduction);
-        position = (TextView)findViewById(R.id.position);
-        company = (TextView)findViewById(R.id.company);
-        userName = (TextView) findViewById(R.id.user_name);
-        openDB();
-        confirm.setOnClickListener(confirmClick);
+//        matched = (TextView) findViewById(R.id.matched);
+     /*   available = (TextView) findViewById(R.id.available) ;
+//        tvDevices.append("測試測試~~\n");
+        mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+        available.setText("");*/
+     /*   if (mBluetoothAdapter == null) {
+            //裝置不支援藍芽
+            Toast.makeText(this, "裝置不支援藍芽", Toast.LENGTH_SHORT).show();
+            finish();
+        } else{
 
 //        if (mBluetoothAdapter == null) {
 //            //裝置不支援藍芽
@@ -188,19 +188,9 @@ public class MainActivity extends AppCompatActivity /*implements ThematicListAda
 //            if (isGpsEnable(this)) {
 //                openGPS(this);
 //            }
-//            if (!mBluetoothAdapter.isEnabled()) {
-//                bluetooth(this);
-////                Intent intent = new Intent(BluetoothAdapter.ACTION_REQUEST_DISCOVERABLE);
-////                   intent.putExtra(BluetoothAdapter.EXTRA_DISCOVERABLE_DURATION, 200);
-////        startActivityForResult(intent, 2);
-//                ActivityCompat.requestPermissions( this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 3 );
-//            } else {
-//                mBluetoothAdapter.enable();
-//            }
-////            }
-//            matchedDevices();
-//            scanBluth();
-//        }
+            matchedDevices();
+            scanBluth();
+        }*/
 
 
     }
