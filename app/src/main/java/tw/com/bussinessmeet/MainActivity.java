@@ -139,16 +139,21 @@ public class MainActivity extends AppCompatActivity /*implements ThematicListAda
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.add_introduction);
 //        recyclerViewThrmatic = (RecyclerView) findViewById(R.id.recycleViewThematic);
 //        deviceItems = new ArrayList<>();
         Log.d("MainActivity","success");
 //        tvDevices = (TextView) findViewById(R.id.tvDecives);
 //        matched = (TextView) findViewById(R.id.matched);
-        available = (TextView) findViewById(R.id.available) ;
+     /*   available = (TextView) findViewById(R.id.available) ;
 //        tvDevices.append("測試測試~~\n");
         mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-        available.setText("");
+        available.setText("");*/
+     /*   if (mBluetoothAdapter == null) {
+            //裝置不支援藍芽
+            Toast.makeText(this, "裝置不支援藍芽", Toast.LENGTH_SHORT).show();
+            finish();
+        } else{
 
         new Thread() {
             public void run() {
@@ -185,19 +190,9 @@ public class MainActivity extends AppCompatActivity /*implements ThematicListAda
 //            if (isGpsEnable(this)) {
 //                openGPS(this);
 //            }
-//            if (!mBluetoothAdapter.isEnabled()) {
-//                bluetooth(this);
-////                Intent intent = new Intent(BluetoothAdapter.ACTION_REQUEST_DISCOVERABLE);
-////                   intent.putExtra(BluetoothAdapter.EXTRA_DISCOVERABLE_DURATION, 200);
-////        startActivityForResult(intent, 2);
-//                ActivityCompat.requestPermissions( this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 3 );
-//            } else {
-//                mBluetoothAdapter.enable();
-//            }
-////            }
-//            matchedDevices();
-//            scanBluth();
-//        }
+            matchedDevices();
+            scanBluth();
+        }*/
 
 
     }
