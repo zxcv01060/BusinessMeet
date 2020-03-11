@@ -101,6 +101,8 @@ public class MainActivity extends AppCompatActivity /*implements ThematicListAda
             ufb.setCompany(company.getText().toString());
             ufb.setPosition(position.getText().toString());
             ufb.setUserName(userName.getText().toString());
+            ufb.setEmail(email.getText().toString());
+            ufb.setTel(tel.getText().toString());
             ufb.setAvatar("1");
             Log.d("add",DH.toString());
             Log.d("add",ufb.getCompany());
