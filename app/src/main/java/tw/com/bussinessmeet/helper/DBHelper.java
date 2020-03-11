@@ -25,6 +25,8 @@ public class DBHelper extends SQLiteOpenHelper {
                         "user_name NVARCHAR(100) NOT NULL, " +
                         "company NVARCHAR(100) NOT NULL, " +
                         "position NVARCHAR(100), " +
+                        "email VARCHAR(100))," +
+                        "tel INT" +
                         "avatar NVARCHAR(1000)" +
                     ");";
         SQL += "CREATE TABLE IF NOT EXISTS" + _TableName[1] + "( " +

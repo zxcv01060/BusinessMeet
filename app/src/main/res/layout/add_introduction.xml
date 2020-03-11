@@ -40,7 +40,7 @@
         tools:ignore="MissingConstraints" />
 
     <EditText
-        android:id="@+id/add_profile_compan"
+        android:id="@+id/add_profile_company"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="99dp"
@@ -69,7 +69,7 @@
         android:text="職位"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/add_profile_compan" />
+        app:layout_constraintTop_toBottomOf="@+id/add_profile_company" />
 
     <EditText
         android:id="@+id/add_profile_email"
@@ -88,7 +88,7 @@
         app:layout_constraintTop_toBottomOf="@+id/add_profile_position" />
 
     <EditText
-        android:id="@+id/editText5"
+        android:id="@+id/add_profile_tel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="99dp"
@@ -104,7 +104,7 @@
         app:layout_constraintTop_toBottomOf="@+id/add_profile_email" />
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/confirm_introduction"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="40dp"
@@ -115,7 +115,7 @@
         android:textStyle="bold"
         android:textColor="#ffffff"
         android:textSize="14sp"
-        app:layout_constraintTop_toBottomOf="@+id/editText5"
+        app:layout_constraintTop_toBottomOf="@+id/add_profile_tel"
         tools:ignore="MissingConstraints"
         tools:layout_editor_absoluteX="121dp" />
 
