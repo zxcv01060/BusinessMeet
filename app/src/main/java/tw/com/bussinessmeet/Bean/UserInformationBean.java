@@ -6,6 +6,8 @@ public class UserInformationBean {
     private String company;
     private String position;
     private String avatar;
+    private  String email;
+    private  String tel;
     public String getBlueTooth() {
         return blueTooth;
     }
@@ -44,5 +46,21 @@ public class UserInformationBean {
 
     public void setAvatar(String avatar) {
         this.avatar = avatar;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getTel() {
+        return tel;
+    }
+
+    public void setTel(String tel) {
+        this.tel = tel;
     }
 }

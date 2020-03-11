@@ -15,28 +15,30 @@ public class UserInformationDAO {
     public UserInformationDAO(DBHelper DH){
         db = DH.getWritableDatabase();
     }
+    private ContentValues putValues(UserInformationBean userInformationBean){
+        ContentValues values = new ContentValues();
+        values.put("blue_tooth", userInformationBean.getBlueTooth());
+        values.put("user_name", userInformationBean.getUserName());
+        values.put("company",userInformationBean.getCompany());
+        values.put("position", userInformationBean.getPosition());
+        values.put("email",userInformationBean.getEmail());
+        values.put("tel",userInformationBean.getTel());
+        values.put("avatar", userInformationBean.getAvatar());
+        return  values;
+    }
     public void add (UserInformationBean userInformationBean){
         Log.d("add:","add");
 
         Log.d("add","dbsuccess");
-        ContentValues values = new ContentValues();
-        values.put("blue_tooth", userInformationBean.getBlueTooth());
-        values.put("user_name", userInformationBean.getUserName());
-        values.put("company",userInformationBean.getCompany());
-        values.put("position", userInformationBean.getPosition());
-        values.put("avatar", userInformationBean.getAvatar());
+        ContentValues values = putValues(userInformationBean);
+
         db.insert(tableName, null, values);
         db.close();
     }
+
     public void update(UserInformationBean userInformationBean){
 
-        ContentValues values = new ContentValues();
-        values.put("blue_tooth", userInformationBean.getBlueTooth());
-        values.put("user_name", userInformationBean.getUserName());
-        values.put("company",userInformationBean.getCompany());
-        values.put("position", userInformationBean.getPosition());
-        values.put("avatar", userInformationBean.getAvatar());
-        db.close();
+        ContentValues values = putValues(userInformationBean);
     //範例
 //        String[] whereArgs1 = {"#100", b.getStorage_id()};
 //        String whereClause1 = DatabaseSchema.TABLE_TALKS.COLUMN_TID + "=? AND " + DatabaseSchema.TABLE_TALKS.COLUMN_STORAGEID + "=?";
@@ -80,4 +82,5 @@ public class UserInformationDAO {
         db.close();
         return cursor;
     }
+
 }

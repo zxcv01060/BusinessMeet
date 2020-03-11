@@ -25,12 +25,14 @@ public class DBHelper extends SQLiteOpenHelper {
                         "user_name NVARCHAR(100) NOT NULL, " +
                         "company NVARCHAR(100) NOT NULL, " +
                         "position NVARCHAR(100), " +
+                        "email VARCHAR(100)," +
+                        "tel INT," +
                         "avatar NVARCHAR(1000)" +
                     ");";
         SQL += "CREATE TABLE IF NOT EXISTS" + _TableName[1] + "( " +
                     "m_sno INT PRIMARY KEY IDENTITY, " +
                     "blue_tooth VARCHAR(18) REFERENCES " + _TableName[0] +"(blue_tooth), " +
-                    "matched_blue_tooth VARCHAR(18) REFERENCES " + _TableName[0] + "(blue_tooth)"+
+                    "matched_blue_tooth VARCHAR(18) REFERENCES " + _TableName[0] + "(blue_tooth),"+
                     "memprandum VARCHAR(1000)" +
                 ");";
         db.execSQL(SQL);
