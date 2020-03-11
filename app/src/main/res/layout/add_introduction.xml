@@ -39,14 +39,14 @@
         android:ems="10"
         android:inputType="textPersonName"
         android:text="姓名"
-        app:layout_constraintBottom_toTopOf="@+id/add_profile_compan"
+        app:layout_constraintBottom_toTopOf="@+id/add_profile_company"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imageButton"
         tools:ignore="MissingConstraints" />
 
     <EditText
-        android:id="@+id/add_profile_compan"
+        android:id="@+id/add_profile_company"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="99dp"
@@ -79,7 +79,7 @@
         app:layout_constraintBottom_toTopOf="@+id/add_profile_email"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/add_profile_compan" />
+        app:layout_constraintTop_toBottomOf="@+id/add_profile_company" />
 
     <EditText
         android:id="@+id/add_profile_email"
@@ -94,13 +94,13 @@
         android:ems="10"
         android:inputType="textEmailAddress"
         android:text="Email"
-        app:layout_constraintBottom_toTopOf="@+id/editText5"
+        app:layout_constraintBottom_toTopOf="@+id/add_profile_tel"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/add_profile_position" />
 
     <EditText
-        android:id="@+id/editText5"
+        android:id="@+id/add_profile_tel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="99dp"
@@ -118,7 +118,7 @@
         app:layout_constraintTop_toBottomOf="@+id/add_profile_email" />
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/confirm_introduction"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="99dp"
@@ -137,7 +137,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editText5"
+        app:layout_constraintTop_toBottomOf="@+id/add_profile_tel"
         tools:ignore="MissingConstraints" />
 
     <ImageButton

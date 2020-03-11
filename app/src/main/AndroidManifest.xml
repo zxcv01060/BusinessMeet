@@ -6,7 +6,7 @@
     <!--    部分手機（如小米等）需要將下面兩個許可權新增進去，藍芽功能才能正常使用-->
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <uses-permission android:name="android.permission.INTERNET"/>
+
 <!--  網路許可  -->
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.INTERNET" />
