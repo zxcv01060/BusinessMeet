@@ -58,7 +58,7 @@ public class UserInformationDAO {
         cursor.moveToFirst();
         int index = cursor.getColumnIndex("blue_tooth");
         Log.d("resultIndex",String.valueOf(index));
-        if (index != -1) {
+        if (index > 0) {
             return cursor.getString(cursor.getColumnIndex("blue_tooth"));
         }
         return null;
