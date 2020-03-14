@@ -36,8 +36,8 @@ public class BlueToothHelper {
     private TextView available;
     public BlueToothHelper(Activity activity) {
         this.activity = activity;
-        available = (TextView) activity.findViewById(R.id.available) ;
-        available.setText(" ");
+//        available = (TextView) activity.findViewById(R.id.available) ;
+//        available.setText(" ");
     }
 
 
@@ -235,7 +235,9 @@ public class BlueToothHelper {
         }
     }
 
-
+    public String getMyBuleTooth(){
+        return mBluetoothAdapter.getAddress();
+    }
 
 
 }
