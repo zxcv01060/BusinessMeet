@@ -5,16 +5,15 @@
     android:layout_height="match_parent">
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/editPersonalProfile"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="23dp"
-        android:layout_marginLeft="23dp"
         android:layout_marginTop="52dp"
         android:text="個人檔案"
         android:textSize="24sp"
+        android:textColor="#111111"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_bias="0.12"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -22,18 +21,17 @@
         android:id="@+id/profile_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="23dp"
-        android:layout_marginLeft="23dp"
         android:layout_marginTop="132dp"
         android:text="姓名"
+        android:textColor="#111111"
         android:textSize="23sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_bias="0.12"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/editPersonalProfileButton"
         style="@style/Widget.AppCompat.Button.Borderless.Colored"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -46,13 +44,13 @@
         app:layout_constraintTop_toBottomOf="@+id/profile_name" />
 
     <ImageView
-        android:id="@+id/imageView3"
+        android:id="@+id/edit_personal_photo"
         android:layout_width="100dp"
         android:layout_height="100dp"
-        android:layout_marginEnd="23dp"
-        android:layout_marginRight="23dp"
-        app:layout_constraintBottom_toBottomOf="@+id/button"
+        app:layout_constraintBottom_toBottomOf="@+id/editPersonalProfileButton"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.88"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/profile_name"
         app:srcCompat="@drawable/avatar" />
 
@@ -60,12 +58,11 @@
         android:id="@+id/profile_company"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="23dp"
-        android:layout_marginLeft="23dp"
         android:layout_marginTop="264dp"
         android:text="公司"
+        android:textColor="#111111"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_bias="0.12"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -75,8 +72,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
         android:text="職稱"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        android:textColor="#111111"
         app:layout_constraintStart_toStartOf="@+id/profile_company"
         app:layout_constraintTop_toBottomOf="@+id/profile_company" />
 
@@ -86,6 +82,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
         android:text="信箱"
+        android:textColor="#111111"
         app:layout_constraintStart_toStartOf="@+id/profile_company"
         app:layout_constraintTop_toBottomOf="@+id/profile_position" />
 
@@ -95,6 +92,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
         android:text="電話"
+        android:textColor="#111111"
         app:layout_constraintStart_toStartOf="@+id/profile_position"
         app:layout_constraintTop_toBottomOf="@+id/profile_email" />
 
