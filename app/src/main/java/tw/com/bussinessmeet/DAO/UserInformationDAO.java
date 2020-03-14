@@ -54,14 +54,16 @@ public class UserInformationDAO {
         db.close();
     }
     public String getById(String blueTooth) {
-        Cursor cursor = db.query(tableName, column, "blue_tooth = ?", new String[]{blueTooth}, null, null, null);
+        Cursor cursor = db.query(tableName, null, "blue_tooth = ?", new String[]{blueTooth}, null, null, null);
         cursor.moveToFirst();
         int index = cursor.getColumnIndex("blue_tooth");
         Log.d("resultIndex",String.valueOf(index));
-        if (index > 0) {
+        try{
             return cursor.getString(cursor.getColumnIndex("blue_tooth"));
+        }catch (Exception e){
+            return null;
         }
-        return null;
+
     }
     public Cursor searchAll(UserInformationBean userInformationBean){
 

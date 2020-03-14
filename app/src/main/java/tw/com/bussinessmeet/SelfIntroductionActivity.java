@@ -28,7 +28,7 @@ public class SelfIntroductionActivity extends AppCompatActivity {
         email = (TextView) findViewById(R.id.profile_email);
         tel = (TextView) findViewById(R.id.profile_tel);
 
-        userName.append("\n");
+
         company.append("\n");
         position.append("\n");
         email.append("\n");
@@ -44,8 +44,10 @@ public class SelfIntroductionActivity extends AppCompatActivity {
 
     public void searchUserInformation(){
         UserInformationBean ufb = new UserInformationBean();
-        BlueToothHelper blueToothHelper = new BlueToothHelper(this);
+//        BlueToothHelper blueToothHelper = new BlueToothHelper(this);
+//        blueToothHelper.startBuleTooth();
 //        ufb.setBlueTooth(blueToothHelper.getMyBuleTooth());
+
         ufb.setBlueTooth("1");
         Cursor result = userInformationDAO.searchAll(ufb);
         Log.d("result",String.valueOf(result.getColumnCount()));

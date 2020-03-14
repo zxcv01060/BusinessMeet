@@ -147,7 +147,7 @@ public class BlueToothHelper {
             filter.addAction(BluetoothAdapter.ACTION_DISCOVERY_FINISHED);
             filter.addAction(BluetoothAdapter.ACTION_STATE_CHANGED);
 
-            activity.registerReceiver(receiver, filter);
+//            activity.registerReceiver(receiver, filter);
 
 
 
