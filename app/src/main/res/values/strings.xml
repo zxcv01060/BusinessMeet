@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">BussinessMeet</string>
+    <string name="user_name">姓名</string>
+    <string name="company">公司</string>
+    <string name="position">職稱</string>
+    <string name="email">信箱</string>
+    <string name="tel">電話</string>
 </resources>

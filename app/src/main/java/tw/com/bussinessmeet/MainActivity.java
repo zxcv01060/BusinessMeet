@@ -57,6 +57,7 @@ public class MainActivity extends AppCompatActivity /*implements ThematicListAda
 //        blueTooth = new BlueToothHelper(this);
 //        blueTooth.startBuleTooth();
 //        String myBlueTooth = blueTooth.getMyBuleTooth();
+//        Log.d("resultmyBlueTooth",myBlueTooth);
         String myBlueTooth = "1";
         String result = userInformationDAO.getById(myBlueTooth);
         Log.d("result","getBlueTooth"+result);
