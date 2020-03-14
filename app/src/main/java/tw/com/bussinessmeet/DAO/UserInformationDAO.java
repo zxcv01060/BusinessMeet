@@ -5,12 +5,15 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
+import java.util.ArrayList;
+
 import tw.com.bussinessmeet.Bean.UserInformationBean;
 import tw.com.bussinessmeet.helper.DBHelper;
 
 public class UserInformationDAO {
     private String whereClause = "blue_tooth = ?";
     private String tableName = "User_Information";
+    private  String[] column = new String[]{"blue_tooth", "user_name", "company", "position","email","tel"};
     private SQLiteDatabase db ;
     public UserInformationDAO(DBHelper DH){
         db = DH.getWritableDatabase();
@@ -50,6 +53,16 @@ public class UserInformationDAO {
         db.delete(tableName, whereClause,new String[]{blueTooth});
         db.close();
     }
+    public String getById(String blueTooth) {
+        Cursor cursor = db.query(tableName, column, "blue_tooth = ?", new String[]{blueTooth}, null, null, null);
+        cursor.moveToFirst();
+        int index = cursor.getColumnIndex("blue_tooth");
+        Log.d("resultIndex",String.valueOf(index));
+        if (index != -1) {
+            return cursor.getString(cursor.getColumnIndex("blue_tooth"));
+        }
+        return null;
+    }
     public Cursor searchAll(UserInformationBean userInformationBean){
 
         String blueTooth = userInformationBean.getBlueTooth();
@@ -57,29 +70,29 @@ public class UserInformationDAO {
         String company = userInformationBean.getCompany();
         String position = userInformationBean.getPosition();
         String where = " ";
-        String[] args = new String[]{};
-        String[] column = new String[]{"blue_tooth", "user_name", "company", "position"};
+        ArrayList<String> args = new ArrayList<>();
+
         if(blueTooth != null && !blueTooth.equals(" ")){
             where += "blue_tooth = ?";
-            args[args.length] = userInformationBean.getBlueTooth();
+            args.add(userInformationBean.getBlueTooth());
         }
         if(userName != null && !userName.equals((""))){
             if(!where.equals(" "))where += " and ";
             where += "user_name = ?";
-            args[args.length] = userInformationBean.getUserName();
+            args.add(userInformationBean.getUserName());
         }
         if(company != null && !company.equals(" ")){
             if(!where.equals(" "))where += " and ";
             where += "company = ?";
-            args[args.length] = userInformationBean.getCompany();
+            args.add( userInformationBean.getCompany());
         }
         if(position != null && !position.equals(" ")){
             if(!where.equals(" "))where += " and ";
             where += "position = ?";
-            args[args.length] = userInformationBean.getPosition();
+            args.add(userInformationBean.getPosition());
         }
-        Cursor cursor = db.query(tableName, column, where,args,null,null,null);
-        db.close();
+        Cursor cursor = db.query(tableName, column, where,args.toArray(new String[0]),null,null,null);
+
         return cursor;
     }
 
