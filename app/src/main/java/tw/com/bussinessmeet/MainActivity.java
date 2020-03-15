@@ -64,7 +64,7 @@ public class MainActivity extends AppCompatActivity /*implements ThematicListAda
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.search);
+        setContentView(R.layout.add_introduction);
 //        recyclerViewThrmatic = (RecyclerView) findViewById(R.id.recycleViewThematic);
 //        deviceItems = new ArrayList<>();
         Log.d("MainActivity","success");
@@ -73,17 +73,17 @@ public class MainActivity extends AppCompatActivity /*implements ThematicListAda
 //
 ////
 
-//        confirm = (Button)findViewById(R.id.confirm_introduction);
-//        position = (TextView)findViewById(R.id.add_profile_position);
-//        company = (TextView)findViewById(R.id.add_profile_company);
-//        userName = (TextView) findViewById(R.id.add_profile_name);
-//        tel = (TextView) findViewById(R.id.add_profile_tel);
-//        email = (TextView) findViewById(R.id.add_profile_email);
-//        openDB();
-//        confirm.setOnClickListener(confirmClick);
+        confirm = (Button)findViewById(R.id.confirm_introduction);
+        position = (TextView)findViewById(R.id.add_profile_position);
+        company = (TextView)findViewById(R.id.add_profile_company);
+        userName = (TextView) findViewById(R.id.add_profile_name);
+        tel = (TextView) findViewById(R.id.add_profile_tel);
+        email = (TextView) findViewById(R.id.add_profile_email);
+        openDB();
+        confirm.setOnClickListener(confirmClick);
         //啟動藍芽
-//        blueTooth = new BlueToothHelper(this);
-//        blueTooth.startBuleTooth();
+        blueTooth = new BlueToothHelper(this);
+        blueTooth.startBuleTooth();
 
 
     }
