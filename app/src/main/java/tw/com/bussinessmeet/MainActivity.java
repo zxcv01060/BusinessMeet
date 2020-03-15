@@ -1,48 +1,19 @@
 package tw.com.bussinessmeet;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-//import androidx.recyclerview.widget.LinearLayoutManager;
-//import androidx.recyclerview.widget.RecyclerView;
-
-import android.Manifest;
-import android.app.AlertDialog;
-import android.app.PendingIntent;
-import android.bluetooth.BluetoothAdapter;
-import android.bluetooth.BluetoothClass;
-import android.bluetooth.BluetoothDevice;
-import android.bluetooth.BluetoothManager;
-import android.content.BroadcastReceiver;
-import android.content.ContentValues;
-import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.IntentFilter;
-import android.database.sqlite.SQLiteDatabase;
-import android.location.LocationManager;
-import android.net.Uri;
+import android.database.Cursor;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
-import android.provider.Settings;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import java.util.ArrayList;
-import java.util.Formatter;
-import java.util.List;
-import java.util.Set;
+import androidx.appcompat.app.AppCompatActivity;
 
 import tw.com.bussinessmeet.Bean.UserInformationBean;
 import tw.com.bussinessmeet.DAO.UserInformationDAO;
 import tw.com.bussinessmeet.helper.BlueToothHelper;
 import tw.com.bussinessmeet.helper.DBHelper;
-
-import static java.lang.Math.abs;
-import static java.lang.Math.pow;
 
 //https://codertw.com/android-%E9%96%8B%E7%99%BC/332688/
 public class MainActivity extends AppCompatActivity /*implements ThematicListAdapter.DevicesClickListener*/ {
@@ -80,24 +51,32 @@ public class MainActivity extends AppCompatActivity /*implements ThematicListAda
         tel = (TextView) findViewById(R.id.add_profile_tel);
         email = (TextView) findViewById(R.id.add_profile_email);
         openDB();
+
+
+//        //啟動藍芽
+//        blueTooth = new BlueToothHelper(this);
+//        blueTooth.startBuleTooth();
+//        String myBlueTooth = blueTooth.getMyBuleTooth();
+//        Log.d("resultmyBlueTooth",myBlueTooth);
+        String myBlueTooth = "1";
+        String result = userInformationDAO.getById(myBlueTooth);
+        Log.d("result","getBlueTooth"+result);
+        if( result !=null && !result.equals("") ) {
+            changeToAnotherPage(SelfIntroductionActivity.class);
+        }
         confirm.setOnClickListener(confirmClick);
-        //啟動藍芽
-        blueTooth = new BlueToothHelper(this);
-        blueTooth.startBuleTooth();
-
-
     }
     private void openDB(){
         Log.d("add","openDB");
         DH = new DBHelper(this);
-
-
+        userInformationDAO = new UserInformationDAO(DH);
     }
     public View.OnClickListener confirmClick = new View.OnClickListener(){
         @Override
         public void onClick(View v) {
             UserInformationBean ufb = new UserInformationBean();
             ufb.setBlueTooth("1");
+//            ufb.setBlueTooth(blueTooth.getMyBuleTooth());
             ufb.setCompany(company.getText().toString());
             ufb.setPosition(position.getText().toString());
             ufb.setUserName(userName.getText().toString());
@@ -107,12 +86,17 @@ public class MainActivity extends AppCompatActivity /*implements ThematicListAda
             Log.d("add",DH.toString());
             Log.d("add",ufb.getCompany());
 
-            userInformationDAO = new UserInformationDAO(DH);
+
             userInformationDAO.add(ufb);
+           changeToAnotherPage(SelfIntroductionActivity.class);
 
         }
     };
-
+    public void changeToAnotherPage(Class classname){
+        Intent intent = new Intent();
+        intent.setClass(MainActivity.this,classname);
+        startActivity(intent);
+    }
 
 
 //    private void createRecyclerViewWeather() {
