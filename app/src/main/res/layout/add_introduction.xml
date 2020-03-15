@@ -5,29 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/addInfoTitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="132dp"
-        android:layout_marginLeft="132dp"
-        android:layout_marginTop="70dp"
-        android:layout_marginEnd="133dp"
-        android:layout_marginRight="133dp"
-        android:layout_marginBottom="15dp"
-        android:text="輸入個人資料"
-        android:textColor="#111111"
-        android:textSize="23.6sp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/imageButton"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.506"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:ignore="MissingConstraints" />
-
-    <EditText
-        android:id="@+id/add_profile_name"
+    <Button
+        android:id="@+id/confirm_introduction"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="99dp"
@@ -35,14 +14,18 @@
         android:layout_marginTop="15dp"
         android:layout_marginEnd="99dp"
         android:layout_marginRight="99dp"
-        android:layout_marginBottom="15dp"
-        android:ems="10"
-        android:inputType="textPersonName"
-        android:hint="@string/user_name"
-        app:layout_constraintBottom_toTopOf="@+id/add_profile_company"
+        android:layout_marginBottom="67dp"
+        android:width="160sp"
+        android:height="48sp"
+        android:background="@drawable/button_radius"
+        android:text="確認"
+        android:textColor="#ffffff"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageButton"
+        app:layout_constraintTop_toBottomOf="@+id/add_profile_tel"
         tools:ignore="MissingConstraints" />
 
     <EditText
@@ -57,9 +40,10 @@
         android:layout_marginBottom="15dp"
         android:ems="10"
         android:inputType="textPersonName"
-        android:hint="@string/company"
-        app:layout_constraintBottom_toTopOf="@+id/add_profile_position"
+        android:hint="@string/user_name"
+        app:layout_constraintBottom_toTopOf="@+id/add_profile_company"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/add_profile_name" />
 
@@ -75,11 +59,68 @@
         android:layout_marginBottom="15dp"
         android:ems="10"
         android:inputType="textPersonName"
+        android:hint="@string/company"
+        app:layout_constraintBottom_toTopOf="@+id/add_profile_position"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/add_profile_company" />
+
+    <EditText
+        android:id="@+id/add_profile_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="99dp"
+        android:layout_marginLeft="99dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginEnd="99dp"
+        android:layout_marginRight="99dp"
+        android:layout_marginBottom="15dp"
+        android:ems="10"
+        android:inputType="textPersonName"
         android:hint="@string/position"
         app:layout_constraintBottom_toTopOf="@+id/add_profile_email"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/add_profile_company" />
+        app:layout_constraintTop_toBottomOf="@+id/imageButton"
+        tools:ignore="MissingConstraints" />
+
+    <ImageButton
+        android:id="@+id/imageButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="157dp"
+        android:layout_marginLeft="157dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginEnd="157dp"
+        android:layout_marginRight="157dp"
+        android:layout_marginBottom="15dp"
+        android:background="#00000000"
+        app:layout_constraintBottom_toTopOf="@+id/add_profile_name"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/addInfoTitle"
+        app:srcCompat="@drawable/addphoto"
+        tools:ignore="MissingConstraints" />
+
+    <TextView
+        android:id="@+id/addInfoTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        android:layout_marginBottom="15dp"
+        android:text="輸入個人資料"
+        android:textColor="#111111"
+        android:textSize="23.6sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/imageButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="MissingConstraints" />
 
     <EditText
         android:id="@+id/add_profile_email"
@@ -116,46 +157,5 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/add_profile_email" />
-
-    <Button
-        android:id="@+id/confirm_introduction"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="99dp"
-        android:layout_marginLeft="99dp"
-        android:layout_marginTop="15dp"
-        android:layout_marginEnd="99dp"
-        android:layout_marginRight="99dp"
-        android:layout_marginBottom="67dp"
-        android:width="160sp"
-        android:height="48sp"
-        android:background="@drawable/button_radius"
-        android:text="確認"
-        android:textColor="#ffffff"
-        android:textSize="14sp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/add_profile_tel"
-        tools:ignore="MissingConstraints" />
-
-    <ImageButton
-        android:id="@+id/imageButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="157dp"
-        android:layout_marginLeft="157dp"
-        android:layout_marginTop="15dp"
-        android:layout_marginEnd="157dp"
-        android:layout_marginRight="157dp"
-        android:layout_marginBottom="15dp"
-        android:background="#00000000"
-        app:layout_constraintBottom_toTopOf="@+id/add_profile_name"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/addInfoTitle"
-        app:srcCompat="@drawable/addphoto"
-        tools:ignore="MissingConstraints" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
