@@ -2,9 +2,12 @@ package tw.com.bussinessmeet;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 import org.w3c.dom.Text;
@@ -16,6 +19,7 @@ import tw.com.bussinessmeet.helper.DBHelper;
 
 public class SelfIntroductionActivity extends AppCompatActivity {
     private TextView userName,company,position,email,tel;
+    private Button editButton;
     private UserInformationDAO userInformationDAO;
     private  DBHelper DH;
     @Override
