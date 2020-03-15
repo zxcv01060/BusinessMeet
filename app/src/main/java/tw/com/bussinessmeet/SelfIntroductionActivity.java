@@ -27,8 +27,8 @@ public class SelfIntroductionActivity extends AppCompatActivity {
         position = (TextView) findViewById(R.id.profile_position);
         email = (TextView) findViewById(R.id.profile_email);
         tel = (TextView) findViewById(R.id.profile_tel);
-
-
+        editButton = (Button) findViewById(R.id.editPersonalProfileButton);
+        editButton.setOnClickListener(editButtonClick);
         company.append("\n");
         position.append("\n");
         email.append("\n");
@@ -63,6 +63,17 @@ public class SelfIntroductionActivity extends AppCompatActivity {
         }
         result.close();
 
+    }
+    public View.OnClickListener editButtonClick = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            changeToEditIntroductionPage();
+        }
+    };
+    public void changeToEditIntroductionPage(){
+        Intent intent = new Intent();
+        intent.setClass(SelfIntroductionActivity.this,EditIntroductionActivity.class);
+        startActivity(intent);
     }
 
 }

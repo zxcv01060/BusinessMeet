@@ -62,7 +62,7 @@ public class MainActivity extends AppCompatActivity /*implements ThematicListAda
         String result = userInformationDAO.getById(myBlueTooth);
         Log.d("result","getBlueTooth"+result);
         if( result !=null && !result.equals("") ) {
-            changeToSelfIntroduction();
+            changeToAnotherPage(SelfIntroductionActivity.class);
         }
         confirm.setOnClickListener(confirmClick);
     }
@@ -88,13 +88,13 @@ public class MainActivity extends AppCompatActivity /*implements ThematicListAda
 
 
             userInformationDAO.add(ufb);
-           changeToSelfIntroduction();
+           changeToAnotherPage(SelfIntroductionActivity.class);
 
         }
     };
-    public void changeToSelfIntroduction(){
+    public void changeToAnotherPage(Class classname){
         Intent intent = new Intent();
-        intent.setClass(MainActivity.this,SelfIntroductionActivity.class);
+        intent.setClass(MainActivity.this,classname);
         startActivity(intent);
     }
 
