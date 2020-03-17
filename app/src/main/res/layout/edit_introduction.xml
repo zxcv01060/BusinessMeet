@@ -108,6 +108,6 @@
         style="@style/Widget.AppCompat.Button.Borderless.Colored"
         android:textColor="#2196F3"
         app:layout_constraintTop_toBottomOf="@+id/profileEmail"
-        app:layout_constraintStart_toStartOf="profileEmail"/>
+        app:layout_constraintStart_toStartOf="@+id/profileEmail"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
