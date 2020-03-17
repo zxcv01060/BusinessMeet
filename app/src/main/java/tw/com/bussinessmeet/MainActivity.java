@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -22,7 +23,7 @@ public class MainActivity extends AppCompatActivity /*implements ThematicListAda
     //    private RecyclerView recyclerViewThrmatic;
     private TextView  userName,company,position,email,tel;
     private TextView matched;
-
+//    private
     private Button confirm;
     private BlueToothHelper blueTooth;
     private UserInformationDAO userInformationDAO;
@@ -54,15 +55,15 @@ public class MainActivity extends AppCompatActivity /*implements ThematicListAda
 
 
 //        //啟動藍芽
-//        blueTooth = new BlueToothHelper(this);
-//        blueTooth.startBuleTooth();
-//        String myBlueTooth = blueTooth.getMyBuleTooth();
-//        Log.d("resultmyBlueTooth",myBlueTooth);
-        String myBlueTooth = "1";
+        blueTooth = new BlueToothHelper(this);
+        blueTooth.startBuleTooth();
+        String myBlueTooth = blueTooth.getMyBuleTooth();
+        Log.d("resultmyBlueTooth",myBlueTooth);
+//        String myBlueTooth = "1";
         String result = userInformationDAO.getById(myBlueTooth);
         Log.d("result","getBlueTooth"+result);
         if( result !=null && !result.equals("") ) {
-            changeToAnotherPage(SelfIntroductionActivity.class);
+            changeToAnotherPage(SearchActivity.class);
         }
         confirm.setOnClickListener(confirmClick);
     }
@@ -86,10 +87,10 @@ public class MainActivity extends AppCompatActivity /*implements ThematicListAda
             Log.d("add",DH.toString());
             Log.d("add",ufb.getCompany());
 
-
-            userInformationDAO.add(ufb);
-           changeToAnotherPage(SelfIntroductionActivity.class);
-
+            if(checkData(ufb)) {
+                userInformationDAO.add(ufb);
+                changeToAnotherPage(SelfIntroductionActivity.class);
+            }
         }
     };
     public void changeToAnotherPage(Class classname){
@@ -97,7 +98,27 @@ public class MainActivity extends AppCompatActivity /*implements ThematicListAda
         intent.setClass(MainActivity.this,classname);
         startActivity(intent);
     }
-
+    private boolean checkData(UserInformationBean userInformationBean){
+        String positionStr = userInformationBean.getPosition();
+        String companyStr = userInformationBean.getCompany();
+        String emailStr = userInformationBean.getEmail();
+        String telStr = userInformationBean.getTel();
+        String userNameStr = userInformationBean.getUserName();
+        if(positionStr ==null || positionStr.equals("")){
+            Toast.makeText(this,"請輸入職稱",Toast.LENGTH_LONG).show();
+        }else if(companyStr == null || companyStr.equals("")){
+            Toast.makeText(this,"請輸入公司",Toast.LENGTH_LONG).show();
+        }else if(emailStr == null || emailStr.equals("")){
+            Toast.makeText(this,"請輸入信箱",Toast.LENGTH_LONG).show();
+        }else if(telStr == null || telStr.equals("")){
+            Toast.makeText(this,"請輸入電話",Toast.LENGTH_LONG).show();
+        }else if(userNameStr == null || userNameStr.equals("")){
+            Toast.makeText(this,"請輸入姓名",Toast.LENGTH_LONG).show();
+        }else{
+            return true;
+        }
+        return false;
+    }
 
 //    private void createRecyclerViewWeather() {
 ////        recyclerViewThrmatic.setLayoutManager(new LinearLayoutManager(this));
