@@ -2,9 +2,12 @@ package tw.com.bussinessmeet;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 import org.w3c.dom.Text;
@@ -16,6 +19,7 @@ import tw.com.bussinessmeet.helper.DBHelper;
 
 public class SelfIntroductionActivity extends AppCompatActivity {
     private TextView userName,company,position,email,tel;
+    private Button editButton;
     private UserInformationDAO userInformationDAO;
     private  DBHelper DH;
     @Override
@@ -44,11 +48,11 @@ public class SelfIntroductionActivity extends AppCompatActivity {
 
     public void searchUserInformation(){
         UserInformationBean ufb = new UserInformationBean();
-//        BlueToothHelper blueToothHelper = new BlueToothHelper(this);
-//        blueToothHelper.startBuleTooth();
-//        ufb.setBlueTooth(blueToothHelper.getMyBuleTooth());
+        BlueToothHelper blueToothHelper = new BlueToothHelper(this);
+        blueToothHelper.startBuleTooth();
+        ufb.setBlueTooth(blueToothHelper.getMyBuleTooth());
 
-        ufb.setBlueTooth("1");
+//        ufb.setBlueTooth("1");
         Cursor result = userInformationDAO.searchAll(ufb);
         Log.d("result",String.valueOf(result.getColumnCount()));
         Log.d("result",String.valueOf(result.getColumnIndex("user_name")));

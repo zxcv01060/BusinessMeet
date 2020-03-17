@@ -9,23 +9,31 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.database.Cursor;
 import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Handler;
 import android.os.Message;
+import android.util.Log;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.core.app.ActivityCompat;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 import java.util.Formatter;
 import java.util.List;
 import java.util.Set;
 
-import tw.com.bussinessmeet.R;
 
-import static androidx.core.app.ActivityCompat.startActivityForResult;
+import tw.com.bussinessmeet.Bean.UserInformationBean;
+import tw.com.bussinessmeet.DAO.UserInformationDAO;
+import tw.com.bussinessmeet.MatchedDeviceRecyclerViewAdapter;
+import tw.com.bussinessmeet.UnmatchedDeviceRecyclerViewAdapter;
+
 import static java.lang.Math.abs;
 import static java.lang.Math.pow;
 
@@ -33,43 +41,47 @@ public class BlueToothHelper {
     private final static int REQUEST_ENABLE_BT = 1;
     private Activity activity;
     private BluetoothAdapter mBluetoothAdapter;
-    private TextView available;
+    private IntentFilter filter;
+    private UserInformationDAO userInformationDAO;
+    private List<UserInformationBean> unmatchedBeanList;
+    private List<UserInformationBean> matchedBeanList;
+
+    private MatchedDeviceRecyclerViewAdapter matchedDeviceRecyclerViewAdapter;
+    private UnmatchedDeviceRecyclerViewAdapter unmatchedDeviceRecyclerViewAdapter;
     public BlueToothHelper(Activity activity) {
         this.activity = activity;
-//        available = (TextView) activity.findViewById(R.id.available) ;
-//        available.setText(" ");
     }
-
-
-        Handler mBLHandler = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            super.handleMessage(msg);
-            available.setText(" ");
-            switch (msg.what) {
-                case 1:
-                    matchedDevices();
-                    scanBluth();
-                    break;
-                default:
-                    break;
+    public void searchBlueTooth(UserInformationDAO userInformationDAO, MatchedDeviceRecyclerViewAdapter matchedDeviceRecyclerViewAdapter, UnmatchedDeviceRecyclerViewAdapter unmatchedDeviceRecyclerViewAdapter){
+        this.userInformationDAO = userInformationDAO;
+        filter = new IntentFilter();
+        filter.addAction(BluetoothDevice.ACTION_FOUND);
+        filter.addAction(BluetoothAdapter.ACTION_DISCOVERY_STARTED);
+        filter.addAction(BluetoothAdapter.ACTION_DISCOVERY_FINISHED);
+        filter.addAction(BluetoothAdapter.ACTION_STATE_CHANGED);
+        this.matchedDeviceRecyclerViewAdapter = matchedDeviceRecyclerViewAdapter;
+        this.unmatchedDeviceRecyclerViewAdapter = unmatchedDeviceRecyclerViewAdapter;
+        Log.d("resultMainAdapter", String.valueOf(matchedDeviceRecyclerViewAdapter.getItemCount()));
+        Set<BluetoothDevice> pairedDevices = mBluetoothAdapter.getBondedDevices();
+        if (pairedDevices.size() > 0) {
+            for (BluetoothDevice device : pairedDevices) {
+                UserInformationBean ufb = new UserInformationBean();
+                ufb.setBlueTooth(device.getAddress());
+                // 遍歷
+//                matchedBeanList.add(ufb);
+                matchedDeviceRecyclerViewAdapter.dataInsert(ufb);
             }
         }
-    };
+        activity.registerReceiver(receiver, filter);
+    }
     private final BroadcastReceiver receiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             // 收到的廣播型別
             String action = intent.getAction();
-
             if (BluetoothDevice.ACTION_FOUND.equals(action)) {
                 // 從intent中獲取裝置
-
                 BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
-
                 String aa = "";
-
-
 //                for(int i = 0; i < deviceItems.size(); i++) {
 ////                    matched = recyclerViewThrmatic.findViewHolderForAdapterPosition(i).itemView.findViewById(R.id.matched);
 //                    if(matched.getText() !=null) {
@@ -78,40 +90,34 @@ public class BlueToothHelper {
 //
 //                    }
 //                }
-
                 if (aa.contains(device.getAddress())) {
                     return;
                 } else {
                     // 判斷是否配對過
-//                    Log.d(TAG,device.getName());
                     if (device.getBondState() != BluetoothDevice.BOND_BONDED) {
-
                         // 新增到列表
                         short rssi = intent.getExtras().getShort(BluetoothDevice.EXTRA_RSSI);
                         int iRssi = abs(rssi);
                         // 將藍芽訊號強度換算為距離
                         double power = (iRssi - 59) / 25.0;
                         String mm = new Formatter().format("%.2f", pow(10, power)).toString();
-//                        DeviceItem deviceItem = new DeviceItem();
-
-//                        deviceItem.setDeviceAddress(device.getAddress());
-//                        if(device.getName()==null){
-//                            deviceItem.setDeviceStatus("連線後獲取該裝置名稱");
-//                        }else{
-//                            deviceItem.setDeviceName(device.getName());
-//                        }
-//                        deviceItems.add(deviceItem);
-                        available.append(device.getName() + " - " + device.getAddress() + " - " + mm + "m" +device.getBluetoothClass()+"\n");
+                        UserInformationBean ufb = new UserInformationBean();
+                        ufb.setBlueTooth(device.getAddress());
+//                        Cursor result = userInformationDAO.searchAll(ufb);
+//                        result.moveToFirst();
+//                        ufb.setAvatar(result.getString(result.getColumnIndex("avatar")));
+                        unmatchedDeviceRecyclerViewAdapter.dataInsert(ufb);
                     }
                 }
             } else if (BluetoothAdapter.ACTION_DISCOVERY_FINISHED.equals(action)) {
                 // 關閉進度條
-                activity.setProgressBarIndeterminateVisibility(true);
-                activity.setTitle("搜尋完成！");
+//                activity.setProgressBarIndeterminateVisibility(true);
+
+//                activity.setTitle("搜尋完成！");
 //                Log.d("MainActivity",String.valueOf(deviceItems.size()));
 //                createRecyclerViewWeather();
                 // 用於迴圈掃描藍芽的handler
-                mBLHandler.sendEmptyMessageDelayed(1, 10000);
+//                mBLHandler.sendEmptyMessageDelayed(1, 10000);
             }else if(BluetoothAdapter.ACTION_STATE_CHANGED.equals(action)){
                 int state = intent.getIntExtra(BluetoothAdapter.EXTRA_STATE, -1);
                 switch (state) {
@@ -123,9 +129,7 @@ public class BlueToothHelper {
                     case BluetoothAdapter.STATE_TURNING_OFF:
                         break;
                     case BluetoothAdapter.STATE_OFF:
-                        if (isGpsEnable(activity)) {
-                            openGPS(activity);
-                        }
+                        openGPS(activity);
                         bluetooth(activity);
                         break;
                 }
@@ -138,24 +142,10 @@ public class BlueToothHelper {
         if (mBluetoothAdapter == null) {
             //裝置不支援藍芽
             Toast.makeText(activity, "裝置不支援藍芽", Toast.LENGTH_SHORT).show();
-//            finish();
+            activity.finish();
         } else{
-
-            IntentFilter filter = new IntentFilter();
-            filter.addAction(BluetoothDevice.ACTION_FOUND);
-            filter.addAction(BluetoothAdapter.ACTION_DISCOVERY_STARTED);
-            filter.addAction(BluetoothAdapter.ACTION_DISCOVERY_FINISHED);
-            filter.addAction(BluetoothAdapter.ACTION_STATE_CHANGED);
-
-//            activity.registerReceiver(receiver, filter);
-
-
-
-
 //            while(!isGpsEnable(this) && !mBluetoothAdapter.isEnabled()){
-            if (isGpsEnable(activity)) {
                 openGPS(activity);
-            }
             if (!mBluetoothAdapter.isEnabled()) {
                 bluetooth(activity);
 //                Intent intent = new Intent(BluetoothAdapter.ACTION_REQUEST_DISCOVERABLE);
@@ -222,11 +212,7 @@ public class BlueToothHelper {
             for (BluetoothDevice device : pairedDevices) {
                 // 遍歷
 //                DeviceItem deviceItem = new DeviceItem();
-//                if(device.getName() == null){
-//                    deviceItem.setDeviceName("連線後取得該裝置名稱");
-//                }else{
-//                    deviceItem.setDeviceName(device.getName());
-//                }
+
 //                deviceItem.setDeviceAddress(device.getAddress());
 //                deviceItems.add(deviceItem);
                 mDevicesList.add(device.getAddress());
@@ -239,5 +225,27 @@ public class BlueToothHelper {
         return mBluetoothAdapter.getAddress();
     }
 
+    Handler mBLHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            switch (msg.what) {
+                case 1:
+                    matchedDevices();
+                    scanBluth();
+                    break;
+                default:
+                    break;
+            }
+        }
+    };
+//    private void createRecyclerViewSearch() {
+//        recyclerViewSearch.setLayoutManager(new LinearLayoutManager(this));
+//        mainRecyclerViewAdapter = new SearchRecyclerViewAdapter(this, this.userInformationBeanList);
+//        mainRecyclerViewAdapter.setClickListener(this);
+//        recyclerViewSearch.setAdapter(mainRecyclerViewAdapter);
+//        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(recyclerViewSearch.getContext(), DividerItemDecoration.VERTICAL);
+//        recyclerViewSearch.addItemDecoration(dividerItemDecoration);
+//    }
 
 }

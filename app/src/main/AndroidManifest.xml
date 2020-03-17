@@ -19,6 +19,7 @@
         android:theme="@style/Theme.AppCompat.Light.NoActionBar">
         <activity android:name=".EditIntroductionActivity"></activity>
         <activity android:name=".SelfIntroductionActivity" />
+        <activity android:name=".SearchActivity" />
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
