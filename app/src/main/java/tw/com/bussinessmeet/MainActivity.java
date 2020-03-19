@@ -74,7 +74,7 @@ public class MainActivity extends AppCompatActivity /*implements ThematicListAda
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
 
         //Set Home selected
-        bottomNavigationView.setSelectedItemId(R.id.menu_home);
+        bottomNavigationView.setSelectedItemId(R.id.menu_search);
 
 
 
