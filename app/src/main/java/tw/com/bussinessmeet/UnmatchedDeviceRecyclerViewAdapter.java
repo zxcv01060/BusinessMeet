@@ -8,10 +8,11 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import java.util.List;
-
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
+import java.util.List;
+
 import tw.com.bussinessmeet.Bean.UserInformationBean;
 
 
@@ -29,7 +30,7 @@ public class UnmatchedDeviceRecyclerViewAdapter extends RecyclerView.Adapter<Unm
     @NonNull
     @Override
     public UnmatchedDeviceRecyclerViewAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = layoutInflater.inflate(R.layout.recycler_view_row_matched_search, parent, false);
+        View view = layoutInflater.inflate(R.layout.recycler_view_row_unmatched_search, parent, false);
         return new ViewHolder(view);
     }
 
