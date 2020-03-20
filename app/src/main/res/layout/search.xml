@@ -58,7 +58,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="23dp"
         android:layout_marginLeft="23dp"
-        android:layout_marginTop="52dp"
+        android:layout_marginTop="28dp"
         android:text="搜尋附近裝置"
         android:textColor="#111111"
         android:textSize="24sp"
