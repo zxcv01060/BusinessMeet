@@ -45,7 +45,7 @@ android:layout_height="match_parent">
     app:layout_constraintTop_toBottomOf="@+id/profile_name" />
 
 <ImageView
-    android:id="@+id/friends_photo"
+    android:id="@+id/edit_person_photo"
     android:layout_width="100dp"
     android:layout_height="100dp"
     app:layout_constraintBottom_toBottomOf="@+id/editPersonalProfileButton"
