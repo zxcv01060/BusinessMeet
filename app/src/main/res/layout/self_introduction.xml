@@ -106,7 +106,7 @@ android:layout_height="match_parent">
 
     <View
         android:layout_width="match_parent"
-        android:layout_height="10dp"
+        android:layout_height="3dp"
         android:layout_above="@id/bottom_navigation"
         android:background="@drawable/bottom_navigation_shadow"
         app:layout_constraintBottom_toTopOf="@+id/bottom_navigation"
