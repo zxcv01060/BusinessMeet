@@ -48,8 +48,28 @@ public class SelfIntroductionActivity extends AppCompatActivity {
         //Initialize And Assign Variable
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
         //Set Home
-        bottomNavigationView.setSelectedItemId(R.id.menu_friends);
-        bottomNavigationView.setOnNavigationItemSelectedListener(navListener);
+        bottomNavigationView.setSelectedItemId(R.id.menu_home);
+        //Perform ItemSelectedListener
+        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+                switch (menuItem.getItemId()){
+                    case R.id.menu_home:
+                        return true;
+                    case R.id.menu_search:
+                        startActivity(new Intent(getApplicationContext()
+                                ,SearchActivity.class));
+                        overridePendingTransition(0,0);
+                        return true;
+                    case R.id.menu_friends:
+                        startActivity(new Intent(getApplicationContext()
+                                ,FriendsActivity.class));
+                        overridePendingTransition(0,0);
+                        return true;
+                }
+                return false;
+            }
+        });
     }
     private void openDB(){
         Log.d("add","openDB");
@@ -91,28 +111,6 @@ public class SelfIntroductionActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    //Perform ItemSelectedListener
-    private BottomNavigationView.OnNavigationItemSelectedListener navListener =
-            (new BottomNavigationView.OnNavigationItemSelectedListener() {
-                @Override
-                public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-                    switch(menuItem.getItemId()){
-                        case R.id.menu_home:
-                            break;
 
-                        case R.id.menu_search:
-                            startActivity(new Intent(getApplicationContext()
-                                    ,MainActivity.class));
-                            overridePendingTransition(0,0);
-                            break;
-                        case R.id.menu_friends:
-                            startActivity(new Intent(getApplicationContext()
-                                    ,FriendsActivity.class));
-                            overridePendingTransition(0,0);
-                            break;
-                    }
-                    return true;
-                }
-            });
 
 }

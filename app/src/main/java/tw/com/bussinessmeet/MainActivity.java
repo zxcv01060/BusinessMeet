@@ -71,12 +71,7 @@ public class MainActivity extends AppCompatActivity /*implements ThematicListAda
         }
         confirm.setOnClickListener(confirmClick);
 
-        //bottomNavigationView
-        //Initialize And Assign Variable
-        BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
-        //Set Home
-        bottomNavigationView.setSelectedItemId(R.id.menu_search);
-        bottomNavigationView.setOnNavigationItemSelectedListener(navListener);
+
 
     }
     private void openDB(){
@@ -132,30 +127,7 @@ public class MainActivity extends AppCompatActivity /*implements ThematicListAda
         return false;
     }
 
-    //Perform ItemSelectedListener
-    private BottomNavigationView.OnNavigationItemSelectedListener navListener =
-            (new BottomNavigationView.OnNavigationItemSelectedListener() {
-                @Override
-                public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-                    switch(menuItem.getItemId()){
-                        case R.id.menu_home:
-                            startActivity(new Intent(getApplicationContext()
-                                    ,SelfIntroductionActivity.class));
-                            overridePendingTransition(0,0);
-                            break;
 
-                        case R.id.menu_search:
-                            break;
-
-                        case R.id.menu_friends:
-                            startActivity(new Intent(getApplicationContext()
-                                    ,FriendsActivity.class));
-                            overridePendingTransition(0,0);
-                            break;
-                    }
-                    return true;
-                }
-            });
 
 
 //    private void createRecyclerViewWeather() {
