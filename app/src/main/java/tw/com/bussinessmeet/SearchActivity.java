@@ -1,9 +1,14 @@
 package tw.com.bussinessmeet;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.DividerItemDecoration;
@@ -40,6 +45,13 @@ public class SearchActivity extends AppCompatActivity implements MatchedDeviceRe
         blueTooth.startBuleTooth();
         blueTooth.searchBlueTooth(userInformationDAO,matchedRecyclerViewAdapter,unmatchedRecyclerViewAdapter);
 
+        //bottomNavigationView
+        //Initialize And Assign Variable
+        BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
+        //Set Home
+        bottomNavigationView.setSelectedItemId(R.id.menu_search);
+        bottomNavigationView.setOnNavigationItemSelectedListener(navListener);
+
     }
 
     private void openDB(){
@@ -69,4 +81,28 @@ public class SearchActivity extends AppCompatActivity implements MatchedDeviceRe
     public void onSearchClick(View view, int position) {
 
     }
+
+    //Perform ItemSelectedListener
+    private BottomNavigationView.OnNavigationItemSelectedListener navListener =
+            (new BottomNavigationView.OnNavigationItemSelectedListener() {
+                @Override
+        public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+            switch (menuItem.getItemId()){
+                case R.id.menu_home:
+                    startActivity(new Intent(getApplicationContext()
+                            ,SelfIntroductionActivity.class));
+                    overridePendingTransition(0,0);
+                    return true;
+                case R.id.menu_search:
+                    return true;
+                case R.id.menu_friends:
+                    startActivity(new Intent(getApplicationContext()
+                            ,FriendsActivity.class));
+                    overridePendingTransition(0,0);
+                    return true;
+            }
+            return false;
+        }
+    });
+
 }
