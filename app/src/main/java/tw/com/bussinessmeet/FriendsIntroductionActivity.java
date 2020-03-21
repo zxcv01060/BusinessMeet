@@ -21,9 +21,10 @@ public class FriendsIntroductionActivity extends AppCompatActivity {
         //Initialize And Assign Variable
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
         //Set Home
-        bottomNavigationView.setSelectedItemId(R.id.menu_home);
+        bottomNavigationView.setSelectedItemId(R.id.menu_friends);
         bottomNavigationView.setOnNavigationItemSelectedListener(navListener);
 
+        //notification
         TextView textView = findViewById(R.id.friends_name);
         String message = getIntent().getStringExtra("message");
         textView.setText(message);
@@ -37,6 +38,9 @@ public class FriendsIntroductionActivity extends AppCompatActivity {
                 public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
                     switch (menuItem.getItemId()){
                         case R.id.menu_home:
+                            startActivity(new Intent(getApplicationContext()
+                                    ,SelfIntroductionActivity.class));
+                            overridePendingTransition(0,0);
                             return true;
                         case R.id.menu_search:
                             startActivity(new Intent(getApplicationContext()
@@ -44,9 +48,6 @@ public class FriendsIntroductionActivity extends AppCompatActivity {
                             overridePendingTransition(0,0);
                             return true;
                         case R.id.menu_friends:
-                            startActivity(new Intent(getApplicationContext()
-                                    ,FriendsActivity.class));
-                            overridePendingTransition(0,0);
                             return true;
                     }
                     return false;
