@@ -12,5 +12,9 @@ public class FriendsIntroductionActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.friends_introduction);
 
+        TextView textView = findViewById(R.id.friends_name);
+        String message = getIntent().getStringExtra("message");
+        textView.setText(message);
+
     }
 }

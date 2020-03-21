@@ -2,12 +2,12 @@ package tw.com.bussinessmeet;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 
-import android.content.Context;
-
-import android.app.Notification;
+import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -16,42 +16,34 @@ import android.widget.Button;
 
 public class NotificationActivity extends AppCompatActivity {
 
-    private Intent intent;
-    private Button button;
-    private static final int NOTIFICATION_ID = 0;
-    private NotificationManager notificationManger;
-    private Notification notification;
+    Button btNotification;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.notification);
-        ///
 
-        button = (Button) findViewById(R.id.bt_notification);
-        notificationManger = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
+            NotificationChannel channel =
+                    new NotificationChannel("MyNotifications","MyNotifications",NotificationManager.IMPORTANCE_DEFAULT);
+            NotificationManager manager = getSystemService(NotificationManager.class);
+            manager.createNotificationChannel(channel);
 
-        intent = new Intent();
-        intent.setClass(NotificationActivity.this, FriendsIntroductionActivity.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK
-                | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        PendingIntent pendingIntent =
-                PendingIntent.getActivity(this, NOTIFICATION_ID, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-            notification = new Notification.Builder(this)
-                    .setSmallIcon(android.R.drawable.sym_def_app_icon)
-                    .setContentTitle("Hi")
-                    .setContentText("Nice to meet you.")
-                    .setContentIntent(pendingIntent)
-                    .build(); // available from API level 11 and onwards
         }
-        notification.flags = Notification.FLAG_AUTO_CANCEL;
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                notificationManger.notify(0, notification);
-            }
-        });
+        //指定通知的UI和操作
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this,"MyNotifications")
+                .setContentTitle("This is my title")
+                .setSmallIcon(R.drawable.ic_insert_comment_black_24dp)
+                .setAutoCancel(true)
+                .setContentText("This is my text");
+
+        NotificationManagerCompat manager = NotificationManagerCompat.from(this);
+        //創建通知
+        manager.notify(999, builder.build());
     }
 }
+
+
+//要指定通知的UI和操作，請使用NotificationCompat.Builder。
+//要創建通知，請使用NotificationCompat.Builder.build()。
+//要發出通知，請使用NotificationManager.notify()將該通知對像傳遞給Android運行時系統。
