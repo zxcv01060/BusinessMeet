@@ -30,16 +30,42 @@ public class NotificationActivity extends AppCompatActivity {
             manager.createNotificationChannel(channel);
 
         }
-        //指定通知的UI和操作
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(this,"MyNotifications")
-                .setContentTitle("This is my title")
-                .setSmallIcon(R.drawable.ic_insert_comment_black_24dp)
-                .setAutoCancel(true)
-                .setContentText("This is my text");
 
-        NotificationManagerCompat manager = NotificationManagerCompat.from(this);
-        //創建通知
-        manager.notify(999, builder.build());
+        btNotification = findViewById(R.id.bt_notification);
+
+        btNotification.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //定義訊息
+                String message = "This is a notific.";
+                NotificationCompat.Builder builder = new NotificationCompat.Builder(
+                        NotificationActivity.this,"MyNotifications"
+                )
+                        .setSmallIcon(R.drawable.ic_insert_comment_black_24dp)
+                        .setContentText("New Notification")
+                        .setContentText(message)
+                        .setAutoCancel(true);
+
+                //宣告Intent物件 跳至friends_introduction
+                Intent intent = new Intent(NotificationActivity.this,
+                        FriendsIntroductionActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                intent.putExtra("message",message);
+
+                // 宣告一個 PendingIntent 的物件(執行完並不會馬上啟動,點訊息的時候才會跳到別的 Activity)
+                PendingIntent pendingIntent = PendingIntent.getActivity(NotificationActivity.this,
+                        0,intent,PendingIntent.FLAG_UPDATE_CURRENT);
+                builder.setContentIntent(pendingIntent);
+
+                //定義一個訊息管理者 和系統要 取得訊息管理者的物件
+                NotificationManager notificationManager = (NotificationManager)getSystemService(
+                        Context.NOTIFICATION_SERVICE
+                );
+
+                //要求傳送一個訊息
+                notificationManager.notify(0,builder.build());
+            }
+        });
     }
 }
 
