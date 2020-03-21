@@ -5,27 +5,32 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.util.Base64;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
-import org.w3c.dom.Text;
-
-import tw.com.bussinessmeet.Bean.UserInformationBean;
-import tw.com.bussinessmeet.DAO.UserInformationDAO;
+import tw.com.bussinessmeet.bean.UserInformationBean;
+import tw.com.bussinessmeet.dao.UserInformationDAO;
+import tw.com.bussinessmeet.helper.AvatarHelper;
 import tw.com.bussinessmeet.helper.BlueToothHelper;
 import tw.com.bussinessmeet.helper.DBHelper;
 
 public class SelfIntroductionActivity extends AppCompatActivity {
     private TextView userName,company,position,email,tel;
     private Button editButton;
+    private ImageView avatar;
     private UserInformationDAO userInformationDAO;
     private  DBHelper DH;
+    private AvatarHelper avatarHelper;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,8 +40,10 @@ public class SelfIntroductionActivity extends AppCompatActivity {
         position = (TextView) findViewById(R.id.profile_position);
         email = (TextView) findViewById(R.id.profile_email);
         tel = (TextView) findViewById(R.id.profile_tel);
+        avatar = (ImageView) findViewById(R.id.edit_person_photo);
         editButton = (Button) findViewById(R.id.editPersonalProfileButton);
         editButton.setOnClickListener(editButtonClick);
+        avatarHelper = new AvatarHelper();
         company.append("\n");
         position.append("\n");
         email.append("\n");
@@ -76,10 +83,12 @@ public class SelfIntroductionActivity extends AppCompatActivity {
             position.append(result.getString(result.getColumnIndex("position")));
             email.append(result.getString(result.getColumnIndex("email")));
             tel.append(result.getString(result.getColumnIndex("tel")));
+            avatar.setImageBitmap(avatarHelper.getImageResource(result.getString(result.getColumnIndex("avatar"))));
         }
         result.close();
 
     }
+
     public View.OnClickListener editButtonClick = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
