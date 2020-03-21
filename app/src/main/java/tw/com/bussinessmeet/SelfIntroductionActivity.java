@@ -64,7 +64,7 @@ public class SelfIntroductionActivity extends AppCompatActivity {
         blueToothHelper.startBuleTooth();
         ufb.setBlueTooth(blueToothHelper.getMyBuleTooth());
 
-//        ufb.setBlueTooth("1");
+        ufb.setBlueTooth("1");
         Cursor result = userInformationDAO.searchAll(ufb);
         Log.d("result",String.valueOf(result.getColumnCount()));
         Log.d("result",String.valueOf(result.getColumnIndex("user_name")));
