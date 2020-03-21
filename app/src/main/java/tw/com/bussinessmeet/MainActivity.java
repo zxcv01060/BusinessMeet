@@ -1,22 +1,35 @@
 package tw.com.bussinessmeet;
 
+import android.content.ContentResolver;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
+import android.media.Image;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+
+
+import java.net.URI;
 
 import tw.com.bussinessmeet.Bean.UserInformationBean;
 import tw.com.bussinessmeet.DAO.UserInformationDAO;
+import tw.com.bussinessmeet.helper.AvatarShapeHelper;
 import tw.com.bussinessmeet.helper.BlueToothHelper;
 import tw.com.bussinessmeet.helper.DBHelper;
 
@@ -25,9 +38,9 @@ public class MainActivity extends AppCompatActivity /*implements ThematicListAda
 
     private  String TAG = "MainActivity";
     //    private RecyclerView recyclerViewThrmatic;
+    private static final int REQUEST_IMAGE_CAPTURE = 1;
     private TextView  userName,company,position,email,tel;
-    private TextView matched;
-//    private
+    private ImageView avatar;
     private Button confirm;
     private BlueToothHelper blueTooth;
     private UserInformationDAO userInformationDAO;
@@ -55,25 +68,52 @@ public class MainActivity extends AppCompatActivity /*implements ThematicListAda
         userName = (TextView) findViewById(R.id.add_profile_name);
         tel = (TextView) findViewById(R.id.add_profile_tel);
         email = (TextView) findViewById(R.id.add_profile_email);
+        avatar = (ImageView) findViewById(R.id.add_photo_button);
         openDB();
-
-
 //        //啟動藍芽
-       blueTooth = new BlueToothHelper(this);
-        blueTooth.startBuleTooth();
-        String myBlueTooth = blueTooth.getMyBuleTooth();
-        Log.d("resultmyBlueTooth",myBlueTooth);
-//        String myBlueTooth = "1";
+//       blueTooth = new BlueToothHelper(this);
+//        blueTooth.startBuleTooth();
+//        String myBlueTooth = blueTooth.getMyBuleTooth();
+//        Log.d("resultmyBlueTooth",myBlueTooth);
+        String myBlueTooth = "1";
         String result = userInformationDAO.getById(myBlueTooth);
         Log.d("result","getBlueTooth"+result);
         if( result !=null && !result.equals("") ) {
             changeToAnotherPage(SearchActivity.class);
         }
         confirm.setOnClickListener(confirmClick);
-
+        avatar.setOnClickListener(choseAvatar);
 
 
     }
+    private Button.OnClickListener choseAvatar = new Button.OnClickListener(){
+        @Override
+        public void onClick(View v) {
+            Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+            intent.setType("image/*");
+            if(intent.resolveActivity(getPackageManager()) != null){
+                startActivityForResult(intent, REQUEST_IMAGE_CAPTURE);
+            }
+        }
+    };
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        if(resultCode == RESULT_OK){
+            Uri uri = data.getData();
+            Log.d("resultUri", uri.toString());
+            ContentResolver cr = this.getContentResolver();
+            try{
+                Bitmap bitmap = BitmapFactory.decodeStream(cr.openInputStream(uri));
+                AvatarShapeHelper avatarShapeHelper = new AvatarShapeHelper();
+                avatar.setImageBitmap(avatarShapeHelper.toCircle(bitmap));
+            }catch(Exception e){
+                Log.d("Exception",e.getMessage());
+            }
+        }
+        super.onActivityResult(requestCode, resultCode, data);
+    }
+
     private void openDB(){
         Log.d("add","openDB");
         DH = new DBHelper(this);
@@ -90,6 +130,7 @@ public class MainActivity extends AppCompatActivity /*implements ThematicListAda
             ufb.setUserName(userName.getText().toString());
             ufb.setEmail(email.getText().toString());
             ufb.setTel(tel.getText().toString());
+
             ufb.setAvatar("1");
             Log.d("add",DH.toString());
             Log.d("add",ufb.getCompany());
