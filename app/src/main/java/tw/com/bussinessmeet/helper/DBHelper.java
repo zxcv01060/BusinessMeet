@@ -33,7 +33,7 @@ public class DBHelper extends SQLiteOpenHelper {
                     "m_sno INT PRIMARY KEY IDENTITY, " +
                     "blue_tooth VARCHAR(18) REFERENCES " + _TableName[0] +"(blue_tooth), " +
                     "matched_blue_tooth VARCHAR(18) REFERENCES " + _TableName[0] + "(blue_tooth),"+
-                    "memprandum VARCHAR(1000)" +
+                    "memorandum VARCHAR(1000)" +
                 ");";
         db.execSQL(SQL);
 

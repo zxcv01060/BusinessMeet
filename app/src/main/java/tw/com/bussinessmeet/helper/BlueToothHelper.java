@@ -9,19 +9,14 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.database.Cursor;
 import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.core.app.ActivityCompat;
-import androidx.recyclerview.widget.DividerItemDecoration;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 import java.util.Formatter;
@@ -29,8 +24,8 @@ import java.util.List;
 import java.util.Set;
 
 
-import tw.com.bussinessmeet.Bean.UserInformationBean;
-import tw.com.bussinessmeet.DAO.UserInformationDAO;
+import tw.com.bussinessmeet.bean.UserInformationBean;
+import tw.com.bussinessmeet.dao.UserInformationDAO;
 import tw.com.bussinessmeet.MatchedDeviceRecyclerViewAdapter;
 import tw.com.bussinessmeet.UnmatchedDeviceRecyclerViewAdapter;
 
