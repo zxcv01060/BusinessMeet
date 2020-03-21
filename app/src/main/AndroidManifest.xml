@@ -11,6 +11,7 @@
         android:theme="@style/Theme.AppCompat.Light.NoActionBar">
         <activity android:name=".NotificationActivity"></activity>
         <activity android:name=".FriendsActivity" />
+        <activity android:name=".FriendsIntroductionActivity"/>
         <activity android:name=".EditIntroductionActivity" />
         <activity android:name=".SelfIntroductionActivity" />
         <activity android:name=".SearchActivity" />
