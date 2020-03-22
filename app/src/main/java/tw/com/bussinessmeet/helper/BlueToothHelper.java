@@ -2,21 +2,28 @@ package tw.com.bussinessmeet.helper;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.PendingIntent;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.pm.PackageManager;
 import android.location.LocationManager;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Handler;
 import android.os.Message;
+import android.provider.Settings;
 import android.util.Log;
 import android.widget.Toast;
 
+import androidx.annotation.RequiresApi;
 import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 import java.util.ArrayList;
 import java.util.Formatter;
@@ -24,6 +31,9 @@ import java.util.List;
 import java.util.Set;
 
 
+import tw.com.bussinessmeet.AddIntroductionActivity;
+import tw.com.bussinessmeet.MainActivity;
+import tw.com.bussinessmeet.RequestCode;
 import tw.com.bussinessmeet.bean.UserInformationBean;
 import tw.com.bussinessmeet.dao.UserInformationDAO;
 import tw.com.bussinessmeet.MatchedDeviceRecyclerViewAdapter;
@@ -33,7 +43,7 @@ import static java.lang.Math.abs;
 import static java.lang.Math.pow;
 
 public class BlueToothHelper {
-    private final static int REQUEST_ENABLE_BT = 1;
+
     private Activity activity;
     private BluetoothAdapter mBluetoothAdapter;
     private IntentFilter filter;
@@ -77,14 +87,6 @@ public class BlueToothHelper {
                 // 從intent中獲取裝置
                 BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
                 String aa = "";
-//                for(int i = 0; i < deviceItems.size(); i++) {
-////                    matched = recyclerViewThrmatic.findViewHolderForAdapterPosition(i).itemView.findViewById(R.id.matched);
-//                    if(matched.getText() !=null) {
-//                        aa = matched.getText().toString();
-//                        break;
-//
-//                    }
-//                }
                 if (aa.contains(device.getAddress())) {
                     return;
                 } else {
@@ -107,10 +109,8 @@ public class BlueToothHelper {
             } else if (BluetoothAdapter.ACTION_DISCOVERY_FINISHED.equals(action)) {
                 // 關閉進度條
 //                activity.setProgressBarIndeterminateVisibility(true);
-
-//                activity.setTitle("搜尋完成！");
-//                Log.d("MainActivity",String.valueOf(deviceItems.size()));
-//                createRecyclerViewWeather();
+                openGPS(activity);
+                Toast.makeText(activity,"搜尋完成！",Toast.LENGTH_LONG);
                 // 用於迴圈掃描藍芽的handler
 //                mBLHandler.sendEmptyMessageDelayed(1, 10000);
             }else if(BluetoothAdapter.ACTION_STATE_CHANGED.equals(action)){
@@ -124,7 +124,7 @@ public class BlueToothHelper {
                     case BluetoothAdapter.STATE_TURNING_OFF:
                         break;
                     case BluetoothAdapter.STATE_OFF:
-                        openGPS(activity);
+
                         bluetooth(activity);
                         break;
                 }
@@ -134,52 +134,32 @@ public class BlueToothHelper {
 
     public void startBuleTooth(){
         mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-        if (mBluetoothAdapter == null) {
+       if (mBluetoothAdapter == null) {
             //裝置不支援藍芽
             Toast.makeText(activity, "裝置不支援藍芽", Toast.LENGTH_SHORT).show();
             activity.finish();
         } else{
 //            while(!isGpsEnable(this) && !mBluetoothAdapter.isEnabled()){
-                openGPS(activity);
             if (!mBluetoothAdapter.isEnabled()) {
                 bluetooth(activity);
 //                Intent intent = new Intent(BluetoothAdapter.ACTION_REQUEST_DISCOVERABLE);
 //                   intent.putExtra(BluetoothAdapter.EXTRA_DISCOVERABLE_DURATION, 200);
 //        startActivityForResult(intent, 2);
-                ActivityCompat.requestPermissions( activity, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 3 );
+
             } else {
                 mBluetoothAdapter.enable();
             }
 //            }
-            matchedDevices();
             scanBluth();
         }
     }
-    public static final boolean isGpsEnable(final Context context) {
-        LocationManager locationManager
-                = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
-        boolean gps = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
-        boolean network = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
-        if (gps || network) {
-            return true;
-        }
-        return false;
-    }
+
     public void bluetooth(Context context){
         Intent enableBtIntent = new Intent((BluetoothAdapter.ACTION_REQUEST_ENABLE));
-        activity.startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
+        activity.startActivityForResult(enableBtIntent, RequestCode.REQUEST_ENABLE_BT);
     }
-    public static final void openGPS(Context context) {
-        Intent GPSIntent = new Intent();
-        GPSIntent.setClassName("com.android.settings",
-                "com.android.settings.widget.SettingsAppWidgetProvider");
-        GPSIntent.addCategory("android.intent.category.ALTERNATIVE");
-        GPSIntent.setData(Uri.parse("custom:3"));
-        try {
-            PendingIntent.getBroadcast(context, 0, GPSIntent, 0).send();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+    public  void openGPS(Context context) {
+        ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, RequestCode.REQUEST_LOCATION );
     }
     private void scanBluth() {
 // 設定進度條
@@ -196,25 +176,7 @@ public class BlueToothHelper {
 
         mBluetoothAdapter.startDiscovery();
     }
-    public void matchedDevices(){
-//        matched.setText("");
-        Set<BluetoothDevice> pairedDevices = mBluetoothAdapter.getBondedDevices();
-//
-//            // 判斷是否有配對過的裝置
-        List<String> mDevicesList = new ArrayList<>();
-//
-        if (pairedDevices.size() > 0) {
-            for (BluetoothDevice device : pairedDevices) {
-                // 遍歷
-//                DeviceItem deviceItem = new DeviceItem();
 
-//                deviceItem.setDeviceAddress(device.getAddress());
-//                deviceItems.add(deviceItem);
-                mDevicesList.add(device.getAddress());
-//                matched.append(device.getName() + " - " + device.getAddress() + "\n");
-            }
-        }
-    }
 
     public String getMyBuleTooth(){
         return mBluetoothAdapter.getAddress();
@@ -226,7 +188,6 @@ public class BlueToothHelper {
             super.handleMessage(msg);
             switch (msg.what) {
                 case 1:
-                    matchedDevices();
                     scanBluth();
                     break;
                 default:
@@ -234,13 +195,45 @@ public class BlueToothHelper {
             }
         }
     };
-//    private void createRecyclerViewSearch() {
-//        recyclerViewSearch.setLayoutManager(new LinearLayoutManager(this));
-//        mainRecyclerViewAdapter = new SearchRecyclerViewAdapter(this, this.userInformationBeanList);
-//        mainRecyclerViewAdapter.setClickListener(this);
-//        recyclerViewSearch.setAdapter(mainRecyclerViewAdapter);
-//        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(recyclerViewSearch.getContext(), DividerItemDecoration.VERTICAL);
-//        recyclerViewSearch.addItemDecoration(dividerItemDecoration);
-//    }
+    public void requestPermissionsResult(int requestCode, int[] grantResults)  {
+        if (requestCode == RequestCode.REQUEST_LOCATION) {
+            // 因為這個 method 會帶回任何權限視窗的結果，所以我們要用 requestCode 來判斷這是哪一個權限
 
+            if (grantResults.length > 0 && grantResults[0] != PackageManager.PERMISSION_GRANTED) {
+                // 不等於 PERMISSION_GRANTED 代表被按下拒絕
+                if (!ActivityCompat.shouldShowRequestPermissionRationale(activity, Manifest.permission.ACCESS_FINE_LOCATION)) {
+
+                    Intent intent =new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS, Uri.parse("package:" + activity.getPackageName()));
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    activity.startActivity(intent);
+
+                    Toast.makeText(activity,"這些權限是為了搜尋附近藍芽裝置，拒絕將無法使用本應用程式。",Toast.LENGTH_LONG).show();
+
+
+                }else{
+                    AlertDialog dialog = new AlertDialog.Builder(activity).setTitle("這些權限是為了搜尋附近藍芽裝置，拒絕將無法使用本應用程式。").setPositiveButton("我需要此权限!", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                           openGPS(activity);
+                        }
+                    }).show();
+                }
+
+            }else{
+                checkPermission();
+
+            }
+        }
+    }
+    public boolean checkPermission(){
+        int permissionCheck = ContextCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_COARSE_LOCATION);
+        if (permissionCheck == PackageManager.PERMISSION_GRANTED) {
+            Intent intent = new Intent();
+            intent.setClass(activity, AddIntroductionActivity.class);
+            activity.startActivity(intent);
+            return true;
+        }else {
+            return false;
+        }
+    }
 }
