@@ -143,6 +143,7 @@ public class MainActivity extends AppCompatActivity /*implements ThematicListAda
         String emailStr = userInformationBean.getEmail();
         String telStr = userInformationBean.getTel();
         String userNameStr = userInformationBean.getUserName();
+        String avatarStr = userInformationBean.getAvatar();
         if(positionStr ==null || positionStr.equals("")){
             Toast.makeText(this,"請輸入職稱",Toast.LENGTH_LONG).show();
         }else if(companyStr == null || companyStr.equals("")){
@@ -153,6 +154,8 @@ public class MainActivity extends AppCompatActivity /*implements ThematicListAda
             Toast.makeText(this,"請輸入電話",Toast.LENGTH_LONG).show();
         }else if(userNameStr == null || userNameStr.equals("")){
             Toast.makeText(this,"請輸入姓名",Toast.LENGTH_LONG).show();
+        }else if(avatarStr == null || avatarStr.equals("")) {
+            Toast.makeText(this,"請上傳圖片",Toast.LENGTH_LONG).show();
         }else{
             return true;
         }

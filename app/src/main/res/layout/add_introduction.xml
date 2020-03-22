@@ -37,7 +37,7 @@
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/addInfoTitle"
-        android:src="@drawable/addphoto"
+        android:background="@drawable/addphoto"
         tools:ignore="MissingConstraints" />
 
 
