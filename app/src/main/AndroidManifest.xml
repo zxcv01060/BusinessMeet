@@ -12,6 +12,7 @@
         <activity android:name=".FriendsActivity"></activity>
         <activity android:name=".EditIntroductionActivity" />
         <activity android:name=".SelfIntroductionActivity" />
+        <activity android:name=".AddIntroductionActivity" />
         <activity android:name=".SearchActivity" />
         <activity android:name=".MainActivity">
             <intent-filter>
