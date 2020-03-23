@@ -100,7 +100,7 @@ public class BlueToothHelper {
                         int iRssi = abs(rssi);
                         // 將藍芽訊號強度換算為距離
                         double power = (iRssi - 59) / 25.0;
-                        String mm = new Formatter().format("%.2f", pow(10, power)).toString();
+                        String distance = new Formatter().format("%.2f", pow(10, power)).toString();
                         UserInformationBean ufb = new UserInformationBean();
                         ufb.setBlueTooth(device.getAddress());
 //                        Cursor result = userInformationDAO.searchAll(ufb);
