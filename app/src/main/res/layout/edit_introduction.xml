@@ -1,18 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginTop="40dp"
-    android:layout_marginLeft="24dp"
-    android:layout_marginRight="24dp">
+>
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="28dp"
+        android:layout_marginLeft="23dp"
+        android:layout_marginRight="23dp">
 
     <TextView
         android:id="@+id/editPersonalProfile"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="編輯個人檔案"
+        android:textStyle="bold"
         android:textColor="#111111"
         android:textSize="24sp"
         app:layout_constraintTop_toTopOf="parent"
@@ -109,5 +114,5 @@
         android:textColor="#2196F3"
         app:layout_constraintTop_toBottomOf="@+id/profileEmail"
         app:layout_constraintStart_toStartOf="@+id/profileEmail"/>
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>
