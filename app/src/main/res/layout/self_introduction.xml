@@ -14,7 +14,7 @@ android:layout_height="match_parent">
         android:layout_marginTop="28dp"
         android:textStyle="bold"
         android:text="個人檔案"
-        android:textColor="#111111"
+        android:textColor="@color/colorAlmostBlack"
         android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -27,7 +27,7 @@ android:layout_height="match_parent">
     android:layout_height="wrap_content"
     android:layout_marginTop="132dp"
 
-    android:textColor="#111111"
+    android:textColor="@color/colorAlmostBlack"
     android:textSize="23sp"
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintHorizontal_bias="0.12"
@@ -59,6 +59,17 @@ android:layout_height="match_parent">
     app:srcCompat="@drawable/avatar" />
 
     <TextView
+        android:id="@+id/label_profile_company"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:text="公司"
+        android:textColor="@color/colorLabelGray"
+        app:layout_constraintBottom_toTopOf="@+id/profile_company"
+        app:layout_constraintStart_toStartOf="@+id/profile_company"
+        tools:ignore="MissingConstraints" />
+
+    <TextView
         android:id="@+id/profile_company"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -66,42 +77,85 @@ android:layout_height="match_parent">
         android:layout_marginLeft="23dp"
         android:layout_marginTop="264dp"
         android:text="公司"
-        android:textColor="#929191"
+        android:textColor="@color/colorAlmostBlack"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
+        android:id="@+id/label_profile_position"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        android:text="職稱"
+        android:textColor="@color/colorLabelGray"
+        app:layout_constraintBottom_toTopOf="@+id/profile_position"
+        app:layout_constraintStart_toStartOf="@+id/profile_position"
+        app:layout_constraintTop_toBottomOf="@+id/profile_company"
+        app:layout_constraintVertical_bias="0.2"
+        tools:ignore="MissingConstraints" />
+
+    <TextView
         android:id="@+id/profile_position"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="36dp"
         android:text="職稱"
-        android:textColor="#929191"
+        android:textColor="@color/colorAlmostBlack"
         app:layout_constraintStart_toStartOf="@+id/profile_company"
         app:layout_constraintTop_toBottomOf="@+id/profile_company" />
+
+
+    <TextView
+        android:id="@+id/label_profile_email"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        android:text="信箱"
+        android:textColor="@color/colorLabelGray"
+        app:layout_constraintBottom_toTopOf="@+id/profile_email"
+        app:layout_constraintStart_toStartOf="@+id/profile_email"
+        app:layout_constraintTop_toBottomOf="@+id/profile_position"
+        app:layout_constraintVertical_bias="0.20"
+        tools:ignore="MissingConstraints" />
 
     <TextView
         android:id="@+id/profile_email"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="36dp"
         android:text="信箱"
-        android:textColor="#929191"
+        android:textColor="@color/colorAlmostBlack"
         app:layout_constraintStart_toStartOf="@+id/profile_company"
         app:layout_constraintTop_toBottomOf="@+id/profile_position" />
+
+
+    <TextView
+        android:id="@+id/label_profile_tel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        android:text="電話"
+        android:textColor="@color/colorLabelGray"
+        app:layout_constraintBottom_toTopOf="@+id/profile_tel"
+        app:layout_constraintStart_toStartOf="@+id/profile_tel"
+        app:layout_constraintTop_toBottomOf="@+id/profile_email"
+        app:layout_constraintVertical_bias="0.2"
+        tools:ignore="MissingConstraints" />
 
     <TextView
         android:id="@+id/profile_tel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="36dp"
         android:text="電話"
-        android:textColor="#929191"
+        android:textColor="@color/colorAlmostBlack"
         app:layout_constraintStart_toStartOf="@+id/profile_position"
         app:layout_constraintTop_toBottomOf="@+id/profile_email" />
-
 
     <TextView
         android:layout_width="wrap_content"
