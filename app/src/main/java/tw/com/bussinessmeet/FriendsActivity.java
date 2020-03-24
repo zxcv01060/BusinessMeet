@@ -30,7 +30,7 @@ public class FriendsActivity extends AppCompatActivity {
 
         //轉跳頁面
         //取得此Button的實體
-        button = (Button)findViewById(R.id.gotonotifi);
+/*        button = (Button)findViewById(R.id.gotonotifi);
 
         //實做OnClickListener界面
         button.setOnClickListener(new View.OnClickListener() {
@@ -40,7 +40,7 @@ public class FriendsActivity extends AppCompatActivity {
                 intent.setClass(FriendsActivity.this , NotificationActivity.class);
                 startActivity(intent);
             }
-        });
+        });*/
 
 
     }
