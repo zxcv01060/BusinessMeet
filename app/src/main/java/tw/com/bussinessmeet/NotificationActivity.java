@@ -25,7 +25,7 @@ public class NotificationActivity extends AppCompatActivity {
     private UserInformationDAO userInformationDAO;
     private MatchedDeviceRecyclerViewAdapter matchedRecyclerViewAdapter;
     private UnmatchedDeviceRecyclerViewAdapter unmatchedRecyclerViewAdapter;
-
+    private DBHelper DH;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,7 +34,7 @@ public class NotificationActivity extends AppCompatActivity {
         blueTooth = new BlueToothHelper(this);
         blueTooth.searchBlueTooth(userInformationDAO,matchedRecyclerViewAdapter,unmatchedRecyclerViewAdapter);
         sendMessage();
-
+        openDB();
         //setting channel
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
             NotificationChannel channel =
@@ -43,6 +43,11 @@ public class NotificationActivity extends AppCompatActivity {
             manager.createNotificationChannel(channel);
 
         }
+    }
+    private void openDB(){
+        Log.d("add","openDB");
+        DH = new DBHelper(this);
+        userInformationDAO = new UserInformationDAO(DH);
     }
 
     private void sendMessage() {
