@@ -59,7 +59,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="34dp"
-        android:text="姓名"
+        android:hint="姓名"
         android:textColor="#111111"
         app:layout_constraintTop_toBottomOf="@+id/profilePhoto" />
 
@@ -68,7 +68,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="34dp"
-        android:text="公司"
+        android:hint="公司"
         android:textColor="#111111"
         app:layout_constraintTop_toBottomOf="@+id/profileName" />
 
@@ -77,7 +77,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="34dp"
-        android:text="職稱"
+        android:hint="職稱"
         app:layout_constraintTop_toBottomOf="@+id/profileCompany" />
 
     <EditText
@@ -85,7 +85,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="34dp"
-        android:text="電話"
+        android:hint="電話"
         android:textColor="#111111"
         app:layout_constraintTop_toBottomOf="@+id/profilePosition" />
 
@@ -94,7 +94,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="34dp"
-        android:text="信箱"
+        android:hint="信箱"
         android:textColor="#111111"
         app:layout_constraintTop_toBottomOf="@+id/profileTel" />
 
