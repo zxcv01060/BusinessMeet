@@ -6,6 +6,16 @@
     android:layout_height="match_parent">
 
     <TextView
+        android:id="@+id/label_friendsProfile"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:text="公司"
+        android:textColor="@color/colorLabelGray"
+        app:layout_constraintBottom_toTopOf="@+id/friends_company"
+        app:layout_constraintStart_toStartOf="@+id/friends_company"
+        tools:ignore="MissingConstraints" />
+    <TextView
         android:id="@+id/friendsProfile"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -43,18 +53,6 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/friends_name"
         app:layout_constraintTop_toBottomOf="@+id/friends_name" />
-
-    <ImageView
-        android:id="@+id/friends_photo"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        app:layout_constraintBottom_toBottomOf="@+id/editFriendsProfileButton"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.88"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/friends_name"
-        app:srcCompat="@drawable/avatar" />
-
     <TextView
         android:id="@+id/friends_company"
         android:layout_width="wrap_content"
@@ -68,41 +66,88 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
+        android:id="@+id/label_friends_position"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        android:text="職稱"
+        android:textColor="@color/colorLabelGray"
+        app:layout_constraintBottom_toTopOf="@+id/friends_position"
+        app:layout_constraintStart_toStartOf="@+id/friends_position"
+        app:layout_constraintTop_toBottomOf="@+id/friends_company"
+        app:layout_constraintVertical_bias="0.2"
+        tools:ignore="MissingConstraints" />
+
+    <TextView
         android:id="@+id/friends_position"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="36dp"
         android:text="職稱"
         android:textColor="@color/colorAlmostBlack"
         app:layout_constraintStart_toStartOf="@+id/friends_company"
         app:layout_constraintTop_toBottomOf="@+id/friends_company" />
 
     <TextView
+        android:id="@+id/label_friends_email"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        android:text="信箱"
+        android:textColor="@color/colorLabelGray"
+        app:layout_constraintBottom_toTopOf="@+id/friends_email"
+        app:layout_constraintStart_toStartOf="@+id/friends_email"
+        app:layout_constraintTop_toBottomOf="@+id/friends_position"
+        app:layout_constraintVertical_bias="0.20"
+        tools:ignore="MissingConstraints" />
+
+    <TextView
         android:id="@+id/friends_email"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="36dp"
         android:text="信箱"
         android:textColor="@color/colorAlmostBlack"
         app:layout_constraintStart_toStartOf="@+id/friends_company"
         app:layout_constraintTop_toBottomOf="@+id/friends_position" />
 
     <TextView
+        android:id="@+id/label_friends_tel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        android:text="電話"
+        android:textColor="@color/colorLabelGray"
+        app:layout_constraintBottom_toTopOf="@+id/friends_tel"
+        app:layout_constraintStart_toStartOf="@+id/friends_tel"
+        app:layout_constraintTop_toBottomOf="@+id/friends_email"
+        app:layout_constraintVertical_bias="0.2"
+        tools:ignore="MissingConstraints" />
+    <TextView
         android:id="@+id/friends_tel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="36dp"
         android:text="電話"
         android:textColor="@color/colorAlmostBlack"
         app:layout_constraintStart_toStartOf="@+id/friends_position"
         app:layout_constraintTop_toBottomOf="@+id/friends_email" />
 
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        tools:ignore="MissingConstraints" />
+    <ImageView
+        android:id="@+id/friends_photo"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        app:layout_constraintBottom_toBottomOf="@+id/editFriendsProfileButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.88"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/friends_name"
+        app:srcCompat="@drawable/avatar" />
+
 
     <View
         android:layout_width="match_parent"
@@ -118,9 +163,9 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         app:itemBackground="?android:attr/windowBackground"
-        app:itemTextColor="@drawable/selector"
         app:itemIconTint="@drawable/selector"
+        app:itemTextColor="@drawable/selector"
         app:layout_constraintBottom_toBottomOf="parent"
         app:menu="@menu/menu_navigation"
-        tools:layout_editor_absoluteX="16dp" />
+        tools:layout_editor_absoluteX="0dp" />
 </androidx.constraintlayout.widget.ConstraintLayout>
