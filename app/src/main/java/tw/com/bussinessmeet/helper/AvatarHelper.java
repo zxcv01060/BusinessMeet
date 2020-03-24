@@ -10,6 +10,7 @@ import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.util.Base64;
 import android.util.Log;
 import android.widget.ImageView;
@@ -60,6 +61,11 @@ public class AvatarHelper {
         return avatarCircle;
     }
     public String setImageResource(ImageView avatar){
+        Drawable avatarDraw = avatar.getDrawable();
+        Log.d("resultavatar",String.valueOf(avatarDraw));
+        if(avatarDraw == null){
+            return "";
+        }
         Bitmap avatarBitmap = ((BitmapDrawable)avatar.getDrawable()).getBitmap();
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         avatarBitmap.compress(Bitmap.CompressFormat.PNG, 100, outputStream);
