@@ -15,16 +15,19 @@
         app:layout_constraintBottom_toTopOf="@+id/friends_company"
         app:layout_constraintStart_toStartOf="@+id/friends_company"
         tools:ignore="MissingConstraints" />
+
     <TextView
         android:id="@+id/friendsProfile"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="23dp"
+        android:layout_marginLeft="23dp"
         android:layout_marginTop="52dp"
         android:text="簡歷"
-        android:textSize="24sp"
         android:textColor="@color/colorAlmostBlack"
+        android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.12"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -53,15 +56,18 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/friends_name"
         app:layout_constraintTop_toBottomOf="@+id/friends_name" />
+
     <TextView
         android:id="@+id/friends_company"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="23dp"
+        android:layout_marginLeft="23dp"
         android:layout_marginTop="264dp"
         android:text="公司"
         android:textColor="@color/colorAlmostBlack"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.12"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
