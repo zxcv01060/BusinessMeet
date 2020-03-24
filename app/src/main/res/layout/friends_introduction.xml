@@ -16,6 +16,7 @@
         android:textStyle="bold"
         android:textColor="#111111"
         android:textSize="24sp"
+        android:textColor="@color/colorAlmostBlack"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
@@ -26,7 +27,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="132dp"
-        android:textColor="#111111"
+
+        android:textColor="@color/colorAlmostBlack"
         android:textSize="23sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.12"
@@ -65,7 +67,7 @@
         android:layout_marginLeft="23dp"
         android:layout_marginTop="264dp"
         android:text="公司"
-        android:textColor="#111111"
+        android:textColor="@color/colorAlmostBlack"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
@@ -77,7 +79,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
         android:text="職稱"
-        android:textColor="#111111"
+        android:textColor="@color/colorAlmostBlack"
         app:layout_constraintStart_toStartOf="@+id/friends_company"
         app:layout_constraintTop_toBottomOf="@+id/friends_company" />
 
@@ -87,7 +89,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
         android:text="信箱"
-        android:textColor="#111111"
+        android:textColor="@color/colorAlmostBlack"
         app:layout_constraintStart_toStartOf="@+id/friends_company"
         app:layout_constraintTop_toBottomOf="@+id/friends_position" />
 
@@ -97,7 +99,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
         android:text="電話"
-        android:textColor="#111111"
+        android:textColor="@color/colorAlmostBlack"
         app:layout_constraintStart_toStartOf="@+id/friends_position"
         app:layout_constraintTop_toBottomOf="@+id/friends_email" />
 
