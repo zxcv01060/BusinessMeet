@@ -28,7 +28,7 @@ public class FriendsActivity extends AppCompatActivity {
         bottomNavigationView.setSelectedItemId(R.id.menu_friends);
         bottomNavigationView.setOnNavigationItemSelectedListener(navListener);
 
-        //轉跳頁面
+/*        //轉跳頁面
         //取得此Button的實體
         button = (Button)findViewById(R.id.gotonotifi);
 
@@ -40,7 +40,7 @@ public class FriendsActivity extends AppCompatActivity {
                 intent.setClass(FriendsActivity.this , NotificationActivity.class);
                 startActivity(intent);
             }
-        });
+        });*/
 
 
     }
