@@ -13,7 +13,7 @@
         android:layout_marginLeft="23dp"
         android:layout_marginTop="28dp"
         android:text="聯絡人"
-        android:textColor="#111111"
+        android:textColor="@color/colorAlmostBlack"
         android:textSize="24sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
@@ -43,7 +43,7 @@
         android:layout_marginLeft="16dp"
         android:layout_marginBottom="4dp"
         android:text="王曉明"
-        android:textColor="#111111"
+        android:textColor="@color/colorAlmostBlack"
         android:textSize="17sp"
         app:layout_constraintBottom_toTopOf="@+id/friends_company"
         app:layout_constraintStart_toEndOf="@+id/friends_photo"
@@ -62,6 +62,7 @@
         app:layout_constraintBottom_toBottomOf="@+id/friends_photo"
         app:layout_constraintStart_toEndOf="@+id/friends_photo"
         tools:ignore="MissingConstraints" />
+
 
     <View
         android:id="@+id/view"

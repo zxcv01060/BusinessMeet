@@ -1,19 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:layout_marginTop="40dp"
-    android:layout_marginLeft="24dp"
-    android:layout_marginRight="24dp">
+    android:layout_height="wrap_content">
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="23dp"
+        android:layout_marginRight="23dp">
 
     <TextView
         android:id="@+id/editPersonalProfile"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="編輯個人檔案"
-        android:textColor="#111111"
+        android:textStyle="bold"
+        android:textColor="@color/colorAlmostBlack"
+        android:layout_marginTop="28dp"
         android:textSize="24sp"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
@@ -23,32 +28,32 @@
         android:layout_width="20dp"
         android:layout_height="20dp"
         android:src="@drawable/checkbox"
-        android:textColor="#111111"
+        android:textColor="@color/colorAlmostBlack"
         android:background="#00000000"
         android:scaleType="fitCenter"
         app:layout_constraintTop_toTopOf="@+id/editPersonalProfile"
         app:layout_constraintBottom_toBottomOf="@+id/editPersonalProfile"
         app:layout_constraintEnd_toEndOf="parent" />
 
-    <ImageButton
+    <ImageView
         android:id="@+id/profilePhoto"
         android:layout_width="110dp"
         android:layout_height="110dp"
         android:layout_marginTop="34dp"
         android:src="@drawable/avatar"
-        android:textColor="#111111"
+        android:textColor="@color/colorAlmostBlack"
         android:background="#00000000"
         android:scaleType="fitCenter"
         app:layout_constraintTop_toBottomOf="@+id/editPersonalProfile"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <ImageButton
+    <ImageView
         android:id="@+id/profilePhoto2"
         android:layout_width="30dp"
         android:layout_height="30dp"
         android:src="@drawable/editphoto"
-        android:textColor="#111111"
+        android:textColor="@color/colorAlmostBlack"
         android:background="#00000000"
         android:scaleType="fitCenter"
         app:layout_constraintBottom_toBottomOf="@+id/profilePhoto"
@@ -59,8 +64,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="34dp"
-        android:text="姓名"
-        android:textColor="#111111"
+        android:hint="姓名"
+        android:textColor="@color/colorAlmostBlack"
         app:layout_constraintTop_toBottomOf="@+id/profilePhoto" />
 
     <EditText
@@ -68,8 +73,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="34dp"
-        android:text="公司"
-        android:textColor="#111111"
+        android:hint="公司"
+        android:textColor="@color/colorAlmostBlack"
         app:layout_constraintTop_toBottomOf="@+id/profileName" />
 
     <EditText
@@ -77,7 +82,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="34dp"
-        android:text="職稱"
+        android:hint="職稱"
         app:layout_constraintTop_toBottomOf="@+id/profileCompany" />
 
     <EditText
@@ -85,8 +90,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="34dp"
-        android:text="電話"
-        android:textColor="#111111"
+        android:hint="電話"
+        android:textColor="@color/colorAlmostBlack"
         app:layout_constraintTop_toBottomOf="@+id/profilePosition" />
 
     <EditText
@@ -94,20 +99,20 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="34dp"
-        android:text="信箱"
-        android:textColor="#111111"
+        android:hint="信箱"
+        android:textColor="@color/colorAlmostBlack"
         app:layout_constraintTop_toBottomOf="@+id/profileTel" />
 
     <Button
         android:id="@+id/otherInformation"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
+        android:layout_marginVertical="10dp"
         android:background="#00000000"
         android:text="加入其他資訊"
         style="@style/Widget.AppCompat.Button.Borderless.Colored"
         android:textColor="#2196F3"
         app:layout_constraintTop_toBottomOf="@+id/profileEmail"
         app:layout_constraintStart_toStartOf="@+id/profileEmail"/>
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>
