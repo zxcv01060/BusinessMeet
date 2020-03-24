@@ -16,7 +16,7 @@
         android:layout_marginTop="40dp"
         android:layout_marginBottom="15dp"
         android:text="輸入個人資料"
-        android:textColor="#111111"
+        android:textColor="@color/colorAlmostBlack"
         android:textSize="23.6sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/add_photo_button"
