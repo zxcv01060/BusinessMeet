@@ -2,6 +2,8 @@ package tw.com.bussinessmeet.helper;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
@@ -12,6 +14,7 @@ import android.content.IntentFilter;
 import android.database.Cursor;
 import android.location.LocationManager;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
@@ -19,6 +22,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.core.app.ActivityCompat;
+import androidx.core.app.NotificationCompat;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -31,7 +35,10 @@ import java.util.Set;
 
 import tw.com.bussinessmeet.Bean.UserInformationBean;
 import tw.com.bussinessmeet.DAO.UserInformationDAO;
+import tw.com.bussinessmeet.FriendsIntroductionActivity;
 import tw.com.bussinessmeet.MatchedDeviceRecyclerViewAdapter;
+import tw.com.bussinessmeet.NotificationActivity;
+import tw.com.bussinessmeet.R;
 import tw.com.bussinessmeet.UnmatchedDeviceRecyclerViewAdapter;
 
 import static java.lang.Math.abs;
@@ -72,6 +79,15 @@ public class BlueToothHelper {
             }
         }
         activity.registerReceiver(receiver, filter);
+
+        //setting channel
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
+            NotificationChannel channel =
+                    new NotificationChannel("MyNotifications","MyNotifications",NotificationManager.IMPORTANCE_DEFAULT);
+            NotificationManager manager = activity.getSystemService(NotificationManager.class);
+            manager.createNotificationChannel(channel);
+
+        }
     }
     private final BroadcastReceiver receiver = new BroadcastReceiver() {
         @Override
@@ -100,7 +116,11 @@ public class BlueToothHelper {
                         int iRssi = abs(rssi);
                         // 將藍芽訊號強度換算為距離
                         double power = (iRssi - 59) / 25.0;
-                        String mm = new Formatter().format("%.2f", pow(10, power)).toString();
+//                        String distance = new Formatter().format("%.2f", pow(10, power)).toString();
+                        int distance = (int)pow(10, power);
+                            if(distance<5){
+                                sendMessage();
+                            }
                         UserInformationBean ufb = new UserInformationBean();
                         ufb.setBlueTooth(device.getAddress());
 //                        Cursor result = userInformationDAO.searchAll(ufb);
@@ -239,13 +259,36 @@ public class BlueToothHelper {
             }
         }
     };
-//    private void createRecyclerViewSearch() {
-//        recyclerViewSearch.setLayoutManager(new LinearLayoutManager(this));
-//        mainRecyclerViewAdapter = new SearchRecyclerViewAdapter(this, this.userInformationBeanList);
-//        mainRecyclerViewAdapter.setClickListener(this);
-//        recyclerViewSearch.setAdapter(mainRecyclerViewAdapter);
-//        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(recyclerViewSearch.getContext(), DividerItemDecoration.VERTICAL);
-//        recyclerViewSearch.addItemDecoration(dividerItemDecoration);
-//    }
+
+    private void sendMessage() {
+
+        String message = "This is a notific.";
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(
+                activity,"MyNotifications"
+        )
+                .setSmallIcon(R.drawable.ic_insert_comment_black_24dp)
+                .setContentText("New Notification")
+                .setContentText(message)
+                .setAutoCancel(true);
+
+        //宣告Intent物件 跳至friends_introduction
+        Intent intent = new Intent(activity,
+                FriendsIntroductionActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        intent.putExtra("message",message);
+
+        // 宣告一個 PendingIntent 的物件(執行完並不會馬上啟動,點訊息的時候才會跳到別的 Activity)
+        PendingIntent pendingIntent = PendingIntent.getActivity(activity,
+                0,intent,PendingIntent.FLAG_UPDATE_CURRENT);
+        builder.setContentIntent(pendingIntent);
+
+        //定義一個訊息管理者 和系統要 取得訊息管理者的物件
+        NotificationManager notificationManager = (NotificationManager)activity.getSystemService(
+                Context.NOTIFICATION_SERVICE
+        );
+
+        //要求傳送一個訊息
+        notificationManager.notify(0,builder.build());
+    }
 
 }
