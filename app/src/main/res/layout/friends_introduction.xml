@@ -24,7 +24,6 @@
         android:layout_marginTop="28dp"
         android:text="簡歷"
         android:textStyle="bold"
-        android:textColor="#111111"
         android:textSize="24sp"
         android:textColor="@color/colorAlmostBlack"
         app:layout_constraintEnd_toEndOf="parent"

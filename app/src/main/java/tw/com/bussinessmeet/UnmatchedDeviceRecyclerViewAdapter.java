@@ -13,7 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
 
-import tw.com.bussinessmeet.Bean.UserInformationBean;
+import tw.com.bussinessmeet.bean.UserInformationBean;
 
 
 public class UnmatchedDeviceRecyclerViewAdapter extends RecyclerView.Adapter<UnmatchedDeviceRecyclerViewAdapter.ViewHolder> {

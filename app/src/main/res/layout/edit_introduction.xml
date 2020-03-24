@@ -35,7 +35,7 @@
         app:layout_constraintBottom_toBottomOf="@+id/editPersonalProfile"
         app:layout_constraintEnd_toEndOf="parent" />
 
-    <ImageButton
+    <ImageView
         android:id="@+id/profilePhoto"
         android:layout_width="110dp"
         android:layout_height="110dp"
@@ -48,7 +48,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <ImageButton
+    <ImageView
         android:id="@+id/profilePhoto2"
         android:layout_width="30dp"
         android:layout_height="30dp"
@@ -64,7 +64,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="34dp"
-        android:text="姓名"
+        android:hint="姓名"
         android:textColor="@color/colorAlmostBlack"
         app:layout_constraintTop_toBottomOf="@+id/profilePhoto" />
 
@@ -73,7 +73,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="34dp"
-        android:text="公司"
+        android:hint="公司"
         android:textColor="@color/colorAlmostBlack"
         app:layout_constraintTop_toBottomOf="@+id/profileName" />
 
@@ -82,7 +82,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="34dp"
-        android:text="職稱"
+        android:hint="職稱"
         app:layout_constraintTop_toBottomOf="@+id/profileCompany" />
 
     <EditText
@@ -90,7 +90,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="34dp"
-        android:text="電話"
+        android:hint="電話"
         android:textColor="@color/colorAlmostBlack"
         app:layout_constraintTop_toBottomOf="@+id/profilePosition" />
 
@@ -99,7 +99,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="34dp"
-        android:text="信箱"
+        android:hint="信箱"
         android:textColor="@color/colorAlmostBlack"
         app:layout_constraintTop_toBottomOf="@+id/profileTel" />
 

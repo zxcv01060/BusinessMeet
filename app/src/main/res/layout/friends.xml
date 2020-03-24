@@ -63,16 +63,6 @@
         app:layout_constraintStart_toEndOf="@+id/friends_photo"
         tools:ignore="MissingConstraints" />
 
-    <Button
-        android:id="@+id/gotonotifi"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="轉跳頁面到notification"
-        app:layout_constraintBottom_toBottomOf="@+id/view"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:ignore="MissingConstraints" />
 
     <View
         android:id="@+id/view"
