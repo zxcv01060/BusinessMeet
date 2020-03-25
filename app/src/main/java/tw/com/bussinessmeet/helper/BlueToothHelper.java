@@ -247,16 +247,17 @@ public class BlueToothHelper {
             }
         }
     }
-    public boolean checkPermission(){
+    public boolean checkPermission() {
         int permissionCheck = ContextCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_COARSE_LOCATION);
         if (permissionCheck == PackageManager.PERMISSION_GRANTED) {
             Intent intent = new Intent();
             intent.setClass(activity, AddIntroductionActivity.class);
             activity.startActivity(intent);
             return true;
-        }else {
+        } else {
             return false;
         }
+    }
     private void sendMessage() {
 
         String message = "This is a notific.";
