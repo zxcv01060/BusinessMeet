@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="tw.com.bussinessmeet">
-
+    <!-- 部分手機（如小米等）需要將下面兩個許可權新增進去，藍芽功能才能正常使用 -->
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -9,9 +9,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar">
-        <activity android:name=".NotificationActivity"></activity>
+        <activity android:name=".NotificationActivity" />
         <activity android:name=".FriendsActivity" />
-        <activity android:name=".FriendsIntroductionActivity"/>
+        <activity android:name=".FriendsIntroductionActivity" />
         <activity android:name=".EditIntroductionActivity" />
         <activity android:name=".SelfIntroductionActivity" />
         <activity android:name=".AddIntroductionActivity" />
@@ -23,18 +23,14 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-    </application> <!-- 部分手機（如小米等）需要將下面兩個許可權新增進去，藍芽功能才能正常使用 -->
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    </application>
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" /> <!-- 網路許可 -->
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-<<<<<<< HEAD
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-=======
->>>>>>> 9eda7c0d1c02ea458248532ad7760ae7a39f9be5
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.BLUETOOTH" />
-
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
 
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 </manifest>

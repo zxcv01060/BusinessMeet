@@ -86,7 +86,7 @@ public class SearchActivity extends AppCompatActivity implements MatchedDeviceRe
 
     }
 
-    //Perform ItemSelectedListener
+    //button_nav Perform ItemSelectedListener
     private BottomNavigationView.OnNavigationItemSelectedListener navListener =
             (new BottomNavigationView.OnNavigationItemSelectedListener() {
                 @Override
