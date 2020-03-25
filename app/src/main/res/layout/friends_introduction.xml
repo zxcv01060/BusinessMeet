@@ -65,7 +65,7 @@
         android:layout_marginStart="23dp"
         android:layout_marginLeft="23dp"
         android:layout_marginTop="264dp"
-        android:text="公司"
+        android:text=""
         android:textColor="@color/colorAlmostBlack"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -91,7 +91,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="36dp"
-        android:text="職稱"
+        android:text=""
         android:textColor="@color/colorAlmostBlack"
         app:layout_constraintStart_toStartOf="@+id/friends_company"
         app:layout_constraintTop_toBottomOf="@+id/friends_company" />
@@ -115,7 +115,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="36dp"
-        android:text="信箱"
+        android:text=""
         android:textColor="@color/colorAlmostBlack"
         app:layout_constraintStart_toStartOf="@+id/friends_company"
         app:layout_constraintTop_toBottomOf="@+id/friends_position" />
@@ -138,7 +138,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="36dp"
-        android:text="電話"
+        android:text=""
         android:textColor="@color/colorAlmostBlack"
         app:layout_constraintStart_toStartOf="@+id/friends_position"
         app:layout_constraintTop_toBottomOf="@+id/friends_email" />
