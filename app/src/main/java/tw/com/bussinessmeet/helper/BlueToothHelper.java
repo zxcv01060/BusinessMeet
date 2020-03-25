@@ -117,7 +117,7 @@ public class BlueToothHelper {
                         double power = (iRssi - 59) / 25.0;
 //                        String distance = new Formatter().format("%.2f", pow(10, power)).toString();
                         int distance = (int)pow(10, power);
-                            if(distance<5){
+                            if(distance<5000){
                                 sendMessage();
                             }
                         UserInformationBean ufb = new UserInformationBean();

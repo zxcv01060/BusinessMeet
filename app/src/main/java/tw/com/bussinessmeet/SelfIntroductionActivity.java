@@ -44,10 +44,6 @@ public class SelfIntroductionActivity extends AppCompatActivity {
         editButton = (Button) findViewById(R.id.editPersonalProfileButton);
         editButton.setOnClickListener(editButtonClick);
         avatarHelper = new AvatarHelper();
-        company.append("\n");
-        position.append("\n");
-        email.append("\n");
-        tel.append("\n");
         openDB();
         searchUserInformation();
 
@@ -71,7 +67,7 @@ public class SelfIntroductionActivity extends AppCompatActivity {
         blueToothHelper.startBuleTooth();
         ufb.setBlueTooth(blueToothHelper.getMyBuleTooth());
 
-        ufb.setBlueTooth("1");
+
         Cursor result = userInformationDAO.searchAll(ufb);
         Log.d("result",String.valueOf(result.getColumnCount()));
         Log.d("result",String.valueOf(result.getColumnIndex("user_name")));
