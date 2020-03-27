@@ -26,8 +26,8 @@ public class FriendsIntroductionActivity extends AppCompatActivity {
 
         //notification
         TextView textView = findViewById(R.id.friends_name);
-        String message = getIntent().getStringExtra("message");
-        textView.setText(message);
+        String title = getIntent().getStringExtra("title");
+        textView.setText(title);
 
     }
 

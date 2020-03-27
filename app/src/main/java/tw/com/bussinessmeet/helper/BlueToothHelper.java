@@ -14,11 +14,16 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
+import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Handler;
 import android.os.Message;
+import android.os.SystemClock;
 import android.provider.Settings;
 import android.util.Log;
 import android.widget.Toast;
@@ -47,11 +52,14 @@ import tw.com.bussinessmeet.MatchedDeviceRecyclerViewAdapter;
 import tw.com.bussinessmeet.NotificationActivity;
 import tw.com.bussinessmeet.R;
 import tw.com.bussinessmeet.UnmatchedDeviceRecyclerViewAdapter;
+import tw.com.bussinessmeet.helper.NotificationHelper;
 
 import static java.lang.Math.abs;
 import static java.lang.Math.pow;
+import android.graphics.BitmapFactory;
 
 public class BlueToothHelper {
+
 
     private Activity activity;
     private BluetoothAdapter mBluetoothAdapter;
@@ -59,9 +67,14 @@ public class BlueToothHelper {
     private UserInformationDAO userInformationDAO;
     private List<UserInformationBean> unmatchedBeanList;
     private List<UserInformationBean> matchedBeanList;
+    private NotificationHelper notificationHelper;
+
+    private static final String CHANNEL_1_ID = "channel1" ;
+
 
     private MatchedDeviceRecyclerViewAdapter matchedDeviceRecyclerViewAdapter;
     private UnmatchedDeviceRecyclerViewAdapter unmatchedDeviceRecyclerViewAdapter;
+
     public BlueToothHelper(Activity activity) {
         this.activity = activity;
     }
@@ -87,16 +100,29 @@ public class BlueToothHelper {
         }
         activity.registerReceiver(receiver, filter);
 
-        //setting channel
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
-            NotificationChannel channel =
-                    new NotificationChannel("MyNotifications","MyNotifications",NotificationManager.IMPORTANCE_DEFAULT);
+        //notificationHelper = new NotificationHelper();
+        //createNotificationChannel
+        //notificationHelper.createNotificationChannel();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            NotificationChannel channel1 =
+                    new NotificationChannel(
+                            CHANNEL_1_ID,
+                            "channel1",
+                            NotificationManager.IMPORTANCE_HIGH
+                    );
+            channel1.setDescription("This is channel 1");
+
             NotificationManager manager = activity.getSystemService(NotificationManager.class);
-            manager.createNotificationChannel(channel);
+            manager.createNotificationChannel(channel1);
 
         }
     }
+
+
+
+
     private final BroadcastReceiver receiver = new BroadcastReceiver() {
+
         @Override
         public void onReceive(Context context, Intent intent) {
             // 收到的廣播型別
@@ -152,6 +178,8 @@ public class BlueToothHelper {
                 }
             }
         }
+
+
     };
 
     public void startBuleTooth(){
@@ -258,35 +286,86 @@ public class BlueToothHelper {
             return false;
         }
     }
-    private void sendMessage() {
 
-        String message = "This is a notific.";
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(
-                activity,"MyNotifications"
+    public void sendMessage() {
+        String title1 = "邱殷龍";
+        String message1 = "原音股份有限公司";
+        String title2 = "李赫宰";
+        String message2 = " SM娛樂公司";
+
+        //Bitmap profilePhoto =  ;
+
+        NotificationCompat.Builder notification1 = new NotificationCompat.Builder(
+                activity, CHANNEL_1_ID
         )
                 .setSmallIcon(R.drawable.ic_insert_comment_black_24dp)
-                .setContentText("New Notification")
-                .setContentText(message)
-                .setAutoCancel(true);
+                .setContentTitle(title1)
+                .setContentText(message1)
+                .setPriority(NotificationCompat.PRIORITY_HIGH)
+                .setAutoCancel(true)
+                .setColor(Color.rgb(4,42,88))
+                .setVisibility(NotificationCompat.VISIBILITY_PRIVATE)
+                //.setLargeIcon(profilePhoto)
+                .setGroup("group");
+
+
+        NotificationCompat.Builder notification2 = new NotificationCompat.Builder(
+                activity, CHANNEL_1_ID
+        )
+                .setSmallIcon(R.drawable.ic_insert_comment_black_24dp)
+                .setContentTitle(title2)
+                .setContentText(message2)
+                .setPriority(NotificationCompat.PRIORITY_HIGH)
+                .setAutoCancel(true)
+                .setColor(Color.rgb(4,42,88))
+                .setVisibility(NotificationCompat.VISIBILITY_PRIVATE)
+                .setGroup("group");
+        NotificationCompat.Builder summaryNotification = new NotificationCompat.Builder(
+                activity, CHANNEL_1_ID
+        )
+                .setSmallIcon(R.drawable.ic_insert_comment_black_24dp)
+                .setStyle(new NotificationCompat.InboxStyle()
+                        .addLine(title2 + " " + message2)
+                        .addLine(title1 + " " + message1)
+                        .setBigContentTitle("2 new messages"))
+                .setPriority(NotificationCompat.PRIORITY_HIGH)
+                .setColor(Color.rgb(4,42,88))
+                .setVisibility(NotificationCompat.VISIBILITY_PRIVATE)
+                .setGroup("group")
+                .setColor(Color.BLUE)
+                .setGroupAlertBehavior(NotificationCompat.GROUP_ALERT_CHILDREN)
+                .setGroupSummary(true);
+
 
         //宣告Intent物件 跳至friends_introduction
         Intent intent = new Intent(activity,
                 FriendsIntroductionActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        intent.putExtra("message",message);
+        intent.putExtra("title", title1);
 
         // 宣告一個 PendingIntent 的物件(執行完並不會馬上啟動,點訊息的時候才會跳到別的 Activity)
         PendingIntent pendingIntent = PendingIntent.getActivity(activity,
-                0,intent,PendingIntent.FLAG_UPDATE_CURRENT);
-        builder.setContentIntent(pendingIntent);
+                0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        notification1.setContentIntent(pendingIntent);
+        notification2.setContentIntent(pendingIntent);
+        summaryNotification.setContentIntent(pendingIntent);
 
         //定義一個訊息管理者 和系統要 取得訊息管理者的物件
-        NotificationManager notificationManager = (NotificationManager)activity.getSystemService(
+        NotificationManager notificationManager = (NotificationManager) activity.getSystemService(
                 Context.NOTIFICATION_SERVICE
         );
 
         //要求傳送一個訊息
-        notificationManager.notify(0,builder.build());
+        //id若一樣，則為更新通知，之前的通知會不建
+        SystemClock.sleep(1000);
+        notificationManager.notify(2, notification1.build());
+        SystemClock.sleep(1000);
+        notificationManager.notify(3, notification2.build());
+        SystemClock.sleep(1000);
+        notificationManager.notify(4, summaryNotification.build());
     }
+
+
+
 
 }
