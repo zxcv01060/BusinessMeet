@@ -100,6 +100,7 @@ public class SearchActivity extends AppCompatActivity implements MatchedDeviceRe
                 case R.id.menu_search:
                     return true;
                 case R.id.menu_friends:
+                    //menuItem.setIcon(R.drawable.ic_people_black_24dp);
                     startActivity(new Intent(getApplicationContext()
                             ,FriendsActivity.class));
                     overridePendingTransition(0,0);
