@@ -16,8 +16,12 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import retrofit2.Call;
+import tw.com.bussinessmeet.api.UserInformationApiImpl;
+import tw.com.bussinessmeet.bean.ResponseBody;
 import tw.com.bussinessmeet.bean.UserInformationBean;
 import tw.com.bussinessmeet.dao.UserInformationDAO;
+import tw.com.bussinessmeet.helper.AsyncTasKHelper;
 import tw.com.bussinessmeet.helper.AvatarHelper;
 import tw.com.bussinessmeet.helper.BlueToothHelper;
 import tw.com.bussinessmeet.helper.DBHelper;
@@ -33,8 +37,26 @@ public class AddIntroductionActivity extends AppCompatActivity {
     private UserInformationDAO userInformationDAO;
     private DBHelper DH = null;
     private AvatarHelper avatarHelper ;
+    private UserInformationApiImpl userInformationApi;
 //    private List<DeviceItem> deviceItems ;
 //    private ThematicListAdapter thematicListAdapter;
+    private AsyncTasKHelper.OnResponseListener<UserInformationBean, UserInformationBean> addResponseListener =
+            new AsyncTasKHelper.OnResponseListener<UserInformationBean, UserInformationBean>() {
+                @Override
+                public Call<ResponseBody<UserInformationBean>> request(UserInformationBean... userInformationBeans) {
+                    return userInformationApi.add(userInformationBeans[0]);
+                }
+
+                @Override
+                public void onSuccess(UserInformationBean userInformationBean) {
+
+                }
+
+                @Override
+                public void onFail(int status) {
+
+                }
+            };
 
 
 
@@ -124,6 +146,7 @@ public class AddIntroductionActivity extends AppCompatActivity {
 
             if(checkData(ufb)) {
                 userInformationDAO.add(ufb);
+                AsyncTasKHelper.execute(addResponseListener, ufb);
                 changeToAnotherPage(SearchActivity.class);
             }
         }

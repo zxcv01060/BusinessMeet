@@ -3,7 +3,6 @@ package tw.com.bussinessmeet.helper;
 import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.PendingIntent;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.BroadcastReceiver;
@@ -12,27 +11,21 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
-import android.location.LocationManager;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Handler;
 import android.os.Message;
 import android.provider.Settings;
 import android.util.Log;
 import android.widget.Toast;
 
-import androidx.annotation.RequiresApi;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
-import java.util.ArrayList;
 import java.util.Formatter;
-import java.util.List;
 import java.util.Set;
 
 
 import tw.com.bussinessmeet.AddIntroductionActivity;
-import tw.com.bussinessmeet.MainActivity;
 import tw.com.bussinessmeet.RequestCode;
 import tw.com.bussinessmeet.bean.UserInformationBean;
 import tw.com.bussinessmeet.dao.UserInformationDAO;
@@ -48,8 +41,7 @@ public class BlueToothHelper {
     private BluetoothAdapter mBluetoothAdapter;
     private IntentFilter filter;
     private UserInformationDAO userInformationDAO;
-    private List<UserInformationBean> unmatchedBeanList;
-    private List<UserInformationBean> matchedBeanList;
+
 
     private MatchedDeviceRecyclerViewAdapter matchedDeviceRecyclerViewAdapter;
     private UnmatchedDeviceRecyclerViewAdapter unmatchedDeviceRecyclerViewAdapter;
@@ -216,7 +208,9 @@ public class BlueToothHelper {
                         public void onClick(DialogInterface dialog, int which) {
                            openGPS(activity);
                         }
-                    }).show();
+
+                    }).setCancelable(false).show();
+//                    dialog.setCanceledOnTouchOutside(false);
                 }
 
             }else{
