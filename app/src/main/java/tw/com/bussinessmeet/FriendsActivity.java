@@ -6,10 +6,16 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
+import android.widget.TextView;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
+import org.w3c.dom.Text;
+
 public class FriendsActivity extends AppCompatActivity {
+    private Button button;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,6 +27,21 @@ public class FriendsActivity extends AppCompatActivity {
         //Set Home
         bottomNavigationView.setSelectedItemId(R.id.menu_friends);
         bottomNavigationView.setOnNavigationItemSelectedListener(navListener);
+
+/*        //轉跳頁面
+        //取得此Button的實體
+/*        button = (Button)findViewById(R.id.gotonotifi);
+
+        //實做OnClickListener界面
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent();
+                intent.setClass(FriendsActivity.this , NotificationActivity.class);
+                startActivity(intent);
+            }
+        });*/
+
 
     }
 
@@ -46,6 +67,8 @@ public class FriendsActivity extends AppCompatActivity {
             return false;
         }
     });
+
+
 
 
 }
