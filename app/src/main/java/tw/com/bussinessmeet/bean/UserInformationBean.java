@@ -12,8 +12,8 @@ public class UserInformationBean {
     private String company;
     private String position;
     private String avatar;
-    private  String email;
-    private  String tel;
+    private String email;
+    private String tel;
     private Date createDate;
     private Date modifyDate;
 

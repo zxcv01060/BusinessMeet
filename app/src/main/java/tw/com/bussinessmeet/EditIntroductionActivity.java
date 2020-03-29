@@ -18,10 +18,14 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.google.android.material.bottomnavigation.BottomNavigationView;
+import retrofit2.Call;
+import tw.com.bussinessmeet.api.UserInformationApiImpl;
 
+import tw.com.bussinessmeet.bean.Empty;
+import tw.com.bussinessmeet.bean.ResponseBody;
 import tw.com.bussinessmeet.bean.UserInformationBean;
 import tw.com.bussinessmeet.dao.UserInformationDAO;
+import tw.com.bussinessmeet.helper.AsyncTasKHelper;
 import tw.com.bussinessmeet.helper.BlueToothHelper;
 import tw.com.bussinessmeet.helper.DBHelper;
 import tw.com.bussinessmeet.helper.AvatarHelper;
@@ -37,7 +41,24 @@ public class EditIntroductionActivity extends AppCompatActivity {
     private BlueToothHelper blueToothHelper;
     private DBHelper DH;
     private UserInformationDAO userInformationDAO;
+    private UserInformationApiImpl userInformationApi;
+    private AsyncTasKHelper.OnResponseListener<UserInformationBean, Empty> updateResponseListener =
+            new AsyncTasKHelper.OnResponseListener<UserInformationBean, Empty>() {
+                @Override
+                public Call<ResponseBody<Empty>> request(UserInformationBean... userInformationBeans) {
+                    return userInformationApi.update(userInformationBeans[0]);
+                }
 
+                @Override
+                public void onSuccess(Empty Empty) {
+
+                }
+
+                @Override
+                public void onFail(int status) {
+
+                }
+            };
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -81,8 +102,8 @@ public class EditIntroductionActivity extends AppCompatActivity {
                 Log.d("edit", name);
                 com = cursor.getString(cursor.getColumnIndex("company"));
                 pos = cursor.getString(cursor.getColumnIndex("position"));
-                mail = cursor.getString(cursor.getColumnIndex("user_name"));
-                phone = cursor.getString(cursor.getColumnIndex("user_name"));
+                mail = cursor.getString(cursor.getColumnIndex("email"));
+                phone = cursor.getString(cursor.getColumnIndex("tel"));
                 avatar.setImageBitmap(avatarHelper.getImageResource(cursor.getString(cursor.getColumnIndex("avatar"))));
             } while (cursor.moveToNext());
         }
@@ -101,6 +122,7 @@ public class EditIntroductionActivity extends AppCompatActivity {
             ufb.setTel(tel.getText().toString());
             ufb.setAvatar(avatarHelper.setImageResource(avatar));
             userInformationDAO.update(ufb);
+            AsyncTasKHelper.execute(updateResponseListener,ufb);
             changeToSelfIntroductionPage();
         }
     };

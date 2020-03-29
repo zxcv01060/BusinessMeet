@@ -64,14 +64,6 @@ public class AddIntroductionActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.add_introduction);
-//        recyclerViewThrmatic = (RecyclerView) findViewById(R.id.recycleViewThematic);
-//        deviceItems = new ArrayList<>();
-        Log.d("MainActivity","success");
-//        tvDevices = (TextView) findViewById(R.id.tvDecives);
-////        matched = (TextView) findViewById(R.id.matched);
-//
-////
-
         confirm = (Button)findViewById(R.id.confirm_introduction);
         position = (TextView)findViewById(R.id.add_profile_position);
         company = (TextView)findViewById(R.id.add_profile_company);
@@ -85,10 +77,9 @@ public class AddIntroductionActivity extends AppCompatActivity {
         blueTooth = new BlueToothHelper(this);
         blueTooth.startBuleTooth();
         String myBlueTooth = blueTooth.getMyBuleTooth();
-//        Log.d("resultmyBlueTooth",myBlueTooth);
-//        String myBlueTooth = "1";
+        Log.d("resultMy","getBlueTooth"+myBlueTooth);
         String result = userInformationDAO.getById(myBlueTooth);
-        Log.d("result","getBlueTooth"+result);
+
         if( result !=null && !result.equals("") ) {
             changeToAnotherPage(SearchActivity.class);
         }
@@ -134,7 +125,7 @@ public class AddIntroductionActivity extends AppCompatActivity {
         @Override
         public void onClick(View v) {
             UserInformationBean ufb = new UserInformationBean();
-//            ufb.setBlueTooth("1");
+
             ufb.setBlueTooth(blueTooth.getMyBuleTooth());
             ufb.setCompany(company.getText().toString());
             ufb.setPosition(position.getText().toString());
@@ -142,6 +133,7 @@ public class AddIntroductionActivity extends AppCompatActivity {
             ufb.setEmail(email.getText().toString());
             ufb.setTel(tel.getText().toString());
             ufb.setAvatar(avatarHelper.setImageResource(avatar));
+//            ufb.setAvatar("1");
             Log.d("add",ufb.getCompany());
 
             if(checkData(ufb)) {
@@ -182,24 +174,4 @@ public class AddIntroductionActivity extends AppCompatActivity {
         return false;
     }
 
-
-
-
-//    private void createRecyclerViewWeather() {
-////        recyclerViewThrmatic.setLayoutManager(new LinearLayoutManager(this));
-//
-//        thematicListAdapter = new ThematicListAdapter(this,this.deviceItems);
-//
-//        thematicListAdapter.setClickListener(this);
-////        recyclerViewThrmatic.setAdapter(thematicListAdapter);
-//
-//    }
-//    @Override
-//    protected void onDestroy() {
-////        unregisterReceiver(receiver); super.onDestroy();
-//    }
-//    @Override
-//    public void onDevicesClick(View view, int position) {
-//
-//    }
 }

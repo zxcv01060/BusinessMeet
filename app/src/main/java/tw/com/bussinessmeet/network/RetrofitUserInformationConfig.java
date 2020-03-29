@@ -16,17 +16,17 @@ public class RetrofitUserInformationConfig {
     private static final String BASE_URL = ApiConfig.API_URL;
     private static final Retrofit retrofit = new Retrofit.Builder()
             .addConverterFactory(GsonConverterFactory.create()) // 使用 Gson 解析
-            .baseUrl(BASE_URL+"/userinformation")
+            .baseUrl(BASE_URL)
             .build();
     public static UserInformationApi createRetrofit(){
         return retrofit.create(UserInformationApi.class);
     }
     public interface UserInformationApi {
-        @POST("/search")
+        @POST("search")
         Call<ResponseBody<List<UserInformationBean>>> search(@Body UserInformationBean userInformationBean);
-        @POST("/add")
+        @POST("add")
         Call<ResponseBody<UserInformationBean>> add(@Body UserInformationBean userInformationBean);
-        @POST("/update")
+        @POST("update")
         Call<ResponseBody<Empty>> update (@Body UserInformationBean userinformationBean);
     }
 
