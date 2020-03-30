@@ -93,8 +93,9 @@ public class UserInformationDAO {
             where += "position = ?";
             args.add(userInformationBean.getPosition());
         }
+        Log.d("result","success");
         Cursor cursor = db.query(tableName, column, where,args.toArray(new String[0]),null,null,null);
-
+        cursor.moveToFirst();
         return cursor;
     }
 

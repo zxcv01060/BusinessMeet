@@ -15,6 +15,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
@@ -26,6 +27,7 @@ import android.os.Message;
 import android.os.SystemClock;
 import android.provider.Settings;
 import android.util.Log;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
@@ -68,6 +70,8 @@ public class BlueToothHelper {
     private List<UserInformationBean> unmatchedBeanList;
     private List<UserInformationBean> matchedBeanList;
     private NotificationHelper notificationHelper;
+    private ImageView avatar;
+    private AvatarHelper avatarHelper;
 
     private static final String CHANNEL_1_ID = "channel1" ;
 
@@ -125,6 +129,7 @@ public class BlueToothHelper {
 
         @Override
         public void onReceive(Context context, Intent intent) {
+
             // 收到的廣播型別
             String action = intent.getAction();
             if (BluetoothDevice.ACTION_FOUND.equals(action)) {
@@ -288,12 +293,22 @@ public class BlueToothHelper {
     }
 
     public void sendMessage() {
+
+        //avatar = (ImageView) findViewById(R.id.edit_person_photo);
+        AvatarHelper avatarHelper = new AvatarHelper();
+        Log.d("seedmess","ness");
+        UserInformationBean ufb = new UserInformationBean();
+        ufb.setBlueTooth(getMyBuleTooth());
+        Cursor result = userInformationDAO.searchAll(ufb);
+
+        //Bitmap profilePhoto = avatar.setImageBitmap(avatarHelper.getImageResource(result.getString(result.getColumnIndex("avatar"))));
+
         String title1 = "邱殷龍";
         String message1 = "原音股份有限公司";
         String title2 = "李赫宰";
         String message2 = " SM娛樂公司";
 
-        //Bitmap profilePhoto =  ;
+
 
         NotificationCompat.Builder notification1 = new NotificationCompat.Builder(
                 activity, CHANNEL_1_ID
@@ -305,7 +320,7 @@ public class BlueToothHelper {
                 .setAutoCancel(true)
                 .setColor(Color.rgb(4,42,88))
                 .setVisibility(NotificationCompat.VISIBILITY_PRIVATE)
-                //.setLargeIcon(profilePhoto)
+                .setLargeIcon(avatarHelper.getImageResource(result.getString(result.getColumnIndex("avatar"))))
                 .setGroup("group");
 
 
@@ -319,7 +334,8 @@ public class BlueToothHelper {
                 .setAutoCancel(true)
                 .setColor(Color.rgb(4,42,88))
                 .setVisibility(NotificationCompat.VISIBILITY_PRIVATE)
-                .setGroup("group");
+                .setLargeIcon(avatarHelper.getImageResource(result.getString(result.getColumnIndex("avatar"))))
+                .setGroup("gro//up");
         NotificationCompat.Builder summaryNotification = new NotificationCompat.Builder(
                 activity, CHANNEL_1_ID
         )
