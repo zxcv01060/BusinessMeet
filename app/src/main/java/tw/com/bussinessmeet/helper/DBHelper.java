@@ -27,13 +27,17 @@ public class DBHelper extends SQLiteOpenHelper {
                         "position NVARCHAR(100), " +
                         "email VARCHAR(100)," +
                         "tel VARCHAR(20)," +
-                        "avatar NVARCHAR(1000)" +
+                        "avatar VARCHAR(1000)," +
+                        "create_date DATETIME NOT NULL," +
+                        "modify_date DATETIME" +
                     ");";
         SQL += "CREATE TABLE IF NOT EXISTS" + _TableName[1] + "( " +
                     "m_sno INT PRIMARY KEY IDENTITY, " +
                     "blue_tooth VARCHAR(18) REFERENCES " + _TableName[0] +"(blue_tooth), " +
                     "matched_blue_tooth VARCHAR(18) REFERENCES " + _TableName[0] + "(blue_tooth),"+
-                    "memorandum VARCHAR(1000)" +
+                    "memorandum VARCHAR(1000)," +
+                    "create_date DATETIME NOT NULL," +
+                    "modify_date DATETIME" +
                 ");";
         db.execSQL(SQL);
 

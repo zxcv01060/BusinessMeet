@@ -1,12 +1,15 @@
 package tw.com.bussinessmeet;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import java.util.List;
+
+import tw.com.bussinessmeet.api.UserInformationApiImpl;
+import tw.com.bussinessmeet.bean.UserInformationBean;
 import tw.com.bussinessmeet.helper.BlueToothHelper;
 
 //https://codertw.com/android-%E9%96%8B%E7%99%BC/332688/
@@ -27,17 +30,18 @@ public class MainActivity extends AppCompatActivity  {
                 while(!permission) {
 
                     permission = blueToothHelper.checkPermission();
+                    if(permission){
+                        Thread.interrupted();
+                    }
                 }
                 Log.d("resultthread",String.valueOf(permission));
             }
         };
         checkPermission.start();
-            try {
-                Log.d("resultthr",String.valueOf(permission));
-                checkPermission.sleep(1000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+
+
+
+
 
     }
     @Override

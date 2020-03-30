@@ -5,16 +5,22 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 import tw.com.bussinessmeet.bean.UserInformationBean;
 import tw.com.bussinessmeet.helper.DBHelper;
+import tw.com.bussinessmeet.network.RetrofitUserInformationConfig;
 
 public class UserInformationDAO {
     private String whereClause = "blue_tooth = ?";
     private String tableName = "User_Information";
-    private  String[] column = new String[]{"blue_tooth", "user_name", "company", "position","email","tel","avatar"};
+    private  String[] column = new String[]{"blue_tooth", "user_name", "company", "position","email","tel","avatar","create_date","modify_date"};
     private SQLiteDatabase db ;
+    private SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    private RetrofitUserInformationConfig retrofitUserInformationConfig;
     public UserInformationDAO(DBHelper DH){
         db = DH.getWritableDatabase();
     }
@@ -35,6 +41,8 @@ public class UserInformationDAO {
         Log.d("add","dbsuccess");
         ContentValues values = putValues(userInformationBean);
 
+        String createDate = dateFormat.format(new Date());
+        values.put("create_date",createDate);
         db.insert(tableName, null, values);
         db.close();
     }
@@ -42,6 +50,8 @@ public class UserInformationDAO {
     public void update(UserInformationBean userInformationBean){
 
         ContentValues values = putValues(userInformationBean);
+        String modifyDate = dateFormat.format(new Date());
+        values.put("modify_date",modifyDate);
     //範例
 //        String[] whereArgs1 = {"#100", b.getStorage_id()};
 //        String whereClause1 = DatabaseSchema.TABLE_TALKS.COLUMN_TID + "=? AND " + DatabaseSchema.TABLE_TALKS.COLUMN_STORAGEID + "=?";
@@ -96,6 +106,11 @@ public class UserInformationDAO {
         Cursor cursor = db.query(tableName, column, where,args.toArray(new String[0]),null,null,null);
 
         return cursor;
+    }
+
+    public List<UserInformationBean> searchFromWebApi(UserInformationBean userInformationBean){
+//        List<UserInformationBean> uib =
+        return null;
     }
 
 }
