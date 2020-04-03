@@ -17,13 +17,15 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import tw.com.bussinessmeet.bean.UserInformationBean;
 import tw.com.bussinessmeet.dao.UserInformationDAO;
+import tw.com.bussinessmeet.helper.AcceptThreadHelper;
 import tw.com.bussinessmeet.helper.BlueToothHelper;
 import tw.com.bussinessmeet.helper.DBHelper;
 
-public class SearchActivity extends AppCompatActivity implements MatchedDeviceRecyclerViewAdapter.SearchClickListener,UnmatchedDeviceRecyclerViewAdapter.SearchClickListener {
+public class SearchActivity extends AppCompatActivity implements MatchedDeviceRecyclerViewAdapter.SearchClickListener,UnmatchedDeviceRecyclerViewAdapter.MatchedClickListener {
     private DBHelper DH = null;
     private UserInformationDAO userInformationDAO;
     private BlueToothHelper blueTooth;
@@ -32,6 +34,7 @@ public class SearchActivity extends AppCompatActivity implements MatchedDeviceRe
     private UnmatchedDeviceRecyclerViewAdapter unmatchedRecyclerViewAdapter;
     private List<UserInformationBean> matchedList = new ArrayList<>();
     private List<UserInformationBean> unmatchedList = new ArrayList<>();
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,7 +47,7 @@ public class SearchActivity extends AppCompatActivity implements MatchedDeviceRe
         blueTooth = new BlueToothHelper(this);
         blueTooth.startBuleTooth();
         blueTooth.searchBlueTooth(userInformationDAO,matchedRecyclerViewAdapter,unmatchedRecyclerViewAdapter);
-
+        blueTooth.startThread();
         //bottomNavigationView
         //Initialize And Assign Variable
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
@@ -79,7 +82,21 @@ public class SearchActivity extends AppCompatActivity implements MatchedDeviceRe
     }
     @Override
     public void onSearchClick(View view, int position) {
-
+        Log.d("results","success");
+        Log.d("results",String.valueOf(position));
+        UserInformationBean userInformationBean = matchedRecyclerViewAdapter.getUserInformation(position);
+        String address = userInformationBean.getBlueTooth();
+        String userName = userInformationBean.getUserName();
+        blueTooth.matched(address,userName);
+    }
+    @Override
+    public void onMatchedClick(View view, int position) {
+        Log.d("results","success");
+        Log.d("results",String.valueOf(position));
+        UserInformationBean userInformationBean = unmatchedRecyclerViewAdapter.getUserInformation(position);
+        String address = userInformationBean.getBlueTooth();
+        String userName = userInformationBean.getUserName();
+        blueTooth.matched(address,userName);
     }
 
     //button_nav Perform ItemSelectedListener

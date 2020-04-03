@@ -8,6 +8,7 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
+import android.bluetooth.BluetoothSocket;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -30,13 +31,17 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.io.IOException;
+import java.io.OutputStream;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.net.NetworkInterface;
 import java.net.SocketException;
 import java.util.Enumeration;
 import java.util.Formatter;
 import java.util.Set;
+import java.util.UUID;
 
 
 import tw.com.bussinessmeet.AddIntroductionActivity;
@@ -62,6 +67,22 @@ public class BlueToothHelper {
 
     private MatchedDeviceRecyclerViewAdapter matchedDeviceRecyclerViewAdapter;
     private UnmatchedDeviceRecyclerViewAdapter unmatchedDeviceRecyclerViewAdapter;
+
+    // UUID，蓝牙建立链接需要的
+
+
+    // 选中发送数据的蓝牙设备，全局变量，否则连接在方法执行完就结束了
+    private BluetoothDevice selectDevice;
+    // 获取到选中设备的客户端串口，全局变量，否则连接在方法执行完就结束了
+    private BluetoothSocket clientSocket;
+    // 获取到向设备写的输出流，全局变量，否则连接在方法执行完就结束了
+    private OutputStream outputStream;
+
+    private final UUID MY_UUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
+    private  AcceptThreadHelper acceptThread;
+
+
+
     public BlueToothHelper(Activity activity) {
         this.activity = activity;
     }
@@ -187,10 +208,7 @@ public class BlueToothHelper {
 // 設定進度條
         activity.setProgressBarIndeterminateVisibility(true);
         activity.setTitle("正在搜尋...");
-// 判斷是否在搜尋,如果在搜尋，就取消搜尋
-//        if (mBluetoothAdapter.isDiscovering()) {
-//            mBluetoothAdapter.cancelDiscovery();
-//        }
+
 // 開始搜尋
 //        BluetoothAdapter adapter = BluetoothAdapter.getDefaultAdapter();
 //
@@ -291,6 +309,7 @@ public class BlueToothHelper {
     public String getMyBuleTooth() {
         BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         String bluetoothMacAddress = "";
+        //確認版本號
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M){
             try {
                 Field mServiceField = bluetoothAdapter.getClass().getDeclaredField("mService");
@@ -301,18 +320,69 @@ public class BlueToothHelper {
                 if (btManagerService != null) {
                     bluetoothMacAddress = (String) btManagerService.getClass().getMethod("getAddress").invoke(btManagerService);
                 }
-            } catch (NoSuchFieldException e) {
+            } catch (Exception e) {
 
-            } catch (NoSuchMethodException e) {
-
-            } catch (IllegalAccessException e) {
-
-            } catch (InvocationTargetException e) {
 
             }
         } else {
             bluetoothMacAddress = bluetoothAdapter.getAddress();
         }
         return bluetoothMacAddress;
+    }
+
+    public void matched(String blueToothAddress,String userName){
+        userName = "darkplume";
+        // 实例接收客户端传过来的数据线程
+
+        Log.d("blueTooth",blueToothAddress);
+        // 判斷是否在搜尋,如果在搜尋，就取消搜尋
+        if (mBluetoothAdapter.isDiscovering()) {
+            mBluetoothAdapter.cancelDiscovery();
+        }
+        selectDevice = mBluetoothAdapter.getRemoteDevice(blueToothAddress);
+        Log.d("selectDevice",String.valueOf(selectDevice));
+        try{
+//            if(clientSocket == null){
+            try {
+                clientSocket = selectDevice.createRfcommSocketToServiceRecord(MY_UUID);
+            } catch (Exception e) {Log.e("error","Error creating socket");}
+
+            try {
+                clientSocket.connect();
+                outputStream = clientSocket.getOutputStream();
+                Log.e("","Connected");
+            } catch (IOException e) {
+                Log.e("error",e.getMessage());
+                try {
+                    Log.e("","trying fallback...");
+
+                    clientSocket =(BluetoothSocket) selectDevice.getClass().getMethod("createRfcommSocket", new Class[] {int.class}).invoke(selectDevice,2);
+                    clientSocket.connect();
+                    outputStream = clientSocket.getOutputStream();
+                    Log.e("",String.valueOf(selectDevice));
+                }
+                catch (Exception e2) {
+                    Log.e("", "Couldn't establish Bluetooth connection!");
+                }
+            }
+
+
+            Log.d("outputStream",String.valueOf(outputStream));
+            if (outputStream != null){
+                Log.d("outputStream","success~~~");
+                String text = blueToothAddress;
+                outputStream.write(text.getBytes("UTF-8"));
+            }
+
+            Toast.makeText(activity,"已發送配對請求，請等待對方同意",Toast.LENGTH_LONG).show();
+
+        }catch(Exception e){
+            e.printStackTrace();
+            Toast.makeText(activity,"請求配對失敗，請稍後再試",Toast.LENGTH_LONG).show();
+        }
+    }
+    public void startThread(){
+        acceptThread = new AcceptThreadHelper(mBluetoothAdapter,MY_UUID,activity);
+        acceptThread.start();
     }
 }
