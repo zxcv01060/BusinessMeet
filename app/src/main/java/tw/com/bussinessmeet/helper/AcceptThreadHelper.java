@@ -23,18 +23,12 @@ public class AcceptThreadHelper extends Thread {
     private final String NAME = "Bluetooth_Socket";
     private BluetoothAdapter mBlueToothAdapter;
     private Activity activity;
-    Handler handler = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            // TODO Auto-generated method stub
-            super.handleMessage(msg);
-            // 通过msg传递过来的信息，吐司一下收到的信息
-            Toast.makeText(activity, (String) msg.obj, Toast.LENGTH_LONG).show();
-        }
-    };
-    public AcceptThreadHelper(BluetoothAdapter mBlueToothAdapter, UUID UUID,Activity activity) {
+    private Handler handler;
+
+    public AcceptThreadHelper(BluetoothAdapter mBlueToothAdapter, UUID UUID,Activity activity,Handler handler) {
         this.mBlueToothAdapter = mBlueToothAdapter;
         this.activity = activity;
+        this.handler = handler;
         try{
             serverSocket =  this.mBlueToothAdapter.listenUsingRfcommWithServiceRecord(NAME,UUID);
             Log.d("output",outputStream.toString());

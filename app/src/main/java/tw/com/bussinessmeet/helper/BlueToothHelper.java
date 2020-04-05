@@ -22,6 +22,8 @@ import android.os.Message;
 import android.provider.Settings;
 import android.text.TextUtils;
 import android.util.Log;
+
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.core.app.ActivityCompat;
@@ -152,8 +154,11 @@ public class BlueToothHelper {
             } else if (BluetoothAdapter.ACTION_DISCOVERY_FINISHED.equals(action)) {
                 // 關閉進度條
 //                activity.setProgressBarIndeterminateVisibility(true);
-                openGPS(activity);
+                TextView search_title = activity.findViewById(R.id.search_title);
+                search_title.setText("搜尋完成!");
                 Toast.makeText(activity,"搜尋完成！",Toast.LENGTH_LONG);
+                openGPS(activity);
+
                 // 用於迴圈掃描藍芽的handler
 //                mBLHandler.sendEmptyMessageDelayed(1, 10000);
             }else if(BluetoothAdapter.ACTION_STATE_CHANGED.equals(action)){
@@ -193,7 +198,7 @@ public class BlueToothHelper {
                 mBluetoothAdapter.enable();
             }
 //            }
-            scanBluth();
+
         }
     }
 
@@ -204,10 +209,13 @@ public class BlueToothHelper {
     public  void openGPS(Context context) {
         ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, RequestCode.REQUEST_LOCATION );
     }
-    private void scanBluth() {
+    public void scanBluth() {
 // 設定進度條
         activity.setProgressBarIndeterminateVisibility(true);
-        activity.setTitle("正在搜尋...");
+        TextView search_title =  activity.findViewById(R.id.search_title);
+        Log.e("search",String.valueOf(activity));
+        Log.e("search",String.valueOf(search_title));
+        search_title.setText("正在搜尋...");
 
 // 開始搜尋
 //        BluetoothAdapter adapter = BluetoothAdapter.getDefaultAdapter();
@@ -329,6 +337,11 @@ public class BlueToothHelper {
         }
         return bluetoothMacAddress;
     }
+    public void cancelDiscovery(){
+        if (mBluetoothAdapter.isDiscovering()) {
+            mBluetoothAdapter.cancelDiscovery();
+        }
+    }
 
     public void matched(String blueToothAddress,String userName){
         userName = "darkplume";
@@ -339,6 +352,28 @@ public class BlueToothHelper {
         if (mBluetoothAdapter.isDiscovering()) {
             mBluetoothAdapter.cancelDiscovery();
         }
+        createConnect(blueToothAddress,false);
+            Log.d("outputStream","success~~~");
+            String message = getMyBuleTooth()+",ask";
+            try {
+                outputStream.write(message.getBytes("UTF-8"));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+    }
+    public void matchedSuccessReturn(String blueToothAddress){
+        String message = getMyBuleTooth()+",accept";
+
+        try {
+            createConnect(blueToothAddress,true);
+            Log.e("successreturn",message);
+            outputStream.write(message.getBytes("UTF-8"));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void createConnect(String blueToothAddress,boolean connect){
         selectDevice = mBluetoothAdapter.getRemoteDevice(blueToothAddress);
         Log.d("selectDevice",String.valueOf(selectDevice));
         try{
@@ -368,21 +403,17 @@ public class BlueToothHelper {
 
 
             Log.d("outputStream",String.valueOf(outputStream));
-            if (outputStream != null){
-                Log.d("outputStream","success~~~");
-                String text = blueToothAddress;
-                outputStream.write(text.getBytes("UTF-8"));
+
+            if(!connect) {
+                Toast.makeText(activity, "已發送配對請求，請等待對方同意", Toast.LENGTH_LONG).show();
             }
-
-            Toast.makeText(activity,"已發送配對請求，請等待對方同意",Toast.LENGTH_LONG).show();
-
         }catch(Exception e){
             e.printStackTrace();
-            Toast.makeText(activity,"請求配對失敗，請稍後再試",Toast.LENGTH_LONG).show();
+            Toast.makeText(activity,"配對失敗，請稍後再試",Toast.LENGTH_LONG).show();
         }
     }
-    public void startThread(){
-        acceptThread = new AcceptThreadHelper(mBluetoothAdapter,MY_UUID,activity);
+    public void startThread(Handler handler){
+        acceptThread = new AcceptThreadHelper(mBluetoothAdapter,MY_UUID,activity,handler);
         acceptThread.start();
     }
 }

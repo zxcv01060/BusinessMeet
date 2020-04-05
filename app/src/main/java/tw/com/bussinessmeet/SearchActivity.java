@@ -2,9 +2,13 @@ package tw.com.bussinessmeet;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
@@ -16,12 +20,17 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
-import java.util.UUID;
 
+import retrofit2.Call;
+import tw.com.bussinessmeet.service.Impl.MatchedServiceImpl;
+import tw.com.bussinessmeet.bean.MatchedBean;
+import tw.com.bussinessmeet.bean.ResponseBody;
 import tw.com.bussinessmeet.bean.UserInformationBean;
+import tw.com.bussinessmeet.dao.MatchedDAO;
 import tw.com.bussinessmeet.dao.UserInformationDAO;
-import tw.com.bussinessmeet.helper.AcceptThreadHelper;
+import tw.com.bussinessmeet.helper.AsyncTasKHelper;
 import tw.com.bussinessmeet.helper.BlueToothHelper;
 import tw.com.bussinessmeet.helper.DBHelper;
 
@@ -34,20 +43,75 @@ public class SearchActivity extends AppCompatActivity implements MatchedDeviceRe
     private UnmatchedDeviceRecyclerViewAdapter unmatchedRecyclerViewAdapter;
     private List<UserInformationBean> matchedList = new ArrayList<>();
     private List<UserInformationBean> unmatchedList = new ArrayList<>();
+    private MatchedServiceImpl matchedApi = new MatchedServiceImpl();
+    private TextView search_title;
+    private MatchedDAO matchedDAO;
+    Handler handler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            // TODO Auto-generated method stub
+            super.handleMessage(msg);
+            // 通过msg传递过来的信息，吐司一下收到的信息
+            try {
+                String[] message = ((String) msg.obj).split(",");
+                String myBlueToothAddress = blueTooth.getMyBuleTooth();
+                String matchedBlueTooth = message[0];
+                if(message[1].equals("ask")) {
+                    blueTooth.matchedSuccessReturn(myBlueToothAddress);
+                }
+                Toast.makeText(SearchActivity.this, matchedBlueTooth, Toast.LENGTH_LONG).show();
+                MatchedBean matchedBean = new MatchedBean();
+                matchedBean.setBlueTooth(blueTooth.getMyBuleTooth());
+                matchedBean.setMatchedBlueTooth(matchedBlueTooth);
+                AsyncTasKHelper.execute(addResponseListener, matchedBean);
+                matchedDAO.add(matchedBean);
+
+            }catch(Exception e){
+                e.printStackTrace();
+            }
+        }
+    };
+
+
+    private AsyncTasKHelper.OnResponseListener<MatchedBean, MatchedBean> addResponseListener =
+            new AsyncTasKHelper.OnResponseListener<MatchedBean, MatchedBean>() {
+                @Override
+                public Call<ResponseBody<MatchedBean>> request(MatchedBean... matchedBean) {
+
+                    return matchedApi.add(matchedBean[0]);
+                }
+
+                @Override
+                public void onSuccess(MatchedBean matchedBean) {
+                        Log.e("MatchedBean",String.valueOf(matchedBean));
+                        Log.e("MatchedBean",String.valueOf(matchedBean.getBlueTooth()));
+                }
+
+                @Override
+                public void onFail(int status) {
+
+                }
+            };
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.search);
         openDB();
+
         recyclerViewMatched = findViewById(R.id.matched);
         recyclerViewUnmatched = findViewById(R.id.unmatched);
         createRecyclerViewUnmatched();
         createRecyclerViewMatched();
+        TextView search_title =  findViewById(R.id.search_title);
+        Log.e("searhTitle",String.valueOf(search_title));
         blueTooth = new BlueToothHelper(this);
         blueTooth.startBuleTooth();
+        blueTooth.scanBluth();
         blueTooth.searchBlueTooth(userInformationDAO,matchedRecyclerViewAdapter,unmatchedRecyclerViewAdapter);
-        blueTooth.startThread();
+        blueTooth.startThread(handler);
+        UserInformationBean ufb = new UserInformationBean();
+
         //bottomNavigationView
         //Initialize And Assign Variable
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
@@ -61,6 +125,8 @@ public class SearchActivity extends AppCompatActivity implements MatchedDeviceRe
         Log.d("add","openDB");
         DH = new DBHelper(this);
         userInformationDAO = new UserInformationDAO(DH);
+        matchedDAO = new MatchedDAO(DH);
+
     }
     private void createRecyclerViewMatched() {
         recyclerViewMatched.setLayoutManager(new LinearLayoutManager(this));
@@ -88,6 +154,13 @@ public class SearchActivity extends AppCompatActivity implements MatchedDeviceRe
         String address = userInformationBean.getBlueTooth();
         String userName = userInformationBean.getUserName();
         blueTooth.matched(address,userName);
+//        blueTooth.cancelDiscovery();
+//        Intent intent = new Intent();
+//        intent.setClass(SearchActivity.this,FriendsIntroductionActivity.class);
+//        Bundle bundle = new Bundle();
+//        bundle.putString("blueToothAddress",matchedRecyclerViewAdapter.getUserInformation(position).getBlueTooth());
+//        intent.putExtras(bundle);
+//        startActivity(intent);
     }
     @Override
     public void onMatchedClick(View view, int position) {

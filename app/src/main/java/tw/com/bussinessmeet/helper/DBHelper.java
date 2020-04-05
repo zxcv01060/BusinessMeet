@@ -31,16 +31,17 @@ public class DBHelper extends SQLiteOpenHelper {
                         "create_date DATETIME NOT NULL," +
                         "modify_date DATETIME" +
                     ");";
-        SQL += "CREATE TABLE IF NOT EXISTS" + _TableName[1] + "( " +
-                    "m_sno INT PRIMARY KEY IDENTITY, " +
-                    "blue_tooth VARCHAR(18) REFERENCES " + _TableName[0] +"(blue_tooth), " +
-                    "matched_blue_tooth VARCHAR(18) REFERENCES " + _TableName[0] + "(blue_tooth),"+
-                    "memorandum VARCHAR(1000)," +
-                    "create_date DATETIME NOT NULL," +
-                    "modify_date DATETIME" +
+
+        db.execSQL(SQL);
+        SQL= "CREATE TABLE IF NOT EXISTS " + _TableName[1] + "( " +
+                "m_sno INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                "blue_tooth VARCHAR(18) REFERENCES " + _TableName[0] +"(blue_tooth), " +
+                "matched_blue_tooth VARCHAR(18) REFERENCES " + _TableName[0] + "(blue_tooth),"+
+                "memorandum VARCHAR(1000)," +
+                "create_date DATETIME NOT NULL," +
+                "modify_date DATETIME" +
                 ");";
         db.execSQL(SQL);
-
     }
 
     @Override
