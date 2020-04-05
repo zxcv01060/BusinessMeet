@@ -17,7 +17,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import retrofit2.Call;
-import tw.com.bussinessmeet.api.UserInformationApiImpl;
+import tw.com.bussinessmeet.service.Impl.UserInformationServiceImpl;
 import tw.com.bussinessmeet.bean.ResponseBody;
 import tw.com.bussinessmeet.bean.UserInformationBean;
 import tw.com.bussinessmeet.dao.UserInformationDAO;
@@ -37,7 +37,7 @@ public class AddIntroductionActivity extends AppCompatActivity {
     private UserInformationDAO userInformationDAO;
     private DBHelper DH = null;
     private AvatarHelper avatarHelper ;
-    private UserInformationApiImpl userInformationApi;
+    private UserInformationServiceImpl userInformationApi ;
 //    private List<DeviceItem> deviceItems ;
 //    private ThematicListAdapter thematicListAdapter;
     private AsyncTasKHelper.OnResponseListener<UserInformationBean, UserInformationBean> addResponseListener =
