@@ -19,7 +19,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import retrofit2.Call;
-import tw.com.bussinessmeet.api.UserInformationApiImpl;
+import tw.com.bussinessmeet.service.Impl.UserInformationServiceImpl;
 
 import tw.com.bussinessmeet.bean.Empty;
 import tw.com.bussinessmeet.bean.ResponseBody;
@@ -41,7 +41,7 @@ public class EditIntroductionActivity extends AppCompatActivity {
     private BlueToothHelper blueToothHelper;
     private DBHelper DH;
     private UserInformationDAO userInformationDAO;
-    private UserInformationApiImpl userInformationApi;
+    private UserInformationServiceImpl userInformationApi;
     private AsyncTasKHelper.OnResponseListener<UserInformationBean, Empty> updateResponseListener =
             new AsyncTasKHelper.OnResponseListener<UserInformationBean, Empty>() {
                 @Override

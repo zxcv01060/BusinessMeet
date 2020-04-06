@@ -1,30 +1,30 @@
-package tw.com.bussinessmeet.api;
+package tw.com.bussinessmeet.service.Impl;
 
 import android.util.Log;
 
 import androidx.annotation.Nullable;
 
-import java.io.IOException;
 import java.util.List;
 
 import retrofit2.Call;
-import retrofit2.Response;
 import tw.com.bussinessmeet.bean.Empty;
 import tw.com.bussinessmeet.bean.ResponseBody;
 import tw.com.bussinessmeet.bean.UserInformationBean;
-import tw.com.bussinessmeet.network.RetrofitUserInformationConfig;
+import tw.com.bussinessmeet.network.RetrofitConfig;
+import tw.com.bussinessmeet.service.UserInformationService;
 
-public class UserInformationApiImpl {
-    private static final RetrofitUserInformationConfig.UserInformationApi userInformationAPI = new RetrofitUserInformationConfig().createRetrofit();
+import static tw.com.bussinessmeet.network.RetrofitConfig.retrofit;
+
+public class UserInformationServiceImpl {
+    private static final UserInformationService userInformationAPI = retrofit.create(UserInformationService.class);
 
     @Nullable
-    public static  Call<ResponseBody<List<UserInformationBean>>> searchUserInformation(UserInformationBean userInformationBean) {
+    public static  Call<ResponseBody<List<UserInformationBean>>> search(UserInformationBean userInformationBean) {
         return userInformationAPI.search(userInformationBean);
     }
 
     @Nullable
     public static Call<ResponseBody<UserInformationBean>> add(UserInformationBean userInformationBean) {
-        Log.d("resultadd",userInformationBean.getUserName());
         return userInformationAPI.add(userInformationBean);
     }
 

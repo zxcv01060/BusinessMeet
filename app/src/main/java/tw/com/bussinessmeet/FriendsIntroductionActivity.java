@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.widget.TextView;
 
@@ -23,7 +24,8 @@ public class FriendsIntroductionActivity extends AppCompatActivity {
         //Set Home
         bottomNavigationView.setSelectedItemId(R.id.menu_friends);
         bottomNavigationView.setOnNavigationItemSelectedListener(navListener);
-
+        String blueToothAddress = getIntent().getStringExtra("blueToothAddress");
+        Log.e("blueToothAddress",blueToothAddress);
         //notification
         TextView textView = findViewById(R.id.friends_name);
         String message = getIntent().getStringExtra("message");

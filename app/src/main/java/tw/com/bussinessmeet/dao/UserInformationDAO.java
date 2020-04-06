@@ -8,11 +8,9 @@ import android.util.Log;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 import tw.com.bussinessmeet.bean.UserInformationBean;
 import tw.com.bussinessmeet.helper.DBHelper;
-import tw.com.bussinessmeet.network.RetrofitUserInformationConfig;
 
 public class UserInformationDAO {
     private String whereClause = "blue_tooth = ?";
@@ -20,7 +18,6 @@ public class UserInformationDAO {
     private  String[] column = new String[]{"blue_tooth", "user_name", "company", "position","email","tel","avatar","create_date","modify_date"};
     private SQLiteDatabase db ;
     private SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-    private RetrofitUserInformationConfig retrofitUserInformationConfig;
     public UserInformationDAO(DBHelper DH){
         db = DH.getWritableDatabase();
     }
@@ -57,6 +54,7 @@ public class UserInformationDAO {
 //        String whereClause1 = DatabaseSchema.TABLE_TALKS.COLUMN_TID + "=? AND " + DatabaseSchema.TABLE_TALKS.COLUMN_STORAGEID + "=?";
 //        db.update(DatabaseSchema.TABLE_TALKS.NAME, values1, whereClause1, whereArgs1);
         db.update(tableName, values,whereClause , new String[]{userInformationBean.getBlueTooth()});
+        db.close();
     }
     public  void delete(String blueTooth){
 
@@ -67,7 +65,6 @@ public class UserInformationDAO {
         Cursor cursor = db.query(tableName, null, "blue_tooth = ?", new String[]{blueTooth}, null, null, null);
         cursor.moveToFirst();
         int index = cursor.getColumnIndex("blue_tooth");
-        Log.d("resultIndex",String.valueOf(index));
         try{
             return cursor.getString(cursor.getColumnIndex("blue_tooth"));
         }catch (Exception e){
@@ -81,36 +78,22 @@ public class UserInformationDAO {
         String userName = userInformationBean.getUserName();
         String company = userInformationBean.getCompany();
         String position = userInformationBean.getPosition();
-        String where = " ";
+        String[] searchValue = new String[]{blueTooth,userName,company,position};
+        String[] searchColumn = new String[]{column[0],column[1],column[2],column[3]};
+        String where = "";
         ArrayList<String> args = new ArrayList<>();
 
-        if(blueTooth != null && !blueTooth.equals(" ")){
-            where += "blue_tooth = ?";
-            args.add(userInformationBean.getBlueTooth());
-        }
-        if(userName != null && !userName.equals((""))){
-            if(!where.equals(" "))where += " and ";
-            where += "user_name = ?";
-            args.add(userInformationBean.getUserName());
-        }
-        if(company != null && !company.equals(" ")){
-            if(!where.equals(" "))where += " and ";
-            where += "company = ?";
-            args.add( userInformationBean.getCompany());
-        }
-        if(position != null && !position.equals(" ")){
-            if(!where.equals(" "))where += " and ";
-            where += "position = ?";
-            args.add(userInformationBean.getPosition());
+        for(int i = 0; i < searchColumn.length; i ++){
+            if(searchValue[i] != null && !searchValue[i].equals("") ){
+                if(!where.equals("")) where += " and ";
+                where += searchColumn[i] + " = ?";
+                args.add(searchValue[i]);
+            }
         }
         Cursor cursor = db.query(tableName, column, where,args.toArray(new String[0]),null,null,null);
-
         return cursor;
     }
 
-    public List<UserInformationBean> searchFromWebApi(UserInformationBean userInformationBean){
-//        List<UserInformationBean> uib =
-        return null;
-    }
+
 
 }
