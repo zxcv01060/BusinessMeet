@@ -8,8 +8,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.List;
 
-import tw.com.bussinessmeet.api.UserInformationApiImpl;
-import tw.com.bussinessmeet.bean.UserInformationBean;
 import tw.com.bussinessmeet.helper.BlueToothHelper;
 
 //https://codertw.com/android-%E9%96%8B%E7%99%BC/332688/
