@@ -59,7 +59,7 @@ import tw.com.bussinessmeet.UnmatchedDeviceRecyclerViewAdapter;
 import static java.lang.Math.abs;
 import static java.lang.Math.pow;
 
-public class BlueToothHelper {
+public class BlueToothHelper { 
 
     private Activity activity;
     private BluetoothAdapter mBluetoothAdapter;
