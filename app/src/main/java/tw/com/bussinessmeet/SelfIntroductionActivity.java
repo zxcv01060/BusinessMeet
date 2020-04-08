@@ -7,9 +7,12 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Base64;
 import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -18,6 +21,7 @@ import android.widget.TextView;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
+import androidx.core.content.ContextCompat;
 import tw.com.bussinessmeet.bean.UserInformationBean;
 import tw.com.bussinessmeet.dao.UserInformationDAO;
 import tw.com.bussinessmeet.helper.AvatarHelper;
@@ -31,6 +35,7 @@ public class SelfIntroductionActivity extends AppCompatActivity {
     private UserInformationDAO userInformationDAO;
     private  DBHelper DH;
     private AvatarHelper avatarHelper;
+    private Menu personal ;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,16 +48,41 @@ public class SelfIntroductionActivity extends AppCompatActivity {
         avatar = (ImageView) findViewById(R.id.edit_person_photo);
         editButton = (Button) findViewById(R.id.editPersonalProfileButton);
         editButton.setOnClickListener(editButtonClick);
+        //personal = (Menu) findViewById(R.id.menu_home);
+        this.personal = personal;
+
         avatarHelper = new AvatarHelper();
+
         openDB();
         searchUserInformation();
 
         //bottomNavigationView
         //Initialize And Assign Variable
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
+        //searchUserInformation();
         //Set Home
         bottomNavigationView.setSelectedItemId(R.id.menu_home);
+//        avatar.setImageBitmap(avatarHelper.getImageResource(result.getString(result.getColumnIndex("avatar"))));
+
+        //Menu profilephoto =(Menu) findViewById(R.id.menu_home);
+        //bottomNavigationView.getMenu().getItem().setChecked(true);
+
         bottomNavigationView.setOnNavigationItemSelectedListener(navListener);
+
+        //get menu
+        //Menu BVMenu = bottomNavigationView.getMenu();
+        bottomNavigationView.setItemIconTintList(null);  //顯示頭像
+        personal.getItem(0).setIcon(ContextCompat.getDrawable(this, R.drawable.ic_search_blod));
+
+
+
+        // ImageView avatar = (ImageView) findViewById(R.id.menu_home);
+        /*
+        JLabel label=new JLabel();
+        ImageIcon icon=new ImageIcon("1.png");
+        label.setIcon(icon);
+        */
+
 
     }
     private void openDB(){
@@ -82,6 +112,8 @@ public class SelfIntroductionActivity extends AppCompatActivity {
             avatar.setImageBitmap(avatarHelper.getImageResource(result.getString(result.getColumnIndex("avatar"))));
         }
         result.close();
+
+
 
     }
 
