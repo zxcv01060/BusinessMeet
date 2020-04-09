@@ -36,7 +36,8 @@ public class SelfIntroductionActivity extends AppCompatActivity {
     private UserInformationDAO userInformationDAO;
     private  DBHelper DH;
     private AvatarHelper avatarHelper;
-    private Menu menu ;
+    private BottomNavigationView menu ;
+    private BlueToothHelper blueToothHelper;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,9 +50,9 @@ public class SelfIntroductionActivity extends AppCompatActivity {
         avatar = (ImageView) findViewById(R.id.edit_person_photo);
         editButton = (Button) findViewById(R.id.editPersonalProfileButton);
         editButton.setOnClickListener(editButtonClick);
-        menu = (Menu) findViewById(R.id.bottom_navigation);
+        menu = (BottomNavigationView) findViewById(R.id.bottom_navigation);
         //this.personal = personal;
-
+        blueToothHelper = new BlueToothHelper(this);
         avatarHelper = new AvatarHelper();
 
         openDB();
@@ -81,11 +82,14 @@ public class SelfIntroductionActivity extends AppCompatActivity {
         MenuItem profilephoto = a.findItem(R.id.menu_home);
         //searchUserInformation();
         AvatarHelper avatarHelper = new AvatarHelper();
+        blueToothHelper.startBuleTooth();
         Log.d("seedmess","ness");
         UserInformationBean ufb = new UserInformationBean();
-        ufb.setBlueTooth(getMyBuleTooth());
+        ufb.setBlueTooth(blueToothHelper.getMyBuleTooth());
         Cursor result = userInformationDAO.searchAll(ufb);
-        //profilephoto.setIcon(avatarHelper.getImageResource(result.getString(result.getColumnIndex("avatar"))));
+        Log.e("result",String.valueOf(result));
+        profilephoto.setIcon(new BitmapDrawable(getResources(),avatarHelper.getImageResource(result.getString(result.getColumnIndex("avatar")))));
+
         ////////////////////////////////
         //avatar.setImageBitmap(avatarHelper.getImageResource(result.getString(result.getColumnIndex("avatar"))))
         //profilephoto.setIcon(R.drawable.ic_search_blod);
