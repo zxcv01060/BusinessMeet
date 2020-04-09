@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.database.Cursor;
+import android.database.MatrixCursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
@@ -35,7 +36,7 @@ public class SelfIntroductionActivity extends AppCompatActivity {
     private UserInformationDAO userInformationDAO;
     private  DBHelper DH;
     private AvatarHelper avatarHelper;
-    private Menu personal ;
+    private Menu menu ;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,8 +49,8 @@ public class SelfIntroductionActivity extends AppCompatActivity {
         avatar = (ImageView) findViewById(R.id.edit_person_photo);
         editButton = (Button) findViewById(R.id.editPersonalProfileButton);
         editButton.setOnClickListener(editButtonClick);
-        //personal = (Menu) findViewById(R.id.menu_home);
-        this.personal = personal;
+        menu = (Menu) findViewById(R.id.bottom_navigation);
+        //this.personal = personal;
 
         avatarHelper = new AvatarHelper();
 
@@ -72,7 +73,28 @@ public class SelfIntroductionActivity extends AppCompatActivity {
         //get menu
         //Menu BVMenu = bottomNavigationView.getMenu();
         bottomNavigationView.setItemIconTintList(null);  //顯示頭像
-        personal.getItem(0).setIcon(ContextCompat.getDrawable(this, R.drawable.ic_search_blod));
+        //personal.getItem(0).setIcon(ContextCompat.getDrawable(this, R.drawable.ic_search_blod));
+
+        //////////////////////////////
+        //set menu
+        Menu a = bottomNavigationView.getMenu();
+        MenuItem profilephoto = a.findItem(R.id.menu_home);
+        //searchUserInformation();
+        AvatarHelper avatarHelper = new AvatarHelper();
+        Log.d("seedmess","ness");
+        UserInformationBean ufb = new UserInformationBean();
+        ufb.setBlueTooth(getMyBuleTooth());
+        Cursor result = userInformationDAO.searchAll(ufb);
+        //profilephoto.setIcon(avatarHelper.getImageResource(result.getString(result.getColumnIndex("avatar"))));
+        ////////////////////////////////
+        //avatar.setImageBitmap(avatarHelper.getImageResource(result.getString(result.getColumnIndex("avatar"))))
+        //profilephoto.setIcon(R.drawable.ic_search_blod);
+
+/*        public boolean onPrepareOptionsMenu(Menu menu) {
+            MenuItem switchButton = menu.findItem(R.id.menu_home);
+            return super.onPrepareOptionsMenu(menu);
+
+        }*/
 
 
 
