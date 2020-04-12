@@ -317,6 +317,7 @@ public class BlueToothHelper {
                 .setContentTitle(title1)
                 .setContentText(message1)
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
+                .setDefaults(NotificationCompat.DEFAULT_ALL)
                 .setAutoCancel(true)
                 .setColor(Color.rgb(4,42,88))
                 .setVisibility(NotificationCompat.VISIBILITY_PRIVATE)
@@ -331,11 +332,12 @@ public class BlueToothHelper {
                 .setContentTitle(title2)
                 .setContentText(message2)
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
+                .setDefaults(NotificationCompat.DEFAULT_ALL)
                 .setAutoCancel(true)
                 .setColor(Color.rgb(4,42,88))
                 .setVisibility(NotificationCompat.VISIBILITY_PRIVATE)
                 .setLargeIcon(avatarHelper.getImageResource(result.getString(result.getColumnIndex("avatar"))))
-                .setGroup("gro//up");
+                .setGroup("group");
         NotificationCompat.Builder summaryNotification = new NotificationCompat.Builder(
                 activity, CHANNEL_1_ID
         )
@@ -345,6 +347,8 @@ public class BlueToothHelper {
                         .addLine(title1 + " " + message1)
                         .setBigContentTitle("2 new messages"))
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
+                .setDefaults(NotificationCompat.DEFAULT_ALL) //設置鈴聲和振動 Android 7.1（API級別25）及更低版本上
+                //.setPriority(NotificationManager.IMPORTANCE_HIGH)
                 .setColor(Color.rgb(4,42,88))
                 .setVisibility(NotificationCompat.VISIBILITY_PRIVATE)
                 .setGroup("group")
@@ -372,7 +376,7 @@ public class BlueToothHelper {
         );
 
         //要求傳送一個訊息
-        //id若一樣，則為更新通知，之前的通知會不建
+        //id若一樣，則為更新通知，之前的通知會不見
         SystemClock.sleep(1000);
         notificationManager.notify(2, notification1.build());
         SystemClock.sleep(1000);
