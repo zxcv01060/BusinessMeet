@@ -20,7 +20,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import retrofit2.Call;
@@ -43,7 +42,7 @@ public class SearchActivity extends AppCompatActivity implements MatchedDeviceRe
     private UnmatchedDeviceRecyclerViewAdapter unmatchedRecyclerViewAdapter;
     private List<UserInformationBean> matchedList = new ArrayList<>();
     private List<UserInformationBean> unmatchedList = new ArrayList<>();
-    private MatchedServiceImpl matchedApi = new MatchedServiceImpl();
+    private MatchedServiceImpl matchedService = new MatchedServiceImpl();
     private TextView search_title;
     private MatchedDAO matchedDAO;
     Handler handler = new Handler() {
@@ -78,7 +77,7 @@ public class SearchActivity extends AppCompatActivity implements MatchedDeviceRe
                 @Override
                 public Call<ResponseBody<MatchedBean>> request(MatchedBean... matchedBean) {
 
-                    return matchedApi.add(matchedBean[0]);
+                    return matchedService.add(matchedBean[0]);
                 }
 
                 @Override

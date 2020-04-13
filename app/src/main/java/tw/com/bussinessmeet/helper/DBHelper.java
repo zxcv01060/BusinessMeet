@@ -12,9 +12,9 @@ public class DBHelper extends SQLiteOpenHelper {
     private final static String[] _TableName = new String[]{"User_Information","Matched"};
 
     public DBHelper(Context context) {
-        super(context, _DBName, null, _DBVersion);
-        SQLiteDatabase   db = getWritableDatabase();
-        Log.d("add",context.toString());
+            super(context, _DBName, null, _DBVersion);
+            SQLiteDatabase   db = getWritableDatabase();
+            Log.d("add",context.toString());
     }
 
     @Override
