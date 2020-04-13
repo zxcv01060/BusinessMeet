@@ -3,3 +3,7 @@
 *.iml
 
 local.properties
+
+.settings/org.eclipse.buildship.core.prefs
+
+.project

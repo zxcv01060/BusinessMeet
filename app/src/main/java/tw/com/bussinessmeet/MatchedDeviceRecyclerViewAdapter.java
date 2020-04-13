@@ -56,6 +56,7 @@ public class MatchedDeviceRecyclerViewAdapter extends RecyclerView.Adapter<Match
             super(itemView);
             search_pro_pic_small = itemView.findViewById(R.id.search_pro_pic_small);
             search_name = itemView.findViewById(R.id.search_name);
+            itemView.setOnClickListener(this);
         }
 
         void bindInformation(String userName, String avatar){
@@ -70,6 +71,9 @@ public class MatchedDeviceRecyclerViewAdapter extends RecyclerView.Adapter<Match
                 }
         }
 
+    }
+    public UserInformationBean getUserInformation(int position){
+        return userInformationBeanList.get(position);
     }
     void  setClickListener(SearchClickListener searchClickLinster){
         this.searchClickListener = searchClickLinster;

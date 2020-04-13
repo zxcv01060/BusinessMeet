@@ -1,13 +1,22 @@
 package tw.com.bussinessmeet.bean;
 
+import com.google.gson.annotations.SerializedName;
+
+import java.util.Date;
+
 public class UserInformationBean {
+
     private String blueTooth;
+
     private String userName;
     private String company;
     private String position;
     private String avatar;
-    private  String email;
-    private  String tel;
+    private String email;
+    private String tel;
+    private String createDate;
+    private String modifyDate;
+
     public String getBlueTooth() {
         return blueTooth;
     }
@@ -62,5 +71,21 @@ public class UserInformationBean {
 
     public void setTel(String tel) {
         this.tel = tel;
+    }
+
+    public String getCreateDate() {
+        return createDate;
+    }
+
+    public void setCreateDate(String createDate) {
+        this.createDate = createDate;
+    }
+
+    public String getModifyDate() {
+        return modifyDate;
+    }
+
+    public void setModifyDate(String modifyDate) {
+        this.modifyDate = modifyDate;
     }
 }

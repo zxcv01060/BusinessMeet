@@ -20,7 +20,7 @@ public class UnmatchedDeviceRecyclerViewAdapter extends RecyclerView.Adapter<Unm
     private LayoutInflater layoutInflater;
     private Context context;
     private  List<UserInformationBean> userInformationBeanList;
-    private SearchClickListener searchClickListener;
+    private MatchedClickListener matchedClickListener;
     UnmatchedDeviceRecyclerViewAdapter(Context context, List<UserInformationBean> userInformationBeanList) {
         this.layoutInflater = LayoutInflater.from(context);
         this.context = context;
@@ -38,6 +38,7 @@ public class UnmatchedDeviceRecyclerViewAdapter extends RecyclerView.Adapter<Unm
     public void onBindViewHolder(@NonNull UnmatchedDeviceRecyclerViewAdapter.ViewHolder holder, int position) {
         UserInformationBean ufb = userInformationBeanList.get(position);
         holder.bindInformation(ufb.getBlueTooth(),ufb.getAvatar());
+
     }
 
     @Override
@@ -56,6 +57,7 @@ public class UnmatchedDeviceRecyclerViewAdapter extends RecyclerView.Adapter<Unm
             super(itemView);
             search_pro_pic_small = itemView.findViewById(R.id.search_pro_pic_small);
             search_name = itemView.findViewById(R.id.search_name);
+            itemView.setOnClickListener(this);
         }
 
         void bindInformation(String userName, String avatar){
@@ -65,22 +67,27 @@ public class UnmatchedDeviceRecyclerViewAdapter extends RecyclerView.Adapter<Unm
 
         @Override
         public void onClick(View v) {
-                if(searchClickListener != null){
-                    searchClickListener.onSearchClick(v,getAdapterPosition());
+            Log.d("results","unmatched1");
+                if(matchedClickListener != null){
+                    Log.d("results","unmatched");
+                    matchedClickListener.onMatchedClick(v,getAdapterPosition());
                 }
         }
 
     }
-    void  setClickListener(SearchClickListener searchClickLinster){
-        this.searchClickListener = searchClickLinster;
+    void  setClickListener(MatchedClickListener searchClickLinster){
+        this.matchedClickListener = searchClickLinster;
+    }
+    public UserInformationBean getUserInformation(int position){
+        return userInformationBeanList.get(position);
     }
     public void dataInsert(UserInformationBean userInformationBean){
         Log.d("resultDataInsert",userInformationBean.getBlueTooth());
         userInformationBeanList.add(userInformationBean);
         notifyItemInserted(getItemCount());
     }
-    public interface SearchClickListener{
-        void onSearchClick(View view, int position);
+    public interface MatchedClickListener{
+        void onMatchedClick(View view, int position);
     }
 
 }
