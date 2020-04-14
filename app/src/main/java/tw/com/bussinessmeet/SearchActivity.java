@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
+import tw.com.bussinessmeet.helper.NotificationHelper;
 import tw.com.bussinessmeet.service.Impl.MatchedServiceImpl;
 import tw.com.bussinessmeet.bean.MatchedBean;
 import tw.com.bussinessmeet.bean.ResponseBody;
@@ -60,10 +61,14 @@ public class SearchActivity extends AppCompatActivity implements MatchedDeviceRe
                 }
                 Toast.makeText(SearchActivity.this, matchedBlueTooth, Toast.LENGTH_LONG).show();
                 MatchedBean matchedBean = new MatchedBean();
+                Log.d("getblueTooth",blueTooth.getMyBuleTooth());
+                Log.d("getblueTooth",matchedBlueTooth);
                 matchedBean.setBlueTooth(blueTooth.getMyBuleTooth());
                 matchedBean.setMatchedBlueTooth(matchedBlueTooth);
                 AsyncTasKHelper.execute(addResponseListener, matchedBean);
                 matchedDAO.add(matchedBean);
+
+
 
             }catch(Exception e){
                 e.printStackTrace();
@@ -152,7 +157,7 @@ public class SearchActivity extends AppCompatActivity implements MatchedDeviceRe
         UserInformationBean userInformationBean = matchedRecyclerViewAdapter.getUserInformation(position);
         String address = userInformationBean.getBlueTooth();
         String userName = userInformationBean.getUserName();
-        blueTooth.matched(address,userName);
+//        blueTooth.matched(address,userName);
 //        blueTooth.cancelDiscovery();
 //        Intent intent = new Intent();
 //        intent.setClass(SearchActivity.this,FriendsIntroductionActivity.class);
@@ -160,6 +165,8 @@ public class SearchActivity extends AppCompatActivity implements MatchedDeviceRe
 //        bundle.putString("blueToothAddress",matchedRecyclerViewAdapter.getUserInformation(position).getBlueTooth());
 //        intent.putExtras(bundle);
 //        startActivity(intent);
+        NotificationHelper notificationHelper = new NotificationHelper(this);
+        notificationHelper.sendMessage(address);
     }
     @Override
     public void onMatchedClick(View view, int position) {

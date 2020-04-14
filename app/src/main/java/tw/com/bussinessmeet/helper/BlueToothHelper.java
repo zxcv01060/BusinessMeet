@@ -17,6 +17,7 @@ import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
@@ -47,15 +48,21 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.NetworkInterface;
 import java.net.SocketException;
+import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.Formatter;
+import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
 
+import retrofit2.Call;
 import tw.com.bussinessmeet.AddIntroductionActivity;
 import tw.com.bussinessmeet.RequestCode;
+import tw.com.bussinessmeet.bean.MatchedBean;
+import tw.com.bussinessmeet.bean.ResponseBody;
 import tw.com.bussinessmeet.bean.UserInformationBean;
+import tw.com.bussinessmeet.dao.MatchedDAO;
 import tw.com.bussinessmeet.dao.UserInformationDAO;
 import tw.com.bussinessmeet.FriendsIntroductionActivity;
 import tw.com.bussinessmeet.MatchedDeviceRecyclerViewAdapter;
@@ -63,6 +70,8 @@ import tw.com.bussinessmeet.NotificationActivity;
 import tw.com.bussinessmeet.R;
 import tw.com.bussinessmeet.UnmatchedDeviceRecyclerViewAdapter;
 import tw.com.bussinessmeet.helper.NotificationHelper;
+import tw.com.bussinessmeet.service.Impl.MatchedServiceImpl;
+import tw.com.bussinessmeet.service.Impl.UserInformationServiceImpl;
 
 import static java.lang.Math.abs;
 import static java.lang.Math.pow;
@@ -76,10 +85,41 @@ public class BlueToothHelper {
     private IntentFilter filter;
     private UserInformationDAO userInformationDAO;
     private AvatarHelper avatarHelper;
+    private ImageView avatar;
 
     private static final String CHANNEL_1_ID = "channel1" ;
     private MatchedDeviceRecyclerViewAdapter matchedDeviceRecyclerViewAdapter;
     private UnmatchedDeviceRecyclerViewAdapter unmatchedDeviceRecyclerViewAdapter;
+    private NotificationHelper notificationHelper;
+    private Cursor cursor;
+    private String tableName = "Matched";
+    private String[] column = new String[]{"blue_tooth","matched_blue_tooth","memorandum","create_date","modify_date"};
+    private String whereClause = "m_sno = ?";
+    //private MatchedDAO db;
+    private SQLiteDatabase db;
+
+
+    private MatchedBean matchedBean = new MatchedBean();
+    private MatchedServiceImpl matchedService = new MatchedServiceImpl();
+    private AsyncTasKHelper.OnResponseListener<MatchedBean, List<MatchedBean>> searchResponseListener =
+            new AsyncTasKHelper.OnResponseListener<MatchedBean, List<MatchedBean>>() {
+                @Override
+                public Call<ResponseBody<List<MatchedBean>>> request(MatchedBean... matchedBeans) {
+
+                    return matchedService.search(matchedBeans[0]);
+                }
+
+                @Override
+                public void onSuccess(List<MatchedBean> MatchedBeanList) {
+                    matchedBean = MatchedBeanList.get(0);
+                }
+
+                @Override
+                public void onFail(int status) {
+
+                }
+            };
+
 
     // UUID，蓝牙建立链接需要的
 
@@ -108,6 +148,7 @@ public class BlueToothHelper {
         filter.addAction(BluetoothAdapter.ACTION_STATE_CHANGED);
         this.matchedDeviceRecyclerViewAdapter = matchedDeviceRecyclerViewAdapter;
         this.unmatchedDeviceRecyclerViewAdapter = unmatchedDeviceRecyclerViewAdapter;
+        notificationHelper = new NotificationHelper(activity);
         Log.d("resultMainAdapter", String.valueOf(matchedDeviceRecyclerViewAdapter.getItemCount()));
         Set<BluetoothDevice> pairedDevices = mBluetoothAdapter.getBondedDevices();
         if (pairedDevices.size() > 0) {
@@ -147,34 +188,59 @@ public class BlueToothHelper {
         @Override
         public void onReceive(Context context, Intent intent) {
 
+
             // 收到的廣播型別
-            String action = intent.getAction();
+
+                String action = intent.getAction();
             if (BluetoothDevice.ACTION_FOUND.equals(action)) {
                 // 從intent中獲取裝置
                 BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
                 String aa = "";
+
                 if (aa.contains(device.getAddress())) {
                     return;
                 } else {
                     // 判斷是否配對過
                     if (device.getBondState() != BluetoothDevice.BOND_BONDED) {
                         // 新增到列表
-                        short rssi = intent.getExtras().getShort(BluetoothDevice.EXTRA_RSSI);
-                        int iRssi = abs(rssi);
-                        // 將藍芽訊號強度換算為距離
-                        double power = (iRssi - 59) / 25.0;
-//                        String distance = new Formatter().format("%.2f", pow(10, power)).toString();
-                        int distance = (int)pow(10, power);
-                            if(distance<5000){
-                                sendMessage();
-                            }
+
                         UserInformationBean ufb = new UserInformationBean();
                         ufb.setBlueTooth(device.getAddress());
 //                        Cursor result = userInformationDAO.searchAll(ufb);
 //                        result.moveToFirst();
 //                        ufb.setAvatar(result.getString(result.getColumnIndex("avatar")));
                         unmatchedDeviceRecyclerViewAdapter.dataInsert(ufb);
+                    }else{
+
+                        DBHelper Dh = new DBHelper(context);
+                        MatchedDAO matchedDAO = new MatchedDAO(Dh);
+                        MatchedBean matchedBean = new MatchedBean();
+                        matchedBean.setBlueTooth(getMyBuleTooth());
+                        matchedBean.setMatchedBlueTooth(device.getAddress());
+                        Cursor cursor = matchedDAO.search(matchedBean);
+
+                       /* String where = "";
+                        ArrayList<String> args = new ArrayList<>();
+                        Cursor cursor = db.query(tableName, column, where, args.toArray(new String[0]),null,null,null);*/
+
+                        //String result = matchedDAO.getById(matchedBlueTooth);
+                        //cursor.moveToFirst();
+                        Log.d("bluetoothmatched",device.getAddress());
+                        if(cursor.moveToNext()) {
+                            short rssi = intent.getExtras().getShort(BluetoothDevice.EXTRA_RSSI);
+                            int iRssi = abs(rssi);
+                            // 將藍芽訊號強度換算為距離
+                            double power = (iRssi - 59) / 25.0;
+//                        String distance = new Formatter().format("%.2f", pow(10, power)).toString();
+                            int distance = (int)pow(10, power);
+                            if(distance<5000){
+
+                                notificationHelper.sendMessage(device.getAddress());
+                            }
+                        }
+
                     }
+
                 }
             } else if (BluetoothAdapter.ACTION_DISCOVERY_FINISHED.equals(action)) {
                 // 關閉進度條
@@ -320,10 +386,13 @@ public class BlueToothHelper {
         UserInformationBean ufb = new UserInformationBean();
         ufb.setBlueTooth(getMyBuleTooth());
         Cursor result = userInformationDAO.searchAll(ufb);
+        result.moveToFirst();
 
         //Bitmap profilePhoto = avatar.setImageBitmap(avatarHelper.getImageResource(result.getString(result.getColumnIndex("avatar"))));
+        String userName;
 
-        String title1 = "邱殷龍";
+        userName = "邱殷龍";
+        String title1 = userName;
         String message1 = "原音股份有限公司";
         String title2 = "李赫宰";
         String message2 = " SM娛樂公司";

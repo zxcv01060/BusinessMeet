@@ -74,7 +74,7 @@ public class AvatarHelper {
     }
 
     public Bitmap getImageResource(String avatar){
-        Log.d("avatar","avatar");
+        Log.d("avatar",avatar);
         byte[] avatarByteArray = Base64.decode(avatar, Base64.NO_WRAP);
         Bitmap avatarBitmap = BitmapFactory.decodeByteArray(avatarByteArray, 0, avatarByteArray.length);
 

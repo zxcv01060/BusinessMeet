@@ -59,4 +59,17 @@ public class MatchedDAO {
         return  cursor;
     }
 
+    // getById
+
+    public String getById(String blueTooth) {
+        Cursor cursor = db.query(tableName, null, "blue_tooth = ?", new String[]{blueTooth}, null, null, null);
+        cursor.moveToFirst();
+        int index = cursor.getColumnIndex("blue_tooth");
+        try {
+            return cursor.getString(cursor.getColumnIndex("blue_tooth"));
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
 }

@@ -28,7 +28,7 @@ public class FriendsIntroductionActivity extends AppCompatActivity {
         Log.e("blueToothAddress",blueToothAddress);
         //notification
         TextView textView = findViewById(R.id.friends_name);
-        String title = getIntent().getStringExtra("title");
+        String title = getIntent().getStringExtra("title1");
         textView.setText(title);
 
     }
