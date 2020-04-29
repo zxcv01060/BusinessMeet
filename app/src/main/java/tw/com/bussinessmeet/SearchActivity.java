@@ -44,7 +44,6 @@ public class SearchActivity extends AppCompatActivity implements MatchedDeviceRe
     private List<UserInformationBean> matchedList = new ArrayList<>();
     private List<UserInformationBean> unmatchedList = new ArrayList<>();
     private MatchedServiceImpl matchedApi = new MatchedServiceImpl();
-    private TextView search_title;
     private MatchedDAO matchedDAO;
     Handler handler = new Handler() {
         @Override
@@ -56,9 +55,7 @@ public class SearchActivity extends AppCompatActivity implements MatchedDeviceRe
                 String[] message = ((String) msg.obj).split(",");
                 String myBlueToothAddress = blueTooth.getMyBuleTooth();
                 String matchedBlueTooth = message[0];
-                if(message[1].equals("ask")) {
-                    blueTooth.matchedSuccessReturn(myBlueToothAddress);
-                }
+
                 Toast.makeText(SearchActivity.this, matchedBlueTooth, Toast.LENGTH_LONG).show();
                 MatchedBean matchedBean = new MatchedBean();
                 matchedBean.setBlueTooth(blueTooth.getMyBuleTooth());
@@ -153,7 +150,7 @@ public class SearchActivity extends AppCompatActivity implements MatchedDeviceRe
         UserInformationBean userInformationBean = matchedRecyclerViewAdapter.getUserInformation(position);
         String address = userInformationBean.getBlueTooth();
         String userName = userInformationBean.getUserName();
-        blueTooth.matched(address,userName);
+        blueTooth.matched(address,userName,addResponseListener,matchedDAO);
 //        blueTooth.cancelDiscovery();
 //        Intent intent = new Intent();
 //        intent.setClass(SearchActivity.this,FriendsIntroductionActivity.class);
@@ -169,7 +166,7 @@ public class SearchActivity extends AppCompatActivity implements MatchedDeviceRe
         UserInformationBean userInformationBean = unmatchedRecyclerViewAdapter.getUserInformation(position);
         String address = userInformationBean.getBlueTooth();
         String userName = userInformationBean.getUserName();
-        blueTooth.matched(address,userName);
+        blueTooth.matched(address,userName,addResponseListener,matchedDAO);
     }
 
     //button_nav Perform ItemSelectedListener
