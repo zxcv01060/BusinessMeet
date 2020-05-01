@@ -9,6 +9,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import tw.com.bussinessmeet.bean.MatchedBean;
 import tw.com.bussinessmeet.helper.AvatarHelper;
 
 import androidx.annotation.NonNull;
@@ -23,52 +25,29 @@ import tw.com.bussinessmeet.bean.ResponseBody;
 import tw.com.bussinessmeet.bean.UserInformationBean;
 import tw.com.bussinessmeet.dao.UserInformationDAO;
 import tw.com.bussinessmeet.helper.AsyncTasKHelper;
+import tw.com.bussinessmeet.helper.BlueToothHelper;
 import tw.com.bussinessmeet.service.Impl.UserInformationServiceImpl;
 
 
 public class UnmatchedDeviceRecyclerViewAdapter extends RecyclerView.Adapter<UnmatchedDeviceRecyclerViewAdapter.ViewHolder> {
     private LayoutInflater layoutInflater;
     private Context context;
-    private String un;
-    private Bitmap avatar;
     private UserInformationDAO userInformationDAO;
     private List<UserInformationBean> userInformationBeanList;
+    private List<MatchedBean> matchedBeanList;
     private UserInformationBean userInformationBean;
     private MatchedClickListener matchedClickListener;
-    private AvatarHelper avatarHelper;
 
     UnmatchedDeviceRecyclerViewAdapter(Context context, List<UserInformationBean> userInformationBeanList) {
         this.layoutInflater = LayoutInflater.from(context);
         this.context = context;
         this.userInformationBeanList = userInformationBeanList;
+        this.matchedBeanList = matchedBeanList;
     }
 
     private UserInformationBean ufb;
     private UserInformationServiceImpl userInformationApi;
-    private AsyncTasKHelper.OnResponseListener<UserInformationBean, List<UserInformationBean>> searchBluetoothResponseListener =
-            new AsyncTasKHelper.OnResponseListener<UserInformationBean, List<UserInformationBean>>() {
-                @Override
-                public Call<ResponseBody<List<UserInformationBean>>> request(UserInformationBean... userInformationBeans) {
-                    return userInformationApi.search(userInformationBeans[0]);
-                }
 
-                @Override
-                public void onSuccess(List<UserInformationBean> userInformationBeanList) {
-                    System.out.println("List" + userInformationBeanList.size());
-                    if (userInformationBeanList.size() != 0) {
-                        ufb = userInformationBeanList.get(0);
-                        un = ufb.getUserName();
-                        avatarHelper = new AvatarHelper();
-                        avatar = avatarHelper.getImageResource(ufb.getAvatar());
-                        Log.d("unmatched-username", un);
-                    }
-                }
-
-                @Override
-                public void onFail(int status) {
-
-                }
-            };
 
     @NonNull
     @Override
@@ -81,7 +60,10 @@ public class UnmatchedDeviceRecyclerViewAdapter extends RecyclerView.Adapter<Unm
     public void onBindViewHolder(@NonNull UnmatchedDeviceRecyclerViewAdapter.ViewHolder holder, int position) {
         //UserInformationBean ufb = userInformationBeanList.get(position);
         ufb = userInformationBeanList.get(position);
-        holder.bindInformation(un, avatar);
+        String userName = ufb.getUserName();
+        AvatarHelper avatarHelper = new AvatarHelper();
+        Bitmap avatar = avatarHelper.getImageResource(ufb.getAvatar());
+        holder.bindInformation(userName, avatar);
     }
 
     @Override
@@ -127,7 +109,6 @@ public class UnmatchedDeviceRecyclerViewAdapter extends RecyclerView.Adapter<Unm
     public void dataInsert(UserInformationBean userInformationBean) {
         Log.d("resultDataInsert", userInformationBean.getBlueTooth());
         userInformationBeanList.add(userInformationBean);
-        AsyncTasKHelper.execute(searchBluetoothResponseListener, userInformationBean);
         notifyItemInserted(getItemCount());
     }
 

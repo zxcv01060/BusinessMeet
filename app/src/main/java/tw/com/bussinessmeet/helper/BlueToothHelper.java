@@ -15,6 +15,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Handler;
@@ -42,12 +43,16 @@ import java.net.NetworkInterface;
 import java.net.SocketException;
 import java.util.Enumeration;
 import java.util.Formatter;
+import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
 
+import retrofit2.Call;
 import tw.com.bussinessmeet.AddIntroductionActivity;
 import tw.com.bussinessmeet.RequestCode;
+import tw.com.bussinessmeet.bean.MatchedBean;
+import tw.com.bussinessmeet.bean.ResponseBody;
 import tw.com.bussinessmeet.bean.UserInformationBean;
 import tw.com.bussinessmeet.dao.UserInformationDAO;
 import tw.com.bussinessmeet.FriendsIntroductionActivity;
@@ -55,6 +60,8 @@ import tw.com.bussinessmeet.MatchedDeviceRecyclerViewAdapter;
 import tw.com.bussinessmeet.NotificationActivity;
 import tw.com.bussinessmeet.R;
 import tw.com.bussinessmeet.UnmatchedDeviceRecyclerViewAdapter;
+import tw.com.bussinessmeet.service.Impl.MatchedServiceImpl;
+import tw.com.bussinessmeet.service.Impl.UserInformationServiceImpl;
 
 import static java.lang.Math.abs;
 import static java.lang.Math.pow;
@@ -65,10 +72,16 @@ public class BlueToothHelper {
     private BluetoothAdapter mBluetoothAdapter;
     private IntentFilter filter;
     private UserInformationDAO userInformationDAO;
-
-
+    private UserInformationServiceImpl userInformationApi;
+    private MatchedServiceImpl matchedApi;
     private MatchedDeviceRecyclerViewAdapter matchedDeviceRecyclerViewAdapter;
     private UnmatchedDeviceRecyclerViewAdapter unmatchedDeviceRecyclerViewAdapter;
+    private AsyncTasKHelper.OnResponseListener<UserInformationBean, List<UserInformationBean>> unmatchedResponseListener;
+    private List<UserInformationBean> userInformationBeanList;
+    private UserInformationBean userInformationBean;
+    private AsyncTasKHelper.OnResponseListener<MatchedBean, List<MatchedBean>> matchedResponseListener;
+    private MatchedBean matchedBean;
+    private String userName, bluetooth;
 
     // UUID，蓝牙建立链接需要的
 
@@ -81,14 +94,14 @@ public class BlueToothHelper {
     private OutputStream outputStream;
 
     private final UUID MY_UUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
-    private  AcceptThreadHelper acceptThread;
-
+    private AcceptThreadHelper acceptThread;
 
 
     public BlueToothHelper(Activity activity) {
         this.activity = activity;
     }
-    public void searchBlueTooth(UserInformationDAO userInformationDAO, MatchedDeviceRecyclerViewAdapter matchedDeviceRecyclerViewAdapter, UnmatchedDeviceRecyclerViewAdapter unmatchedDeviceRecyclerViewAdapter){
+
+    public void searchBlueTooth(UserInformationDAO userInformationDAO, MatchedDeviceRecyclerViewAdapter matchedDeviceRecyclerViewAdapter, UnmatchedDeviceRecyclerViewAdapter unmatchedDeviceRecyclerViewAdapter) {
         this.userInformationDAO = userInformationDAO;
         filter = new IntentFilter();
         filter.addAction(BluetoothDevice.ACTION_FOUND);
@@ -111,14 +124,15 @@ public class BlueToothHelper {
         activity.registerReceiver(receiver, filter);
 
         //setting channel
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             NotificationChannel channel =
-                    new NotificationChannel("MyNotifications","MyNotifications",NotificationManager.IMPORTANCE_DEFAULT);
+                    new NotificationChannel("MyNotifications", "MyNotifications", NotificationManager.IMPORTANCE_DEFAULT);
             NotificationManager manager = activity.getSystemService(NotificationManager.class);
             manager.createNotificationChannel(channel);
 
         }
     }
+
     private final BroadcastReceiver receiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -132,23 +146,67 @@ public class BlueToothHelper {
                     return;
                 } else {
                     // 判斷是否配對過
-                    if (device.getBondState() != BluetoothDevice.BOND_BONDED) {
-                        // 新增到列表
-                        short rssi = intent.getExtras().getShort(BluetoothDevice.EXTRA_RSSI);
-                        int iRssi = abs(rssi);
-                        // 將藍芽訊號強度換算為距離
-                        double power = (iRssi - 59) / 25.0;
+                    // 新增到列表
+                    short rssi = intent.getExtras().getShort(BluetoothDevice.EXTRA_RSSI);
+                    int iRssi = abs(rssi);
+                    // 將藍芽訊號強度換算為距離
+                    double power = (iRssi - 59) / 25.0;
 //                        String distance = new Formatter().format("%.2f", pow(10, power)).toString();
-                        int distance = (int)pow(10, power);
-                            if(distance<5000){
-                                sendMessage();
+                    int distance = (int) pow(10, power);
+                    if (distance < 5000) {
+                        sendMessage();
+                    }
+                    if (device.getBondState() != BluetoothDevice.BOND_BONDED) {
+                        userInformationBean = new UserInformationBean();
+                        userInformationBean.setBlueTooth(device.getAddress());
+                        //unmatchedDeviceRecyclerViewAdapter.dataInsert(ufb);
+                        unmatchedResponseListener = new AsyncTasKHelper.OnResponseListener<UserInformationBean, List<UserInformationBean>>() {
+                            @Override
+                            public Call<ResponseBody<List<UserInformationBean>>> request(UserInformationBean... userInformationBeans) {
+                                return userInformationApi.search(userInformationBeans[0]);
                             }
-                        UserInformationBean ufb = new UserInformationBean();
-                        ufb.setBlueTooth(device.getAddress());
+
+                            @Override
+
+                            public void onSuccess(List<UserInformationBean> userInformationBeanList) {
+                                if (userInformationBeanList.size() != 0) {
+                                    userInformationBean = userInformationBeanList.get(0);
+                                    unmatchedDeviceRecyclerViewAdapter.dataInsert(userInformationBean);
+                                }
+                            }
+
+                            @Override
+                            public void onFail(int status) {
+                            }
+                        };
+                        AsyncTasKHelper.execute(unmatchedResponseListener, userInformationBean);
 //                        Cursor result = userInformationDAO.searchAll(ufb);
 //                        result.moveToFirst();
 //                        ufb.setAvatar(result.getString(result.getColumnIndex("avatar")));
-                        unmatchedDeviceRecyclerViewAdapter.dataInsert(ufb);
+                    } else {
+                        /*
+                        matchedBean = new MatchedBean();
+                        matchedBean.setBlueTooth(device.getAddress());
+                        matchedResponseListener = new AsyncTasKHelper.OnResponseListener<MatchedBean, List<MatchedBean>>() {
+                            @Override
+                            public Call<ResponseBody<List<MatchedBean>>> request(MatchedBean... matchedBeans) {
+                                System.out.println("in");
+                                return matchedApi.search(matchedBeans[0]);
+                            }
+
+                            @Override
+                            public void onSuccess(List<MatchedBean> matchedBeanList) {
+                                System.out.println("!!!!!!!!"+matchedBean.getMatchedBlueTooth());
+                            }
+
+                            @Override
+                            public void onFail(int status) {
+                                System.out.println("error");
+                            }
+                        };
+                        AsyncTasKHelper.execute(matchedResponseListener, matchedBean);
+
+                         */
                     }
                 }
             } else if (BluetoothAdapter.ACTION_DISCOVERY_FINISHED.equals(action)) {
@@ -156,12 +214,12 @@ public class BlueToothHelper {
 //                activity.setProgressBarIndeterminateVisibility(true);
                 TextView search_title = activity.findViewById(R.id.search_title);
                 search_title.setText("搜尋完成!");
-                Toast.makeText(activity,"搜尋完成！",Toast.LENGTH_LONG);
+                Toast.makeText(activity, "搜尋完成！", Toast.LENGTH_LONG);
                 openGPS(activity);
 
                 // 用於迴圈掃描藍芽的handler
 //                mBLHandler.sendEmptyMessageDelayed(1, 10000);
-            }else if(BluetoothAdapter.ACTION_STATE_CHANGED.equals(action)){
+            } else if (BluetoothAdapter.ACTION_STATE_CHANGED.equals(action)) {
                 int state = intent.getIntExtra(BluetoothAdapter.EXTRA_STATE, -1);
                 switch (state) {
                     case BluetoothAdapter.STATE_TURNING_ON:
@@ -180,13 +238,13 @@ public class BlueToothHelper {
         }
     };
 
-    public void startBuleTooth(){
+    public void startBuleTooth() {
         mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-       if (mBluetoothAdapter == null) {
+        if (mBluetoothAdapter == null) {
             //裝置不支援藍芽
             Toast.makeText(activity, "裝置不支援藍芽", Toast.LENGTH_SHORT).show();
             activity.finish();
-        } else{
+        } else {
 //            while(!isGpsEnable(this) && !mBluetoothAdapter.isEnabled()){
             if (!mBluetoothAdapter.isEnabled()) {
                 bluetooth(activity);
@@ -202,19 +260,21 @@ public class BlueToothHelper {
         }
     }
 
-    public void bluetooth(Context context){
+    public void bluetooth(Context context) {
         Intent enableBtIntent = new Intent((BluetoothAdapter.ACTION_REQUEST_ENABLE));
         activity.startActivityForResult(enableBtIntent, RequestCode.REQUEST_ENABLE_BT);
     }
-    public  void openGPS(Context context) {
-        ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, RequestCode.REQUEST_LOCATION );
+
+    public void openGPS(Context context) {
+        ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, RequestCode.REQUEST_LOCATION);
     }
+
     public void scanBluth() {
 // 設定進度條
         activity.setProgressBarIndeterminateVisibility(true);
-        TextView search_title =  activity.findViewById(R.id.search_title);
-        Log.e("search",String.valueOf(activity));
-        Log.e("search",String.valueOf(search_title));
+        TextView search_title = activity.findViewById(R.id.search_title);
+        Log.e("search", String.valueOf(activity));
+        Log.e("search", String.valueOf(search_title));
         search_title.setText("正在搜尋...");
 
 // 開始搜尋
@@ -224,8 +284,6 @@ public class BlueToothHelper {
 
         mBluetoothAdapter.startDiscovery();
     }
-
-
 
 
     Handler mBLHandler = new Handler() {
@@ -241,7 +299,8 @@ public class BlueToothHelper {
             }
         }
     };
-    public void requestPermissionsResult(int requestCode, int[] grantResults)  {
+
+    public void requestPermissionsResult(int requestCode, int[] grantResults) {
         if (requestCode == RequestCode.REQUEST_LOCATION) {
             // 因為這個 method 會帶回任何權限視窗的結果，所以我們要用 requestCode 來判斷這是哪一個權限
 
@@ -249,30 +308,31 @@ public class BlueToothHelper {
                 // 不等於 PERMISSION_GRANTED 代表被按下拒絕
                 if (!ActivityCompat.shouldShowRequestPermissionRationale(activity, Manifest.permission.ACCESS_FINE_LOCATION)) {
 
-                    Intent intent =new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS, Uri.parse("package:" + activity.getPackageName()));
+                    Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS, Uri.parse("package:" + activity.getPackageName()));
                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     activity.startActivity(intent);
 
-                    Toast.makeText(activity,"這些權限是為了搜尋附近藍芽裝置，拒絕將無法使用本應用程式。",Toast.LENGTH_LONG).show();
+                    Toast.makeText(activity, "這些權限是為了搜尋附近藍芽裝置，拒絕將無法使用本應用程式。", Toast.LENGTH_LONG).show();
 
 
-                }else{
+                } else {
                     AlertDialog dialog = new AlertDialog.Builder(activity).setTitle("這些權限是為了搜尋附近藍芽裝置，拒絕將無法使用本應用程式。").setPositiveButton("我需要此权限!", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                           openGPS(activity);
+                            openGPS(activity);
                         }
 
                     }).setCancelable(false).show();
 //                    dialog.setCanceledOnTouchOutside(false);
                 }
 
-            }else{
+            } else {
                 checkPermission();
 
             }
         }
     }
+
     public boolean checkPermission() {
         int permissionCheck = ContextCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_COARSE_LOCATION);
         if (permissionCheck == PackageManager.PERMISSION_GRANTED) {
@@ -284,11 +344,12 @@ public class BlueToothHelper {
             return false;
         }
     }
+
     private void sendMessage() {
 
         String message = "This is a notific.";
         NotificationCompat.Builder builder = new NotificationCompat.Builder(
-                activity,"MyNotifications"
+                activity, "MyNotifications"
         )
                 .setSmallIcon(R.drawable.ic_insert_comment_black_24dp)
                 .setContentText("New Notification")
@@ -299,26 +360,27 @@ public class BlueToothHelper {
         Intent intent = new Intent(activity,
                 FriendsIntroductionActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        intent.putExtra("message",message);
+        intent.putExtra("message", message);
 
         // 宣告一個 PendingIntent 的物件(執行完並不會馬上啟動,點訊息的時候才會跳到別的 Activity)
         PendingIntent pendingIntent = PendingIntent.getActivity(activity,
-                0,intent,PendingIntent.FLAG_UPDATE_CURRENT);
+                0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
         builder.setContentIntent(pendingIntent);
 
         //定義一個訊息管理者 和系統要 取得訊息管理者的物件
-        NotificationManager notificationManager = (NotificationManager)activity.getSystemService(
+        NotificationManager notificationManager = (NotificationManager) activity.getSystemService(
                 Context.NOTIFICATION_SERVICE
         );
 
         //要求傳送一個訊息
-        notificationManager.notify(0,builder.build());
+        notificationManager.notify(0, builder.build());
     }
+
     public String getMyBuleTooth() {
         BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         String bluetoothMacAddress = "";
         //確認版本號
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M){
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
             try {
                 Field mServiceField = bluetoothAdapter.getClass().getDeclaredField("mService");
                 mServiceField.setAccessible(true);
@@ -337,83 +399,87 @@ public class BlueToothHelper {
         }
         return bluetoothMacAddress;
     }
-    public void cancelDiscovery(){
+
+    public void cancelDiscovery() {
         if (mBluetoothAdapter.isDiscovering()) {
             mBluetoothAdapter.cancelDiscovery();
         }
     }
 
-    public void matched(String blueToothAddress,String userName){
+    public void matched(String blueToothAddress, String userName) {
         userName = "darkplume";
         // 实例接收客户端传过来的数据线程
 
-        Log.d("blueTooth",blueToothAddress);
+        Log.d("blueTooth", blueToothAddress);
         // 判斷是否在搜尋,如果在搜尋，就取消搜尋
         if (mBluetoothAdapter.isDiscovering()) {
             mBluetoothAdapter.cancelDiscovery();
         }
-        createConnect(blueToothAddress,false);
-            Log.d("outputStream","success~~~");
-            String message = getMyBuleTooth()+",ask";
-            try {
-                outputStream.write(message.getBytes("UTF-8"));
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+        createConnect(blueToothAddress, false);
+        Log.d("outputStream", "success~~~");
+        String message = getMyBuleTooth() + ",ask";
+        try {
+            outputStream.write(message.getBytes("UTF-8"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
-    public void matchedSuccessReturn(String blueToothAddress){
-        String message = getMyBuleTooth()+",accept";
+
+    public void matchedSuccessReturn(String blueToothAddress) {
+        String message = getMyBuleTooth() + ",accept";
 
         try {
-            createConnect(blueToothAddress,true);
-            Log.e("successreturn",message);
+            createConnect(blueToothAddress, true);
+            Log.e("successreturn", message);
             outputStream.write(message.getBytes("UTF-8"));
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    public void createConnect(String blueToothAddress,boolean connect){
+    public void createConnect(String blueToothAddress, boolean connect) {
         selectDevice = mBluetoothAdapter.getRemoteDevice(blueToothAddress);
-        Log.d("selectDevice",String.valueOf(selectDevice));
-        try{
+        Log.d("selectDevice", String.valueOf(selectDevice));
+        try {
 //            if(clientSocket == null){
             try {
                 clientSocket = selectDevice.createRfcommSocketToServiceRecord(MY_UUID);
-            } catch (Exception e) {Log.e("error","Error creating socket");}
+            } catch (Exception e) {
+                Log.e("error", "Error creating socket");
+            }
 
             try {
                 clientSocket.connect();
                 outputStream = clientSocket.getOutputStream();
-                Log.e("","Connected");
+                Log.e("", "Connected");
             } catch (IOException e) {
-                Log.e("error",e.getMessage());
+                Log.e("error", e.getMessage());
                 try {
-                    Log.e("","trying fallback...");
+                    Log.e("", "trying fallback...");
 
-                    clientSocket =(BluetoothSocket) selectDevice.getClass().getMethod("createRfcommSocket", new Class[] {int.class}).invoke(selectDevice,2);
+                    clientSocket = (BluetoothSocket) selectDevice.getClass().getMethod("createRfcommSocket", new Class[]{int.class}).invoke(selectDevice, 2);
                     clientSocket.connect();
                     outputStream = clientSocket.getOutputStream();
-                    Log.e("",String.valueOf(selectDevice));
-                }
-                catch (Exception e2) {
+                    Log.e("", String.valueOf(selectDevice));
+                } catch (Exception e2) {
                     Log.e("", "Couldn't establish Bluetooth connection!");
                 }
             }
 
 
-            Log.d("outputStream",String.valueOf(outputStream));
+            Log.d("outputStream", String.valueOf(outputStream));
 
-            if(!connect) {
+            if (!connect) {
                 Toast.makeText(activity, "已發送配對請求，請等待對方同意", Toast.LENGTH_LONG).show();
             }
-        }catch(Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
-            Toast.makeText(activity,"配對失敗，請稍後再試",Toast.LENGTH_LONG).show();
+            Toast.makeText(activity, "配對失敗，請稍後再試", Toast.LENGTH_LONG).show();
         }
     }
-    public void startThread(Handler handler){
-        acceptThread = new AcceptThreadHelper(mBluetoothAdapter,MY_UUID,activity,handler);
+
+    public void startThread(Handler handler) {
+        acceptThread = new AcceptThreadHelper(mBluetoothAdapter, MY_UUID, activity, handler);
         acceptThread.start();
     }
 }
