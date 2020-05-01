@@ -504,7 +504,7 @@ public class BlueToothHelper {
         }
     }
 
-    public void matched(String blueToothAddress,String userName){
+    public void matched(String blueToothAddress, String userName, AsyncTasKHelper.OnResponseListener<MatchedBean, MatchedBean> addResponseListener, MatchedDAO matchedDAO){
         userName = "darkplume";
         // 实例接收客户端传过来的数据线程
 
@@ -513,7 +513,7 @@ public class BlueToothHelper {
         if (mBluetoothAdapter.isDiscovering()) {
             mBluetoothAdapter.cancelDiscovery();
         }
-        createConnect(blueToothAddress,false);
+        createConnect(blueToothAddress,addResponseListener,matchedDAO);
             Log.d("outputStream","success~~~");
             String message = getMyBuleTooth()+",ask";
             try {
@@ -522,20 +522,20 @@ public class BlueToothHelper {
                 e.printStackTrace();
             }
     }
-    public void matchedSuccessReturn(String blueToothAddress){
-        String message = getMyBuleTooth()+",accept";
+//    public void matchedSuccessReturn(String blueToothAddress){
+//        String message = getMyBuleTooth()+",accept";
+//
+//        try {
+//            createConnect(blueToothAddress,true);
+//            Log.e("successreturn",message);
+//            outputStream.write(message.getBytes("UTF-8"));
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//    }
 
-        try {
-            createConnect(blueToothAddress,true);
-            Log.e("successreturn",message);
-            outputStream.write(message.getBytes("UTF-8"));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void createConnect(String blueToothAddress,boolean connect){
-        selectDevice = mBluetoothAdapter.getRemoteDevice(blueToothAddress);
+    public void createConnect(String matchedAddress,AsyncTasKHelper.OnResponseListener<MatchedBean, MatchedBean> addResponseListener,MatchedDAO matchedDAO){
+        selectDevice = mBluetoothAdapter.getRemoteDevice(matchedAddress);
         Log.d("selectDevice",String.valueOf(selectDevice));
         try{
 //            if(clientSocket == null){
@@ -561,13 +561,12 @@ public class BlueToothHelper {
                     Log.e("", "Couldn't establish Bluetooth connection!");
                 }
             }
-
-
+            MatchedBean matchedBean = new MatchedBean();
+            matchedBean.setBlueTooth(getMyBuleTooth());
+            matchedBean.setMatchedBlueTooth(matchedAddress);
+            AsyncTasKHelper.execute(addResponseListener, matchedBean);
+            matchedDAO.add(matchedBean);
             Log.d("outputStream",String.valueOf(outputStream));
-
-            if(!connect) {
-                Toast.makeText(activity, "已發送配對請求，請等待對方同意", Toast.LENGTH_LONG).show();
-            }
         }catch(Exception e){
             e.printStackTrace();
             Toast.makeText(activity,"配對失敗，請稍後再試",Toast.LENGTH_LONG).show();
