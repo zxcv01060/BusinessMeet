@@ -192,11 +192,12 @@ public class BlueToothHelper {
             // 收到的廣播型別
 
                 String action = intent.getAction();
+                Log.d("into",action);
             if (BluetoothDevice.ACTION_FOUND.equals(action)) {
                 // 從intent中獲取裝置
                 BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
                 String aa = "";
-
+                Log.d("intomatch",device.getAddress());
                 if (aa.contains(device.getAddress())) {
                     return;
                 } else {
@@ -211,7 +212,7 @@ public class BlueToothHelper {
 //                        ufb.setAvatar(result.getString(result.getColumnIndex("avatar")));
                         unmatchedDeviceRecyclerViewAdapter.dataInsert(ufb);
                     }else{
-
+                        Log.d("intomatchmatched",device.getAddress());
                         DBHelper Dh = new DBHelper(context);
                         MatchedDAO matchedDAO = new MatchedDAO(Dh);
                         MatchedBean matchedBean = new MatchedBean();
@@ -226,6 +227,7 @@ public class BlueToothHelper {
                         //String result = matchedDAO.getById(matchedBlueTooth);
                         //cursor.moveToFirst();
                         Log.d("bluetoothmatched",device.getAddress());
+                        Log.d("bluetoothmatched",cursor.toString());
                         if(cursor.moveToNext()) {
                             short rssi = intent.getExtras().getShort(BluetoothDevice.EXTRA_RSSI);
                             int iRssi = abs(rssi);
