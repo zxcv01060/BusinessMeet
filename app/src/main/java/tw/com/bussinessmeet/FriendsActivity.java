@@ -14,6 +14,12 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import org.w3c.dom.Text;
 
+import tw.com.bussinessmeet.bean.UserInformationBean;
+import tw.com.bussinessmeet.dao.UserInformationDAO;
+import tw.com.bussinessmeet.helper.AvatarHelper;
+import tw.com.bussinessmeet.helper.BlueToothHelper;
+import tw.com.bussinessmeet.helper.DBHelper;
+
 public class FriendsActivity extends AppCompatActivity {
     private Button button;
 

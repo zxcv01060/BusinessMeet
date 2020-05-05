@@ -128,6 +128,10 @@ public class SelfIntroductionActivity extends AppCompatActivity {
         Log.d("result",String.valueOf(result.getColumnCount()));
         Log.d("result",String.valueOf(result.getColumnIndex("user_name")));
 
+        for(int i = 0; i<result.getColumnCount(); i++){
+            Log.d("result",result.getColumnName(i));
+        }
+
 
         if (result.moveToFirst()) {
             userName.append(result.getString(result.getColumnIndex("user_name")));
@@ -136,6 +140,7 @@ public class SelfIntroductionActivity extends AppCompatActivity {
             email.append(result.getString(result.getColumnIndex("email")));
             tel.append(result.getString(result.getColumnIndex("tel")));
             avatar.setImageBitmap(avatarHelper.getImageResource(result.getString(result.getColumnIndex("avatar"))));
+
         }
         result.close();
 
@@ -169,6 +174,7 @@ public class SelfIntroductionActivity extends AppCompatActivity {
                     overridePendingTransition(0,0);
                     return true;
                 case R.id.menu_friends:
+                    //menuItem.setIcon(R.drawable.ic_people_blue_24dp);
                     startActivity(new Intent(getApplicationContext()
                             ,FriendsActivity.class));
                     overridePendingTransition(0,0);

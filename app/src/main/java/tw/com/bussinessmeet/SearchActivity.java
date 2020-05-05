@@ -20,10 +20,10 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import retrofit2.Call;
+import tw.com.bussinessmeet.helper.NotificationHelper;
 import tw.com.bussinessmeet.service.Impl.MatchedServiceImpl;
 import tw.com.bussinessmeet.bean.MatchedBean;
 import tw.com.bussinessmeet.bean.ResponseBody;
@@ -44,6 +44,7 @@ public class SearchActivity extends AppCompatActivity implements MatchedDeviceRe
     private List<UserInformationBean> matchedList = new ArrayList<>();
     private List<UserInformationBean> unmatchedList = new ArrayList<>();
     private MatchedServiceImpl matchedApi = new MatchedServiceImpl();
+    private MatchedServiceImpl matchedService = new MatchedServiceImpl();
     private TextView search_title;
     private MatchedDAO matchedDAO;
     Handler handler = new Handler() {
@@ -56,15 +57,17 @@ public class SearchActivity extends AppCompatActivity implements MatchedDeviceRe
                 String[] message = ((String) msg.obj).split(",");
                 String myBlueToothAddress = blueTooth.getMyBuleTooth();
                 String matchedBlueTooth = message[0];
-                if(message[1].equals("ask")) {
-                    blueTooth.matchedSuccessReturn(myBlueToothAddress);
-                }
+
                 Toast.makeText(SearchActivity.this, matchedBlueTooth, Toast.LENGTH_LONG).show();
                 MatchedBean matchedBean = new MatchedBean();
+                Log.d("getblueTooth",blueTooth.getMyBuleTooth());
+                Log.d("getblueTooth",matchedBlueTooth);
                 matchedBean.setBlueTooth(blueTooth.getMyBuleTooth());
                 matchedBean.setMatchedBlueTooth(matchedBlueTooth);
                 AsyncTasKHelper.execute(addResponseListener, matchedBean);
                 matchedDAO.add(matchedBean);
+
+
 
             }catch(Exception e){
                 e.printStackTrace();
@@ -78,7 +81,7 @@ public class SearchActivity extends AppCompatActivity implements MatchedDeviceRe
                 @Override
                 public Call<ResponseBody<MatchedBean>> request(MatchedBean... matchedBean) {
 
-                    return matchedApi.add(matchedBean[0]);
+                    return matchedService.add(matchedBean[0]);
                 }
 
                 @Override
@@ -153,14 +156,17 @@ public class SearchActivity extends AppCompatActivity implements MatchedDeviceRe
         UserInformationBean userInformationBean = matchedRecyclerViewAdapter.getUserInformation(position);
         String address = userInformationBean.getBlueTooth();
         String userName = userInformationBean.getUserName();
-        blueTooth.matched(address,userName);
-//        blueTooth.cancelDiscovery();
+       blueTooth.matched(address,userName,addResponseListener,matchedDAO);
+        blueTooth.cancelDiscovery();
 //        Intent intent = new Intent();
 //        intent.setClass(SearchActivity.this,FriendsIntroductionActivity.class);
 //        Bundle bundle = new Bundle();
 //        bundle.putString("blueToothAddress",matchedRecyclerViewAdapter.getUserInformation(position).getBlueTooth());
 //        intent.putExtras(bundle);
 //        startActivity(intent);
+        Log.e("send","============================");
+        //NotificationHelper notificationHelper = new NotificationHelper(this);
+        //notificationHelper.sendMessage(address);
     }
     @Override
     public void onMatchedClick(View view, int position) {
@@ -169,7 +175,7 @@ public class SearchActivity extends AppCompatActivity implements MatchedDeviceRe
         UserInformationBean userInformationBean = unmatchedRecyclerViewAdapter.getUserInformation(position);
         String address = userInformationBean.getBlueTooth();
         String userName = userInformationBean.getUserName();
-        blueTooth.matched(address,userName);
+        blueTooth.matched(address,userName,addResponseListener,matchedDAO);
     }
 
     //button_nav Perform ItemSelectedListener
@@ -186,6 +192,7 @@ public class SearchActivity extends AppCompatActivity implements MatchedDeviceRe
                 case R.id.menu_search:
                     return true;
                 case R.id.menu_friends:
+                    //menuItem.setIcon(R.drawable.ic_people_black_24dp);
                     startActivity(new Intent(getApplicationContext()
                             ,FriendsActivity.class));
                     overridePendingTransition(0,0);
