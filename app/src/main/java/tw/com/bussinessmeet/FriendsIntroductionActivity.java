@@ -52,11 +52,11 @@ public class FriendsIntroductionActivity extends AppCompatActivity {
                 public void onSuccess(List<UserInformationBean> userInformationBeanList) {
                     Log.d("nameeee", userInformationBeanList.get(0).getUserName());
                     UserInformationBean userInformationBean = userInformationBeanList.get(0);
-                    String userName = userInformationBean.getUserName();
+/*                    String userName = userInformationBean.getUserName();
                     String company = userInformationBean.getCompany();
                     String position = userInformationBean.getPosition();
                     String email = userInformationBean.getEmail();
-                    String tel  = userInformationBean.getTel();
+                    String tel  = userInformationBean.getTel();*/
 
                 }
 
