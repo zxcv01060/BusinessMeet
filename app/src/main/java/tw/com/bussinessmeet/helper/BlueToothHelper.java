@@ -158,6 +158,8 @@ public class BlueToothHelper {
                 // 遍歷
 //                matchedBeanList.add(ufb);
                 matchedDeviceRecyclerViewAdapter.dataInsert(ufb);
+                Log.d("messagecall","aaaaaaaaaaaaaaaaaaaaaaa");
+                // notificationHelper.sendMessage(device.getAddress());
             }
         }
         activity.registerReceiver(receiver, filter);
@@ -229,16 +231,21 @@ public class BlueToothHelper {
                         //cursor.moveToFirst();
                         Log.d("bluetoothmatched",device.getAddress());
                         Log.d("bluetoothmatched",cursor.toString());
+                        Log.d("intomatch", String.valueOf(cursor.getCount()));
                         if(cursor.moveToNext()) {
+                            Log.d("intomatch", "alllll");
                             short rssi = intent.getExtras().getShort(BluetoothDevice.EXTRA_RSSI);
                             int iRssi = abs(rssi);
                             // 將藍芽訊號強度換算為距離
                             double power = (iRssi - 59) / 25.0;
 //                        String distance = new Formatter().format("%.2f", pow(10, power)).toString();
                             int distance = (int)pow(10, power);
+                            Log.d("intomatchdistance",String.valueOf(distance));
                             if(distance<5000){
-
+                                Log.d("distance","under5000");
                                 notificationHelper.sendMessage(device.getAddress());
+                                Log.d("intomatchnotifi","canresponessss");
+
                             }
                         }
 

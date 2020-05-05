@@ -138,7 +138,7 @@ public class NotificationHelper {
 
                     //要求傳送一個訊息
                     //id若一樣，則為更新通知，之前的通知會不見
-                    //要求傳送一個訊息
+                    SystemClock.sleep(1000);
                     notificationManager.notify(0,notification1.build());
                 }
 
@@ -176,7 +176,7 @@ public class NotificationHelper {
 
      public void sendMessage(String matchedBlueTooth) {
 
-         Log.d("seedmess","ness");
+         Log.d("seedmess",matchedBlueTooth);
          UserInformationBean ufb = new UserInformationBean();
          ufb.setBlueTooth(matchedBlueTooth);
          AsyncTasKHelper.execute(searchResponseListener, ufb);
