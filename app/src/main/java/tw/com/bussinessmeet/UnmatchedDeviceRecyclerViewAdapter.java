@@ -24,7 +24,6 @@ import tw.com.bussinessmeet.bean.Empty;
 import tw.com.bussinessmeet.bean.ResponseBody;
 import tw.com.bussinessmeet.bean.UserInformationBean;
 import tw.com.bussinessmeet.dao.UserInformationDAO;
-import tw.com.bussinessmeet.helper.AsyncTasKHelper;
 import tw.com.bussinessmeet.helper.BlueToothHelper;
 import tw.com.bussinessmeet.service.Impl.UserInformationServiceImpl;
 
