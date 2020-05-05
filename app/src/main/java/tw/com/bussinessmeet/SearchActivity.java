@@ -156,14 +156,15 @@ public class SearchActivity extends AppCompatActivity implements MatchedDeviceRe
         UserInformationBean userInformationBean = matchedRecyclerViewAdapter.getUserInformation(position);
         String address = userInformationBean.getBlueTooth();
         String userName = userInformationBean.getUserName();
-        blueTooth.matched(address,userName,addResponseListener,matchedDAO);
-//        blueTooth.cancelDiscovery();
+//        blueTooth.matched(address,userName,addResponseListener,matchedDAO);
+////        blueTooth.cancelDiscovery();
 //        Intent intent = new Intent();
 //        intent.setClass(SearchActivity.this,FriendsIntroductionActivity.class);
 //        Bundle bundle = new Bundle();
 //        bundle.putString("blueToothAddress",matchedRecyclerViewAdapter.getUserInformation(position).getBlueTooth());
 //        intent.putExtras(bundle);
 //        startActivity(intent);
+        Log.e("send","============================");
         NotificationHelper notificationHelper = new NotificationHelper(this);
         notificationHelper.sendMessage(address);
     }

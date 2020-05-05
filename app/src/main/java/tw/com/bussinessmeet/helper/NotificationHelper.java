@@ -15,6 +15,7 @@ import android.os.Build;
 import android.os.SystemClock;
 import android.util.Log;
 
+import java.io.ByteArrayOutputStream;
 import java.util.List;
 
 import androidx.core.app.NotificationCompat;
@@ -45,11 +46,17 @@ public class NotificationHelper {
                     UserInformationBean userInformationBean = userInformationBeanList.get(0);
                     String userName = userInformationBean.getUserName();
                     String company = userInformationBean.getCompany();
+                    String position = userInformationBean.getPosition();
+                    String email = userInformationBean.getEmail();
+                    String tel = userInformationBean.getTel();
+                    //String avatar = userInformationBean.getAvatar();
+
 
                     String title1 = userName;
                     String message1 = company;
-                    String title2 = "李赫宰";
-                    String message2 = " SM娛樂公司";
+                    /*String title2 = "李赫宰";
+                    String message2 = " SM娛樂公司";*/
+                    /**/
 
 
 
@@ -68,7 +75,7 @@ public class NotificationHelper {
                             .setGroup("group");
 
 
-                    NotificationCompat.Builder notification2 = new NotificationCompat.Builder(
+                    /*NotificationCompat.Builder notification2 = new NotificationCompat.Builder(
                             activity, CHANNEL_1_ID
                     )
                             .setSmallIcon(R.drawable.ic_insert_comment_black_24dp)
@@ -97,21 +104,32 @@ public class NotificationHelper {
                             .setGroup("group")
                             .setColor(Color.BLUE)
                             .setGroupAlertBehavior(NotificationCompat.GROUP_ALERT_CHILDREN)
-                            .setGroupSummary(true);
+                            .setGroupSummary(true);*/
 
 
                     //宣告Intent物件 跳至friends_introduction
                     Intent intent = new Intent(activity,
                             FriendsIntroductionActivity.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                    intent.putExtra("title", title1);
+                    intent.putExtra("title", userName);
+                    intent.putExtra("company", company);
+                    intent.putExtra("position", position);
+                    intent.putExtra("email", email);
+                    intent.putExtra("tel", tel);
+                    //大頭貼---------------------
+                    AvatarHelper avatarHelper = new AvatarHelper();
+                    Bitmap profilePhoto = avatarHelper.getImageResource(userInformationBean.getAvatar());
+                    ByteArrayOutputStream bs = new ByteArrayOutputStream();
+                    profilePhoto.compress(Bitmap.CompressFormat.PNG, 100, bs);
 
+                    intent.putExtra("avatar", bs.toByteArray());
+                    //大頭貼---------------------
                     // 宣告一個 PendingIntent 的物件(執行完並不會馬上啟動,點訊息的時候才會跳到別的 Activity)
                     PendingIntent pendingIntent = PendingIntent.getActivity(activity,
                             0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
                     notification1.setContentIntent(pendingIntent);
-                    notification2.setContentIntent(pendingIntent);
-                    summaryNotification.setContentIntent(pendingIntent);
+                    /*notification2.setContentIntent(pendingIntent);
+                    summaryNotification.setContentIntent(pendingIntent);*/
 
                     //定義一個訊息管理者 和系統要 取得訊息管理者的物件
                     NotificationManager notificationManager = (NotificationManager) activity.getSystemService(
@@ -120,12 +138,8 @@ public class NotificationHelper {
 
                     //要求傳送一個訊息
                     //id若一樣，則為更新通知，之前的通知會不見
-                    SystemClock.sleep(1000);
-                    notificationManager.notify(2, notification1.build());
-                    SystemClock.sleep(1000);
-                    notificationManager.notify(3, notification2.build());
-                    SystemClock.sleep(1000);
-                    notificationManager.notify(4, summaryNotification.build());
+                    //要求傳送一個訊息
+                    notificationManager.notify(0,notification1.build());
                 }
 
                 @Override
