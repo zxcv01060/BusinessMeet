@@ -79,7 +79,7 @@ public class SelfIntroductionActivity extends AppCompatActivity {
 
         //////////////////////////////
         //set menu
-        Menu menu = bottomNavigationView.getMenu();
+        //Menu menu = bottomNavigationView.getMenu();
         //MenuItem profilephoto = menu.findItem(R.id.menu_home);
         //searchUserInformation();
         AvatarHelper avatarHelper = new AvatarHelper();
@@ -90,11 +90,12 @@ public class SelfIntroductionActivity extends AppCompatActivity {
         Cursor result = userInformationDAO.searchAll(ufb);
         Log.e("result",String.valueOf(result));
 
-/*            MenuInflater inflater = getMenuInflater();
-            inflater.inflate(R.menu.menu_navigation, menu);
-            MenuItem userItem = menu.findItem(R.id.menu_home);
-            Bitmap myPhoto = avatarHelper.getImageResource(result.getString(result.getColumnIndex("avatar")));
-                    userItem.setIcon(new BitmapDrawable(getResources(), myPhoto));*/
+        //MenuInflater inflater = getMenuInflater();
+        //inflater.inflate(R.menu.menu_navigation, BVMenu);
+        MenuItem userItem = BVMenu.findItem(R.id.menu_home);
+        Bitmap myPhoto = avatarHelper.getImageResource(result.getString(result.getColumnIndex("avatar")));
+
+        userItem.setIcon(new BitmapDrawable(getResources(), myPhoto));
 
             //return menu;
 
