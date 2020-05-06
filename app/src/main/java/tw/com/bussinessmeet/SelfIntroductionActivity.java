@@ -14,6 +14,7 @@ import android.os.Bundle;
 import android.util.Base64;
 import android.util.Log;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -72,14 +73,14 @@ public class SelfIntroductionActivity extends AppCompatActivity {
         bottomNavigationView.setOnNavigationItemSelectedListener(navListener);
 
         //get menu
-        //Menu BVMenu = bottomNavigationView.getMenu();
+        Menu BVMenu = bottomNavigationView.getMenu();
         bottomNavigationView.setItemIconTintList(null);  //顯示頭像
         //personal.getItem(0).setIcon(ContextCompat.getDrawable(this, R.drawable.ic_search_blod));
 
         //////////////////////////////
         //set menu
-        Menu a = bottomNavigationView.getMenu();
-        MenuItem profilephoto = a.findItem(R.id.menu_home);
+        Menu menu = bottomNavigationView.getMenu();
+        //MenuItem profilephoto = menu.findItem(R.id.menu_home);
         //searchUserInformation();
         AvatarHelper avatarHelper = new AvatarHelper();
         blueToothHelper.startBuleTooth();
@@ -88,7 +89,16 @@ public class SelfIntroductionActivity extends AppCompatActivity {
         ufb.setBlueTooth(blueToothHelper.getMyBuleTooth());
         Cursor result = userInformationDAO.searchAll(ufb);
         Log.e("result",String.valueOf(result));
-        profilephoto.setIcon(new BitmapDrawable(getResources(),avatarHelper.getImageResource(result.getString(result.getColumnIndex("avatar")))));
+
+/*            MenuInflater inflater = getMenuInflater();
+            inflater.inflate(R.menu.menu_navigation, menu);
+            MenuItem userItem = menu.findItem(R.id.menu_home);
+            Bitmap myPhoto = avatarHelper.getImageResource(result.getString(result.getColumnIndex("avatar")));
+                    userItem.setIcon(new BitmapDrawable(getResources(), myPhoto));*/
+
+            //return menu;
+
+
 
         ////////////////////////////////
         //avatar.setImageBitmap(avatarHelper.getImageResource(result.getString(result.getColumnIndex("avatar"))))
