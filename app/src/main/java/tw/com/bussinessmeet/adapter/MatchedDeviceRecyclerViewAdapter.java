@@ -1,4 +1,4 @@
-package tw.com.bussinessmeet;
+package tw.com.bussinessmeet.adapter;
 
 import android.content.Context;
 import android.util.Log;
@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
 
+import tw.com.bussinessmeet.R;
 import tw.com.bussinessmeet.bean.UserInformationBean;
 
 
@@ -21,7 +22,7 @@ public class MatchedDeviceRecyclerViewAdapter extends RecyclerView.Adapter<Match
     private Context context;
     private  List<UserInformationBean> userInformationBeanList;
     private SearchClickListener searchClickListener;
-    MatchedDeviceRecyclerViewAdapter(Context context, List<UserInformationBean> userInformationBeanList) {
+    public MatchedDeviceRecyclerViewAdapter(Context context, List<UserInformationBean> userInformationBeanList) {
         this.layoutInflater = LayoutInflater.from(context);
         this.context = context;
         this.userInformationBeanList = userInformationBeanList;
@@ -66,16 +67,16 @@ public class MatchedDeviceRecyclerViewAdapter extends RecyclerView.Adapter<Match
 
         @Override
         public void onClick(View v) {
-                if(searchClickListener != null){
-                    searchClickListener.onSearchClick(v,getAdapterPosition());
-                }
+            if(searchClickListener != null){
+                searchClickListener.onSearchClick(v,getAdapterPosition());
+            }
         }
 
     }
     public UserInformationBean getUserInformation(int position){
         return userInformationBeanList.get(position);
     }
-    void  setClickListener(SearchClickListener searchClickLinster){
+    public void  setClickListener(SearchClickListener searchClickLinster){
         this.searchClickListener = searchClickLinster;
     }
     public void dataInsert(UserInformationBean userInformationBean){
