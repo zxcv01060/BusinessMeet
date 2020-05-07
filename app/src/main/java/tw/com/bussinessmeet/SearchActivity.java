@@ -1,10 +1,14 @@
 package tw.com.bussinessmeet;
 
 import android.content.Intent;
+import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
@@ -121,6 +125,9 @@ public class SearchActivity extends AppCompatActivity implements MatchedDeviceRe
         //Set Home
         bottomNavigationView.setSelectedItemId(R.id.menu_search);
         bottomNavigationView.setOnNavigationItemSelectedListener(navListener);
+        bottomNavigationView.setItemIconTintList(null);  //顯示頭像
+
+
 
     }
 
@@ -178,10 +185,12 @@ public class SearchActivity extends AppCompatActivity implements MatchedDeviceRe
         blueTooth.matched(address,userName,addResponseListener,matchedDAO);
     }
 
+
     //button_nav Perform ItemSelectedListener
-    private BottomNavigationView.OnNavigationItemSelectedListener navListener =
+    BottomNavigationView.OnNavigationItemSelectedListener navListener =
             (new BottomNavigationView.OnNavigationItemSelectedListener() {
                 @Override
+
         public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
             switch (menuItem.getItemId()){
                 case R.id.menu_home:

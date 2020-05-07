@@ -4,7 +4,10 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -33,26 +36,24 @@ public class FriendsActivity extends AppCompatActivity {
         //Set Home
         bottomNavigationView.setSelectedItemId(R.id.menu_friends);
         bottomNavigationView.setOnNavigationItemSelectedListener(navListener);
-
-/*        //轉跳頁面
-        //取得此Button的實體
-/*        button = (Button)findViewById(R.id.gotonotifi);
-
-        //實做OnClickListener界面
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent();
-                intent.setClass(FriendsActivity.this , NotificationActivity.class);
-                startActivity(intent);
-            }
-        });*/
-
+        bottomNavigationView.setItemIconTintList(null);  //顯示頭像
 
     }
 
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        MenuItem switchButton = menu.findItem(R.id.menu_friends);
+        boolean searchScriptDisplayed = false;
+        if(searchScriptDisplayed){
+            switchButton.setIcon(R.drawable.ic_people_blue_24dp);
+        }else{
+            switchButton.setIcon(R.drawable.ic_people_outline_blue_24dp);
+        }
+        return super.onPrepareOptionsMenu(menu);
+
+    }
     //Perform ItemSelectedListener
-    private BottomNavigationView.OnNavigationItemSelectedListener navListener =
+    BottomNavigationView.OnNavigationItemSelectedListener navListener =
             (new BottomNavigationView.OnNavigationItemSelectedListener() {
                 @Override
         public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
@@ -68,6 +69,7 @@ public class FriendsActivity extends AppCompatActivity {
                     overridePendingTransition(0,0);
                     return true;
                 case R.id.menu_friends:
+
                     return true;
             }
             return false;

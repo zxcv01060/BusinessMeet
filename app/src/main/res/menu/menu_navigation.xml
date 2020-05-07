@@ -3,13 +3,13 @@
     <item
         android:id="@+id/menu_home"
         android:icon="@drawable/ic_headphoto"
-        android:title="Home" />
+        android:title="個人資料" />
     <item
         android:id="@+id/menu_search"
         android:icon="@drawable/ic_search_black_24dp"
-        android:title="Search" />
+        android:title="搜尋" />
     <item
         android:id="@+id/menu_friends"
         android:icon="@drawable/ic_people_outline_black_24dp"
-        android:title="Friends" />
+        android:title="好友" />
 </menu>

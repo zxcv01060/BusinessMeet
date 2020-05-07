@@ -117,11 +117,6 @@ public class FriendsIntroductionActivity extends AppCompatActivity {
                     getIntent().getByteArrayExtra("avatar"), 0, getIntent().getByteArrayExtra("avatar").length);
             photo.setImageBitmap(profilePhoto);
         }
-
-
-
-
-
     }
 
 /*    public void searchUserInformation(){
@@ -170,6 +165,7 @@ public class FriendsIntroductionActivity extends AppCompatActivity {
                             overridePendingTransition(0,0);
                             return true;
                         case R.id.menu_friends:
+                            menuItem.setIcon(R.drawable.ic_people_blue_24dp);
                             return true;
                     }
                     return false;

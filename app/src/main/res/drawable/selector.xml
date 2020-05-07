@@ -6,8 +6,10 @@
     <item
         android:state_selected="false"
         android:color="@color/cardview_dark_background"/>
-<!--    &lt;!&ndash;Clicked&ndash;&gt;
-    <item android:drawable="@drawable/homeclicked" android:state_checked="true" />
-    &lt;!&ndash;Not Clicked&ndash;&gt;
-    <item android:drawable="@drawable/homenotclicked" android:state_checked="false" />-->
+    <!--Clicked-->
+    <item android:drawable="@drawable/ic_people_blue_24dp"
+        android:state_checked="true" />
+    <!--Not Clicked-->
+    <item android:drawable="@drawable/ic_people_outline_blue_24dp"
+        android:state_checked="false" />
 </selector>

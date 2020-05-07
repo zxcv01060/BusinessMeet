@@ -99,8 +99,7 @@
         app:itemBackground="?android:attr/windowBackground"
         app:itemIconTint="@drawable/selector"
         app:itemTextColor="@drawable/selector"
-        app:labelVisibilityMode="unlabeled"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:menu="@menu/menu_navigation_search"
+        app:menu="@menu/menu_navigation"
         tools:layout_editor_absoluteX="16dp" />
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -65,23 +65,11 @@ public class SelfIntroductionActivity extends AppCompatActivity {
         //searchUserInformation();
         //Set Home
         bottomNavigationView.setSelectedItemId(R.id.menu_home);
-//        avatar.setImageBitmap(avatarHelper.getImageResource(result.getString(result.getColumnIndex("avatar"))));
-
-        //Menu profilephoto =(Menu) findViewById(R.id.menu_home);
-        //bottomNavigationView.getMenu().getItem().setChecked(true);
-
         bottomNavigationView.setOnNavigationItemSelectedListener(navListener);
 
-        //get menu
+
         Menu BVMenu = bottomNavigationView.getMenu();
         bottomNavigationView.setItemIconTintList(null);  //顯示頭像
-        //personal.getItem(0).setIcon(ContextCompat.getDrawable(this, R.drawable.ic_search_blod));
-
-        //////////////////////////////
-        //set menu
-        //Menu menu = bottomNavigationView.getMenu();
-        //MenuItem profilephoto = menu.findItem(R.id.menu_home);
-        //searchUserInformation();
         AvatarHelper avatarHelper = new AvatarHelper();
         blueToothHelper.startBuleTooth();
         Log.d("seedmess","ness");
@@ -90,36 +78,9 @@ public class SelfIntroductionActivity extends AppCompatActivity {
         Cursor result = userInformationDAO.searchAll(ufb);
         Log.e("result",String.valueOf(result));
 
-        //MenuInflater inflater = getMenuInflater();
-        //inflater.inflate(R.menu.menu_navigation, BVMenu);
         MenuItem userItem = BVMenu.findItem(R.id.menu_home);
         Bitmap myPhoto = avatarHelper.getImageResource(result.getString(result.getColumnIndex("avatar")));
-
         userItem.setIcon(new BitmapDrawable(getResources(), myPhoto));
-
-            //return menu;
-
-
-
-        ////////////////////////////////
-        //avatar.setImageBitmap(avatarHelper.getImageResource(result.getString(result.getColumnIndex("avatar"))))
-        //profilephoto.setIcon(R.drawable.ic_search_blod);
-
-/*        public boolean onPrepareOptionsMenu(Menu menu) {
-            MenuItem switchButton = menu.findItem(R.id.menu_home);
-            return super.onPrepareOptionsMenu(menu);
-
-        }*/
-
-
-
-        // ImageView avatar = (ImageView) findViewById(R.id.menu_home);
-        /*
-        JLabel label=new JLabel();
-        ImageIcon icon=new ImageIcon("1.png");
-        label.setIcon(icon);
-        */
-
 
     }
     private void openDB(){
@@ -171,8 +132,10 @@ public class SelfIntroductionActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
+
+
     //Perform ItemSelectedListener
-    private BottomNavigationView.OnNavigationItemSelectedListener navListener =
+    BottomNavigationView.OnNavigationItemSelectedListener navListener =
             (new BottomNavigationView.OnNavigationItemSelectedListener() {
                 @Override
         public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
@@ -193,6 +156,8 @@ public class SelfIntroductionActivity extends AppCompatActivity {
             }
             return false;
         }
+
+
     });
 
 
