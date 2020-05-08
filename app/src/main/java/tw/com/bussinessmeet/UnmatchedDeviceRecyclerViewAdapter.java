@@ -41,11 +41,9 @@ public class UnmatchedDeviceRecyclerViewAdapter extends RecyclerView.Adapter<Unm
         this.layoutInflater = LayoutInflater.from(context);
         this.context = context;
         this.userInformationBeanList = userInformationBeanList;
-        this.matchedBeanList = matchedBeanList;
     }
 
     private UserInformationBean ufb;
-    private UserInformationServiceImpl userInformationApi;
 
 
     @NonNull
@@ -59,10 +57,9 @@ public class UnmatchedDeviceRecyclerViewAdapter extends RecyclerView.Adapter<Unm
     public void onBindViewHolder(@NonNull UnmatchedDeviceRecyclerViewAdapter.ViewHolder holder, int position) {
         //UserInformationBean ufb = userInformationBeanList.get(position);
         ufb = userInformationBeanList.get(position);
-        String userName = ufb.getUserName();
         AvatarHelper avatarHelper = new AvatarHelper();
         Bitmap avatar = avatarHelper.getImageResource(ufb.getAvatar());
-        holder.bindInformation(userName, avatar);
+        holder.bindInformation(ufb.getUserName(), avatar);
     }
 
     @Override
