@@ -38,7 +38,7 @@ public class AsyncTasKHelper<P, R> extends AsyncTask<P, Void, Response<ResponseB
             if (body.getSuccess()) {
                 onResponseListener.onSuccess(body.getData());
             } else {
-                onResponseListener.onFail(500);
+                onResponseListener.onFail(1);
             }
         } else {
             onResponseListener.onFail(response != null ? response.code() : 500);

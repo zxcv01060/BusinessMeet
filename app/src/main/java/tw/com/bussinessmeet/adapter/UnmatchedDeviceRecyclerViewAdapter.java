@@ -1,8 +1,6 @@
-package tw.com.bussinessmeet;
+package tw.com.bussinessmeet.adapter;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.media.Image;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,41 +8,27 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import tw.com.bussinessmeet.bean.MatchedBean;
-import tw.com.bussinessmeet.helper.AvatarHelper;
-
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.util.Iterator;
 import java.util.List;
 
-import retrofit2.Call;
-import tw.com.bussinessmeet.bean.Empty;
-import tw.com.bussinessmeet.bean.ResponseBody;
+import tw.com.bussinessmeet.R;
 import tw.com.bussinessmeet.bean.UserInformationBean;
-import tw.com.bussinessmeet.dao.UserInformationDAO;
-import tw.com.bussinessmeet.helper.BlueToothHelper;
-import tw.com.bussinessmeet.service.Impl.UserInformationServiceImpl;
+import tw.com.bussinessmeet.helper.AvatarHelper;
 
 
 public class UnmatchedDeviceRecyclerViewAdapter extends RecyclerView.Adapter<UnmatchedDeviceRecyclerViewAdapter.ViewHolder> {
     private LayoutInflater layoutInflater;
     private Context context;
-    private UserInformationDAO userInformationDAO;
-    private List<UserInformationBean> userInformationBeanList;
-    private List<MatchedBean> matchedBeanList;
-    private UserInformationBean userInformationBean;
+    private  List<UserInformationBean> userInformationBeanList;
     private MatchedClickListener matchedClickListener;
-
-    UnmatchedDeviceRecyclerViewAdapter(Context context, List<UserInformationBean> userInformationBeanList) {
+    private AvatarHelper avatarHelper = new AvatarHelper();
+    public UnmatchedDeviceRecyclerViewAdapter(Context context, List<UserInformationBean> userInformationBeanList) {
         this.layoutInflater = LayoutInflater.from(context);
         this.context = context;
         this.userInformationBeanList = userInformationBeanList;
     }
-
-    private UserInformationBean ufb;
-
 
     @NonNull
     @Override
@@ -55,11 +39,9 @@ public class UnmatchedDeviceRecyclerViewAdapter extends RecyclerView.Adapter<Unm
 
     @Override
     public void onBindViewHolder(@NonNull UnmatchedDeviceRecyclerViewAdapter.ViewHolder holder, int position) {
-        //UserInformationBean ufb = userInformationBeanList.get(position);
-        ufb = userInformationBeanList.get(position);
-        AvatarHelper avatarHelper = new AvatarHelper();
-        Bitmap avatar = avatarHelper.getImageResource(ufb.getAvatar());
-        holder.bindInformation(ufb.getUserName(), avatar);
+        UserInformationBean ufb = userInformationBeanList.get(position);
+        holder.bindInformation(ufb.getUserName(),ufb.getAvatar());
+
     }
 
     @Override
@@ -73,6 +55,7 @@ public class UnmatchedDeviceRecyclerViewAdapter extends RecyclerView.Adapter<Unm
         TextView search_name;
 
 
+
         ViewHolder(@NonNull View itemView) {
             super(itemView);
             search_pro_pic_small = itemView.findViewById(R.id.search_pro_pic_small);
@@ -80,37 +63,35 @@ public class UnmatchedDeviceRecyclerViewAdapter extends RecyclerView.Adapter<Unm
             itemView.setOnClickListener(this);
         }
 
-        void bindInformation(String userName, Bitmap avatar) {
+        void bindInformation(String userName, String avatar){
             search_name.setText(userName);
-            search_pro_pic_small.setImageBitmap(avatar);
+            search_pro_pic_small.setImageBitmap(avatarHelper.getImageResource(avatar));
+
         }
 
         @Override
         public void onClick(View v) {
-            if (matchedClickListener != null) {
-                matchedClickListener.onMatchedClick(v, getAdapterPosition());
+            Log.d("results","unmatched1");
+            if(matchedClickListener != null){
+                Log.d("results","unmatched");
+                matchedClickListener.onMatchedClick(v,getAdapterPosition());
             }
         }
 
     }
-
-    void setClickListener(MatchedClickListener searchClickLinster) {
+    public void  setClickListener(MatchedClickListener searchClickLinster){
         this.matchedClickListener = searchClickLinster;
     }
-
-    public UserInformationBean getUserInformation(int position) {
+    public UserInformationBean getUserInformation(int position){
         return userInformationBeanList.get(position);
     }
-
-    public void dataInsert(UserInformationBean userInformationBean) {
-        Log.d("resultDataInsert", userInformationBean.getBlueTooth());
+    public void dataInsert(UserInformationBean userInformationBean){
+        Log.d("resultDataInsert",userInformationBean.getBlueTooth());
         userInformationBeanList.add(userInformationBean);
         notifyItemInserted(getItemCount());
     }
-
-    public interface MatchedClickListener {
+    public interface MatchedClickListener{
         void onMatchedClick(View view, int position);
     }
-
 
 }
