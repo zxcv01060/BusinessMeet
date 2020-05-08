@@ -77,10 +77,70 @@ public class BlueToothHelper {
     private MatchedServiceImpl matchedApi;
     private MatchedDeviceRecyclerViewAdapter matchedDeviceRecyclerViewAdapter;
     private UnmatchedDeviceRecyclerViewAdapter unmatchedDeviceRecyclerViewAdapter;
-    private AsyncTasKHelper.OnResponseListener<UserInformationBean, List<UserInformationBean>> unmatchedResponseListener;
     private UserInformationBean userInformationBean;
-    private AsyncTasKHelper.OnResponseListener<MatchedBean, List<MatchedBean>> matchedResponseListener;
+    private AsyncTasKHelper.OnResponseListener<UserInformationBean, List<UserInformationBean>> unmatchedBluetoothResponseListener = new AsyncTasKHelper.OnResponseListener<UserInformationBean, List<UserInformationBean>>() {
+        @Override
+        public Call<ResponseBody<List<UserInformationBean>>> request(UserInformationBean... userInformationBeans) {
+            return userInformationApi.search(userInformationBeans[0]);
+        }
+
+        @Override
+        public void onSuccess(List<UserInformationBean> userInformationBeanList) {
+            if (userInformationBeanList.size() != 0) {
+                userInformationBean = userInformationBeanList.get(0);
+                unmatchedDeviceRecyclerViewAdapter.dataInsert(userInformationBean);
+            }
+        }
+
+        @Override
+        public void onFail(int status) {
+        }
+    };
     private MatchedBean matchedBean;
+    private AsyncTasKHelper.OnResponseListener<MatchedBean, List<MatchedBean>> matchedResponseListener = new AsyncTasKHelper.OnResponseListener<MatchedBean, List<MatchedBean>>() {
+        @Override
+        public Call<ResponseBody<List<MatchedBean>>> request(MatchedBean... matchedBeans) {
+            return matchedApi.search(matchedBeans[0]);
+        }
+
+        @Override
+        public void onSuccess(List<MatchedBean> matchedBeanList) {
+            if (matchedBeanList.size() != 0) {
+                for (int i = 0; i < matchedBeanList.size(); i++) {
+                    matchedBean = matchedBeanList.get(i);
+                    UserInformationBean ufb = new UserInformationBean();
+                    ufb.setBlueTooth(matchedBean.getMatchedBlueTooth());
+                    System.out.println(ufb.getBlueTooth());
+                    AsyncTasKHelper.execute(userInfoResponseListener, ufb);
+
+                }
+            }
+        }
+
+        @Override
+        public void onFail(int status) {
+
+        }
+    };
+    private UserInformationBean matcheduserInfoBean;
+    private AsyncTasKHelper.OnResponseListener<UserInformationBean, List<UserInformationBean>> userInfoResponseListener = new AsyncTasKHelper.OnResponseListener<UserInformationBean, List<UserInformationBean>>() {
+        @Override
+        public Call<ResponseBody<List<UserInformationBean>>> request(UserInformationBean... userInformationBeans) {
+            return userInformationApi.search(userInformationBeans[0]);
+        }
+
+        @Override
+        public void onSuccess(List<UserInformationBean> userInformationBeanList) {
+            if (userInformationBeanList.size() != 0) {
+                matcheduserInfoBean = userInformationBeanList.get(0);
+                matchedDeviceRecyclerViewAdapter.dataInsert(matcheduserInfoBean);
+            }
+        }
+
+        @Override
+        public void onFail(int status) {
+        }
+    };
 
     // UUID，蓝牙建立链接需要的
 
@@ -117,7 +177,7 @@ public class BlueToothHelper {
                 ufb.setBlueTooth(device.getAddress());
                 // 遍歷
 //                matchedBeanList.add(ufb);
-                matchedDeviceRecyclerViewAdapter.dataInsert(ufb);
+                //matchedDeviceRecyclerViewAdapter.dataInsert(ufb);
             }
         }
         activity.registerReceiver(receiver, filter);
@@ -152,36 +212,17 @@ public class BlueToothHelper {
                     double power = (iRssi - 59) / 25.0;
 //                        String distance = new Formatter().format("%.2f", pow(10, power)).toString();
                     int distance = (int) pow(10, power);
-                    if (distance < 5000) {
+                    if (distance <= 5000) {
                         sendMessage();
                     }
                     if (device.getBondState() != BluetoothDevice.BOND_BONDED) {
                         userInformationBean = new UserInformationBean();
                         userInformationBean.setBlueTooth(device.getAddress());
-                        unmatchedResponseListener = new AsyncTasKHelper.OnResponseListener<UserInformationBean, List<UserInformationBean>>() {
-                            @Override
-                            public Call<ResponseBody<List<UserInformationBean>>> request(UserInformationBean... userInformationBeans) {
-                                return userInformationApi.search(userInformationBeans[0]);
-                            }
-
-                            @Override
-                            public void onSuccess(List<UserInformationBean> userInformationBeanList) {
-                                if (userInformationBeanList.size() != 0) {
-                                    userInformationBean = userInformationBeanList.get(0);
-                                    unmatchedDeviceRecyclerViewAdapter.dataInsert(userInformationBean);
-                                }
-                            }
-
-                            @Override
-                            public void onFail(int status) {
-                            }
-                        };
-                        AsyncTasKHelper.execute(unmatchedResponseListener, userInformationBean);
-//                        Cursor result = userInformationDAO.searchAll(ufb);
-//                        result.moveToFirst();
-//                        ufb.setAvatar(result.getString(result.getColumnIndex("avatar")));
-                    } else {
-
+                        AsyncTasKHelper.execute(unmatchedBluetoothResponseListener, userInformationBean);
+                    } else if (device.getBondState() == BluetoothDevice.BOND_BONDED && distance <= 5000) {
+                        matchedBean = new MatchedBean();
+                        matchedBean.setBlueTooth(getMyBuleTooth());
+                        AsyncTasKHelper.execute(matchedResponseListener, matchedBean);
                     }
                 }
             } else if (BluetoothAdapter.ACTION_DISCOVERY_FINISHED.equals(action)) {

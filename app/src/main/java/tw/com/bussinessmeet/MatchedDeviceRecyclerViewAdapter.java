@@ -1,6 +1,7 @@
 package tw.com.bussinessmeet;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.List;
 
 import tw.com.bussinessmeet.bean.UserInformationBean;
+import tw.com.bussinessmeet.helper.AvatarHelper;
 
 
 public class MatchedDeviceRecyclerViewAdapter extends RecyclerView.Adapter<MatchedDeviceRecyclerViewAdapter.ViewHolder> {
@@ -26,6 +28,7 @@ public class MatchedDeviceRecyclerViewAdapter extends RecyclerView.Adapter<Match
         this.context = context;
         this.userInformationBeanList = userInformationBeanList;
     }
+    private UserInformationBean ufb;
 
     @NonNull
     @Override
@@ -36,8 +39,10 @@ public class MatchedDeviceRecyclerViewAdapter extends RecyclerView.Adapter<Match
 
     @Override
     public void onBindViewHolder(@NonNull MatchedDeviceRecyclerViewAdapter.ViewHolder holder, int position) {
-        UserInformationBean ufb = userInformationBeanList.get(position);
-        holder.bindInformation(ufb.getBlueTooth(),ufb.getAvatar());
+        ufb = userInformationBeanList.get(position);
+        AvatarHelper avatarHelper = new AvatarHelper();
+        Bitmap avatar = avatarHelper.getImageResource(ufb.getAvatar());
+        holder.bindInformation(ufb.getUserName(), avatar);
     }
 
     @Override
@@ -59,9 +64,9 @@ public class MatchedDeviceRecyclerViewAdapter extends RecyclerView.Adapter<Match
             itemView.setOnClickListener(this);
         }
 
-        void bindInformation(String userName, String avatar){
+        void bindInformation(String userName, Bitmap avatar){
             search_name.setText(userName);
-
+            search_pro_pic_small.setImageBitmap(avatar);
         }
 
         @Override
