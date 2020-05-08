@@ -6,6 +6,7 @@ import androidx.core.app.NotificationCompat;
 import retrofit2.Call;
 import tw.com.bussinessmeet.bean.ResponseBody;
 import tw.com.bussinessmeet.bean.UserInformationBean;
+import tw.com.bussinessmeet.dao.MatchedDAO;
 import tw.com.bussinessmeet.dao.UserInformationDAO;
 import tw.com.bussinessmeet.helper.AsyncTasKHelper;
 import tw.com.bussinessmeet.helper.AvatarHelper;
@@ -21,14 +22,17 @@ import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import tw.com.bussinessmeet.helper.DBHelper;
 
 import java.util.List;
 
@@ -39,6 +43,7 @@ public class FriendsIntroductionActivity extends AppCompatActivity {
     private UserInformationDAO userInformationDAO;
     private DBHelper DH;
     private AvatarHelper avatarHelper = new AvatarHelper();
+    private MatchedDAO matchedDAO;
     private UserInformationServiceImpl userInformationService = new UserInformationServiceImpl();
     private AsyncTasKHelper.OnResponseListener<UserInformationBean, List<UserInformationBean>> searchResponseListener =
             new AsyncTasKHelper.OnResponseListener<UserInformationBean, List<UserInformationBean>>() {
@@ -83,6 +88,7 @@ public class FriendsIntroductionActivity extends AppCompatActivity {
 
 
 
+
         //searchUserInformation();
 
         //bottomNavigationView
@@ -91,6 +97,18 @@ public class FriendsIntroductionActivity extends AppCompatActivity {
         //Set Home
         bottomNavigationView.setSelectedItemId(R.id.menu_friends);
         bottomNavigationView.setOnNavigationItemSelectedListener(navListener);
+        openDB();
+        bottomNavigationView.setItemIconTintList(null);  //顯示頭像
+        Menu BVMenu = bottomNavigationView.getMenu();
+        AvatarHelper avatarHelper = new AvatarHelper();
+        UserInformationBean ufb = new UserInformationBean();
+        Cursor result = userInformationDAO.searchAll(ufb);
+
+        MenuItem userItem = BVMenu.findItem(R.id.menu_home);
+        Bitmap myPhoto = avatarHelper.getImageResource(result.getString(result.getColumnIndex("avatar")));
+        userItem.setIcon(new BitmapDrawable(getResources(), myPhoto));
+
+
         String blueToothAddress = getIntent().getStringExtra("blueToothAddress");
 //        Log.e("blueToothAddress",blueToothAddress);
         //notification
@@ -118,35 +136,13 @@ public class FriendsIntroductionActivity extends AppCompatActivity {
             photo.setImageBitmap(profilePhoto);
         }
     }
+    private void openDB(){
+        Log.d("add","openDB");
+        DH = new DBHelper(this);
+        userInformationDAO = new UserInformationDAO(DH);
+        matchedDAO = new MatchedDAO(DH);
 
-/*    public void searchUserInformation(){
-        UserInformationBean ufb = new UserInformationBean();
-        BlueToothHelper blueToothHelper = new BlueToothHelper(this);
-        blueToothHelper.startBuleTooth();
-        ufb.setBlueTooth(blueToothHelper.getMyBuleTooth());
-
-
-        Cursor result = userInformationDAO.searchAll(ufb);
-        Log.d("result",String.valueOf(result.getColumnCount()));
-        Log.d("result",String.valueOf(result.getColumnIndex("user_name")));
-
-        for(int i = 0; i<result.getColumnCount(); i++){
-            Log.d("result",result.getColumnName(i));
-        }
-
-
-        if (result.moveToFirst()) {
-            userName.append(result.getString(result.getColumnIndex("user_name")));
-            company.append(result.getString(result.getColumnIndex("company")));
-            position.append(result.getString(result.getColumnIndex("position")));
-            email.append(result.getString(result.getColumnIndex("email")));
-            tel.append(result.getString(result.getColumnIndex("tel")));
-            avatar.setImageBitmap(avatarHelper.getImageResource(result.getString(result.getColumnIndex("avatar"))));
-
-        }
-        result.close();
-
-    }*/
+    }
 
     //Perform ItemSelectedListener
     private BottomNavigationView.OnNavigationItemSelectedListener navListener =

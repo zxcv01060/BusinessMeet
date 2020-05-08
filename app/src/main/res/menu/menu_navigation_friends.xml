@@ -10,6 +10,6 @@
         android:title="搜尋" />
     <item
         android:id="@+id/menu_friends"
-        android:icon="@drawable/ic_people_black_24dp"
+        android:icon="@drawable/ic_people_blue_24dp"
         android:title="好友" />
 </menu>
