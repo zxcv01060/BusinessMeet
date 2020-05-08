@@ -41,12 +41,12 @@ public class EditIntroductionActivity extends AppCompatActivity {
     private BlueToothHelper blueToothHelper;
     private DBHelper DH;
     private UserInformationDAO userInformationDAO;
-    private UserInformationServiceImpl userInformationApi;
+    private UserInformationServiceImpl userInformationService = new UserInformationServiceImpl();
     private AsyncTasKHelper.OnResponseListener<UserInformationBean, Empty> updateResponseListener =
             new AsyncTasKHelper.OnResponseListener<UserInformationBean, Empty>() {
                 @Override
                 public Call<ResponseBody<Empty>> request(UserInformationBean... userInformationBeans) {
-                    return userInformationApi.update(userInformationBeans[0]);
+                    return userInformationService.update(userInformationBeans[0]);
                 }
 
                 @Override

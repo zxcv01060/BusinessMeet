@@ -3,6 +3,9 @@ package tw.com.bussinessmeet;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
+
+import tw.com.bussinessmeet.adapter.MatchedDeviceRecyclerViewAdapter;
+import tw.com.bussinessmeet.adapter.UnmatchedDeviceRecyclerViewAdapter;
 import tw.com.bussinessmeet.dao.UserInformationDAO;
 import tw.com.bussinessmeet.helper.BlueToothHelper;
 import tw.com.bussinessmeet.helper.DBHelper;

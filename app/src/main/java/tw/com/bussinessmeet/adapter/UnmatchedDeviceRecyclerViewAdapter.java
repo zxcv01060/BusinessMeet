@@ -15,6 +15,7 @@ import java.util.List;
 
 import tw.com.bussinessmeet.R;
 import tw.com.bussinessmeet.bean.UserInformationBean;
+import tw.com.bussinessmeet.helper.AvatarHelper;
 
 
 public class UnmatchedDeviceRecyclerViewAdapter extends RecyclerView.Adapter<UnmatchedDeviceRecyclerViewAdapter.ViewHolder> {
@@ -22,6 +23,7 @@ public class UnmatchedDeviceRecyclerViewAdapter extends RecyclerView.Adapter<Unm
     private Context context;
     private  List<UserInformationBean> userInformationBeanList;
     private MatchedClickListener matchedClickListener;
+    private AvatarHelper avatarHelper = new AvatarHelper();
     public UnmatchedDeviceRecyclerViewAdapter(Context context, List<UserInformationBean> userInformationBeanList) {
         this.layoutInflater = LayoutInflater.from(context);
         this.context = context;
@@ -38,7 +40,7 @@ public class UnmatchedDeviceRecyclerViewAdapter extends RecyclerView.Adapter<Unm
     @Override
     public void onBindViewHolder(@NonNull UnmatchedDeviceRecyclerViewAdapter.ViewHolder holder, int position) {
         UserInformationBean ufb = userInformationBeanList.get(position);
-        holder.bindInformation(ufb.getBlueTooth(),ufb.getAvatar());
+        holder.bindInformation(ufb.getUserName(),ufb.getAvatar());
 
     }
 
@@ -63,6 +65,7 @@ public class UnmatchedDeviceRecyclerViewAdapter extends RecyclerView.Adapter<Unm
 
         void bindInformation(String userName, String avatar){
             search_name.setText(userName);
+            search_pro_pic_small.setImageBitmap(avatarHelper.getImageResource(avatar));
 
         }
 
