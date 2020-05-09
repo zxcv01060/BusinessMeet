@@ -56,7 +56,11 @@ public class MatchedDAO {
             }
         }
         Cursor cursor = db.query(tableName, column, where, args.toArray(new String[0]),null,null,null);
-        return  cursor;
+        if(cursor.moveToFirst()) {
+            return cursor;
+        }else{
+            return null;
+        }
     }
 
     // getById

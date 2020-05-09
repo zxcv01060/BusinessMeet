@@ -91,7 +91,7 @@ public class UserInformationDAO {
             }
         }
         Cursor cursor = db.query(tableName, column, where,args.toArray(new String[0]),null,null,null);
-        if(cursor.moveToFirst()){
+        if(cursor.moveToFirst()) {
             return cursor;
         }else{
             return null;

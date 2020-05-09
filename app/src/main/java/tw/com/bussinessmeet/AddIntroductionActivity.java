@@ -37,14 +37,14 @@ public class AddIntroductionActivity extends AppCompatActivity {
     private UserInformationDAO userInformationDAO;
     private DBHelper DH = null;
     private AvatarHelper avatarHelper ;
-    private UserInformationServiceImpl userInformationApi ;
+    private UserInformationServiceImpl userInformationService = new UserInformationServiceImpl() ;
 //    private List<DeviceItem> deviceItems ;
 //    private ThematicListAdapter thematicListAdapter;
     private AsyncTasKHelper.OnResponseListener<UserInformationBean, UserInformationBean> addResponseListener =
             new AsyncTasKHelper.OnResponseListener<UserInformationBean, UserInformationBean>() {
                 @Override
                 public Call<ResponseBody<UserInformationBean>> request(UserInformationBean... userInformationBeans) {
-                    return userInformationApi.add(userInformationBeans[0]);
+                    return userInformationService.add(userInformationBeans[0]);
                 }
 
                 @Override

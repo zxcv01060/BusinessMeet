@@ -24,25 +24,31 @@ public class AvatarHelper {
 
         int width = avatar.getWidth();
         int height = avatar.getHeight();
-        int edge = 500;
-        Matrix matrix = new Matrix();
-        if(width < height){
-            matrix.postScale((edge/(float)width),(edge/(float)width));
-        }else{
-            matrix.postScale((edge/(float)height),(edge/(float)height));
+        if (width >= height) {
+            avatar = Bitmap.createBitmap(
+                    avatar,
+                    width / 2 - height / 2,
+                    0,
+                    height,
+                    height
+            );
+        } else {
+            avatar = Bitmap.createBitmap(
+                    avatar,
+                    0,
+                    height / 2 - width / 2,
+                    width,
+                    width
+            );
         }
-        avatar  = Bitmap.createBitmap(avatar,0,0,width,height,matrix,true);
-        width = avatar.getWidth();
-        height = avatar.getHeight();
-        avatar = Bitmap.createBitmap(
-                avatar,
-                width/2 - edge/2,
-                height/2 - edge/2,
-                edge,
-                edge
-        );
+        int r = 0;
 
-        int r = edge;
+        if(width > height) {
+            r = height;
+        } else {
+            r = width;
+        }
+
         Bitmap avatarCircle = Bitmap.createBitmap(r,r, Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(avatarCircle);
         Paint paint = new Paint();

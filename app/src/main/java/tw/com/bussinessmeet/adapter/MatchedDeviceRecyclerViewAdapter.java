@@ -1,6 +1,7 @@
-package tw.com.bussinessmeet;
+package tw.com.bussinessmeet.adapter;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,7 +14,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
 
+import tw.com.bussinessmeet.R;
 import tw.com.bussinessmeet.bean.UserInformationBean;
+import tw.com.bussinessmeet.helper.AvatarHelper;
 
 
 public class MatchedDeviceRecyclerViewAdapter extends RecyclerView.Adapter<MatchedDeviceRecyclerViewAdapter.ViewHolder> {
@@ -21,11 +24,12 @@ public class MatchedDeviceRecyclerViewAdapter extends RecyclerView.Adapter<Match
     private Context context;
     private  List<UserInformationBean> userInformationBeanList;
     private SearchClickListener searchClickListener;
-    MatchedDeviceRecyclerViewAdapter(Context context, List<UserInformationBean> userInformationBeanList) {
+    public MatchedDeviceRecyclerViewAdapter(Context context, List<UserInformationBean> userInformationBeanList) {
         this.layoutInflater = LayoutInflater.from(context);
         this.context = context;
         this.userInformationBeanList = userInformationBeanList;
     }
+    private UserInformationBean ufb;
 
     @NonNull
     @Override
@@ -36,8 +40,10 @@ public class MatchedDeviceRecyclerViewAdapter extends RecyclerView.Adapter<Match
 
     @Override
     public void onBindViewHolder(@NonNull MatchedDeviceRecyclerViewAdapter.ViewHolder holder, int position) {
-        UserInformationBean ufb = userInformationBeanList.get(position);
-        holder.bindInformation(ufb.getBlueTooth(),ufb.getAvatar());
+        ufb = userInformationBeanList.get(position);
+        AvatarHelper avatarHelper = new AvatarHelper();
+        Bitmap avatar = avatarHelper.getImageResource(ufb.getAvatar());
+        holder.bindInformation(ufb.getUserName(), avatar);
     }
 
     @Override
@@ -59,23 +65,23 @@ public class MatchedDeviceRecyclerViewAdapter extends RecyclerView.Adapter<Match
             itemView.setOnClickListener(this);
         }
 
-        void bindInformation(String userName, String avatar){
+        void bindInformation(String userName, Bitmap avatar){
             search_name.setText(userName);
-
+            search_pro_pic_small.setImageBitmap(avatar);
         }
 
         @Override
         public void onClick(View v) {
-                if(searchClickListener != null){
-                    searchClickListener.onSearchClick(v,getAdapterPosition());
-                }
+            if(searchClickListener != null){
+                searchClickListener.onSearchClick(v,getAdapterPosition());
+            }
         }
 
     }
     public UserInformationBean getUserInformation(int position){
         return userInformationBeanList.get(position);
     }
-    void  setClickListener(SearchClickListener searchClickLinster){
+    public void  setClickListener(SearchClickListener searchClickLinster){
         this.searchClickListener = searchClickLinster;
     }
     public void dataInsert(UserInformationBean userInformationBean){

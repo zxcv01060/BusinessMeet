@@ -1,4 +1,4 @@
-package tw.com.bussinessmeet;
+package tw.com.bussinessmeet.adapter;
 
 import android.content.Context;
 import android.util.Log;
@@ -13,7 +13,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
 
+import tw.com.bussinessmeet.R;
 import tw.com.bussinessmeet.bean.UserInformationBean;
+import tw.com.bussinessmeet.helper.AvatarHelper;
 
 
 public class UnmatchedDeviceRecyclerViewAdapter extends RecyclerView.Adapter<UnmatchedDeviceRecyclerViewAdapter.ViewHolder> {
@@ -21,7 +23,8 @@ public class UnmatchedDeviceRecyclerViewAdapter extends RecyclerView.Adapter<Unm
     private Context context;
     private  List<UserInformationBean> userInformationBeanList;
     private MatchedClickListener matchedClickListener;
-    UnmatchedDeviceRecyclerViewAdapter(Context context, List<UserInformationBean> userInformationBeanList) {
+    private AvatarHelper avatarHelper = new AvatarHelper();
+    public UnmatchedDeviceRecyclerViewAdapter(Context context, List<UserInformationBean> userInformationBeanList) {
         this.layoutInflater = LayoutInflater.from(context);
         this.context = context;
         this.userInformationBeanList = userInformationBeanList;
@@ -37,7 +40,7 @@ public class UnmatchedDeviceRecyclerViewAdapter extends RecyclerView.Adapter<Unm
     @Override
     public void onBindViewHolder(@NonNull UnmatchedDeviceRecyclerViewAdapter.ViewHolder holder, int position) {
         UserInformationBean ufb = userInformationBeanList.get(position);
-        holder.bindInformation(ufb.getBlueTooth(),ufb.getAvatar());
+        holder.bindInformation(ufb.getUserName(),ufb.getAvatar());
 
     }
 
@@ -62,20 +65,21 @@ public class UnmatchedDeviceRecyclerViewAdapter extends RecyclerView.Adapter<Unm
 
         void bindInformation(String userName, String avatar){
             search_name.setText(userName);
+            search_pro_pic_small.setImageBitmap(avatarHelper.getImageResource(avatar));
 
         }
 
         @Override
         public void onClick(View v) {
             Log.d("results","unmatched1");
-                if(matchedClickListener != null){
-                    Log.d("results","unmatched");
-                    matchedClickListener.onMatchedClick(v,getAdapterPosition());
-                }
+            if(matchedClickListener != null){
+                Log.d("results","unmatched");
+                matchedClickListener.onMatchedClick(v,getAdapterPosition());
+            }
         }
 
     }
-    void  setClickListener(MatchedClickListener searchClickLinster){
+    public void  setClickListener(MatchedClickListener searchClickLinster){
         this.matchedClickListener = searchClickLinster;
     }
     public UserInformationBean getUserInformation(int position){

@@ -29,6 +29,8 @@ import java.util.List;
 import retrofit2.Call;
 import tw.com.bussinessmeet.helper.AvatarHelper;
 import tw.com.bussinessmeet.helper.NotificationHelper;
+import tw.com.bussinessmeet.adapter.MatchedDeviceRecyclerViewAdapter;
+import tw.com.bussinessmeet.adapter.UnmatchedDeviceRecyclerViewAdapter;
 import tw.com.bussinessmeet.service.Impl.MatchedServiceImpl;
 import tw.com.bussinessmeet.bean.MatchedBean;
 import tw.com.bussinessmeet.bean.ResponseBody;
@@ -41,7 +43,7 @@ import tw.com.bussinessmeet.helper.DBHelper;
 import tw.com.bussinessmeet.helper.BlueToothHelper;
 import tw.com.bussinessmeet.bean.UserInformationBean;
 
-public class SearchActivity extends AppCompatActivity implements MatchedDeviceRecyclerViewAdapter.SearchClickListener,UnmatchedDeviceRecyclerViewAdapter.MatchedClickListener {
+public class SearchActivity extends AppCompatActivity implements MatchedDeviceRecyclerViewAdapter.SearchClickListener, UnmatchedDeviceRecyclerViewAdapter.MatchedClickListener {
     private DBHelper DH = null;
     private UserInformationDAO userInformationDAO;
     private BlueToothHelper blueTooth;
@@ -95,8 +97,8 @@ public class SearchActivity extends AppCompatActivity implements MatchedDeviceRe
 
                 @Override
                 public void onSuccess(MatchedBean matchedBean) {
-                        Log.e("MatchedBean",String.valueOf(matchedBean));
-                        Log.e("MatchedBean",String.valueOf(matchedBean.getBlueTooth()));
+                    Log.e("MatchedBean",String.valueOf(matchedBean));
+                    Log.e("MatchedBean",String.valueOf(matchedBean.getBlueTooth()));
                 }
 
                 @Override
