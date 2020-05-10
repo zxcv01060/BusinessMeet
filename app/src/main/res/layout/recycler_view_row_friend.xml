@@ -31,6 +31,7 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginLeft="16dp"
                 android:layout_marginBottom="4dp"
+                android:layout_marginTop="10dp"
                 android:text="王曉明"
                 android:textColor="@color/colorAlmostBlack"
                 android:textSize="17sp"
