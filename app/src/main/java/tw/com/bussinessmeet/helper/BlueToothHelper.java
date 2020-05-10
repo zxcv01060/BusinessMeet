@@ -80,11 +80,30 @@ public class BlueToothHelper {
 
         public void onSuccess(UserInformationBean responseBean) {
             Log.d("blueToothSearch","success");
-            userInformationBean = responseBean;
-            matchedBean = new MatchedBean();
-            matchedBean.setBlueTooth(getMyBuleTooth());
-            matchedBean.setMatchedBlueTooth(userInformationBean.getBlueTooth());
-            AsyncTasKHelper.execute(matchedResponseListener, matchedBean);
+            int count = matchedDeviceRecyclerViewAdapter.getItemCount();
+            boolean first = true;
+            for(int i = 0; i < count; i++ ){
+                if(!first)break;
+                if(matchedDeviceRecyclerViewAdapter.getUserInformation(i).getBlueTooth().equals(responseBean.getBlueTooth())){
+                    first = false;
+                }
+
+            }
+            count = unmatchedDeviceRecyclerViewAdapter.getItemCount();
+            for(int i = 0; i < count; i++ ){
+                if(!first)break;
+                if(unmatchedDeviceRecyclerViewAdapter.getUserInformation(i).getBlueTooth().equals(responseBean.getBlueTooth())){
+                    first = false;
+                }
+
+            }
+            if(first) {
+                userInformationBean = responseBean;
+                matchedBean = new MatchedBean();
+                matchedBean.setBlueTooth(getMyBuleTooth());
+                matchedBean.setMatchedBlueTooth(userInformationBean.getBlueTooth());
+                AsyncTasKHelper.execute(matchedResponseListener, matchedBean);
+            }
         }
         @Override
         public void onFail(int status) {
