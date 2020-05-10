@@ -6,10 +6,10 @@
         android:title="個人資料" />
     <item
         android:id="@+id/menu_search"
-        android:icon="@drawable/ic_search_black_24dp"
+        android:icon="@drawable/search_selector"
         android:title="搜尋" />
     <item
         android:id="@+id/menu_friends"
-        android:icon="@drawable/ic_people_outline_black_24dp"
+        android:icon="@drawable/friends_selector"
         android:title="好友" />
 </menu>

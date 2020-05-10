@@ -69,7 +69,7 @@ public class BlueToothHelper {
     private UnmatchedDeviceRecyclerViewAdapter unmatchedDeviceRecyclerViewAdapter;
     private UserInformationBean userInformationBean;
     private int distance = 0;
-    private BluetoothDevice device = null;
+    //private BluetoothDevice device = null;
     private NotificationHelper notificationHelper;
     private AsyncTasKHelper.OnResponseListener<String, UserInformationBean> getByIdResponseListener = new AsyncTasKHelper.OnResponseListener<String, UserInformationBean>() {
         @Override
@@ -98,17 +98,13 @@ public class BlueToothHelper {
         }
         @Override
         public void onSuccess(List<MatchedBean> matchedBeanList) {
-
             if (matchedBeanList.size() > 0) {
                 Log.d("blueToothSearchmatched",String.valueOf(distance));
                 matchedDeviceRecyclerViewAdapter.dataInsert(userInformationBean);
                 if (distance <= 5000) {
-                    Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS, Uri.parse("package:" + activity.getPackageName()));
-                    String action = intent.getAction();
-                    device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
-                    Log.d("sendmess", String.valueOf(device));
-                    notificationHelper.sendMessage(device.getAddress());
-                    device = null;
+                    //Log.d("sendmess", String.valueOf(device));
+                    notificationHelper.sendMessage(userInformationBean.getBlueTooth());
+                    //device = null;
                 }
             }
         }
