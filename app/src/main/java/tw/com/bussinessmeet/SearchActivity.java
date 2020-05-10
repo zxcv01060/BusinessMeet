@@ -1,10 +1,14 @@
 package tw.com.bussinessmeet;
 
 import android.content.Intent;
+import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
@@ -23,6 +27,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
+import tw.com.bussinessmeet.helper.AvatarHelper;
+import tw.com.bussinessmeet.helper.NotificationHelper;
 import tw.com.bussinessmeet.adapter.MatchedDeviceRecyclerViewAdapter;
 import tw.com.bussinessmeet.adapter.UnmatchedDeviceRecyclerViewAdapter;
 import tw.com.bussinessmeet.service.Impl.MatchedServiceImpl;
@@ -34,6 +40,8 @@ import tw.com.bussinessmeet.dao.UserInformationDAO;
 import tw.com.bussinessmeet.helper.AsyncTasKHelper;
 import tw.com.bussinessmeet.helper.BlueToothHelper;
 import tw.com.bussinessmeet.helper.DBHelper;
+import tw.com.bussinessmeet.helper.BlueToothHelper;
+import tw.com.bussinessmeet.bean.UserInformationBean;
 
 public class SearchActivity extends AppCompatActivity implements MatchedDeviceRecyclerViewAdapter.SearchClickListener, UnmatchedDeviceRecyclerViewAdapter.MatchedClickListener {
     private DBHelper DH = null;
@@ -48,6 +56,8 @@ public class SearchActivity extends AppCompatActivity implements MatchedDeviceRe
     private MatchedServiceImpl matchedService = new MatchedServiceImpl();
     private TextView search_title;
     private MatchedDAO matchedDAO;
+    private BlueToothHelper blueToothHelper;
+
     Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -114,7 +124,6 @@ public class SearchActivity extends AppCompatActivity implements MatchedDeviceRe
         blueTooth.scanBluth();
         blueTooth.searchBlueTooth(userInformationDAO,matchedRecyclerViewAdapter,unmatchedRecyclerViewAdapter);
         blueTooth.startThread(handler);
-        UserInformationBean ufb = new UserInformationBean();
 
         //bottomNavigationView
         //Initialize And Assign Variable
@@ -122,6 +131,23 @@ public class SearchActivity extends AppCompatActivity implements MatchedDeviceRe
         //Set Home
         bottomNavigationView.setSelectedItemId(R.id.menu_search);
         bottomNavigationView.setOnNavigationItemSelectedListener(navListener);
+        bottomNavigationView.setItemIconTintList(null);  //顯示頭像
+
+        Menu BVMenu = bottomNavigationView.getMenu();
+        bottomNavigationView.setItemIconTintList(null);  //顯示頭像
+        AvatarHelper avatarHelper = new AvatarHelper();
+        //blueToothHelper.startBuleTooth();
+        Log.d("seedmess","ness");
+        UserInformationBean ufb = new UserInformationBean();
+        //ufb.setBlueTooth(blueToothHelper.getMyBuleTooth());
+        Cursor result = userInformationDAO.searchAll(ufb);
+        Log.e("result",String.valueOf(result));
+
+        MenuItem userItem = BVMenu.findItem(R.id.menu_home);
+        Bitmap myPhoto = avatarHelper.getImageResource(result.getString(result.getColumnIndex("avatar")));
+        userItem.setIcon(new BitmapDrawable(getResources(), myPhoto));
+
+
 
     }
 
@@ -157,14 +183,17 @@ public class SearchActivity extends AppCompatActivity implements MatchedDeviceRe
         UserInformationBean userInformationBean = matchedRecyclerViewAdapter.getUserInformation(position);
         String address = userInformationBean.getBlueTooth();
         String userName = userInformationBean.getUserName();
-        blueTooth.matched(address,userName,addResponseListener,matchedDAO);
-//        blueTooth.cancelDiscovery();
+       blueTooth.matched(address,userName,addResponseListener,matchedDAO);
+        blueTooth.cancelDiscovery();
 //        Intent intent = new Intent();
 //        intent.setClass(SearchActivity.this,FriendsIntroductionActivity.class);
 //        Bundle bundle = new Bundle();
 //        bundle.putString("blueToothAddress",matchedRecyclerViewAdapter.getUserInformation(position).getBlueTooth());
 //        intent.putExtras(bundle);
 //        startActivity(intent);
+        Log.e("send","============================");
+        //NotificationHelper notificationHelper = new NotificationHelper(this);
+        //notificationHelper.sendMessage(address);
     }
     @Override
     public void onMatchedClick(View view, int position) {
@@ -178,28 +207,28 @@ public class SearchActivity extends AppCompatActivity implements MatchedDeviceRe
 
 
     //button_nav Perform ItemSelectedListener
-    private BottomNavigationView.OnNavigationItemSelectedListener navListener =
+    BottomNavigationView.OnNavigationItemSelectedListener navListener =
             (new BottomNavigationView.OnNavigationItemSelectedListener() {
                 @Override
-                public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-                    switch (menuItem.getItemId()){
-                        case R.id.menu_home:
-                            startActivity(new Intent(getApplicationContext()
-                                    ,SelfIntroductionActivity.class));
-                            overridePendingTransition(0,0);
-                            return true;
-                        case R.id.menu_search:
-                            return true;
-                        case R.id.menu_friends:
-                            //menuItem.setIcon(R.drawable.ic_people_black_24dp);
-                            blueTooth.cancelDiscovery();
-                            startActivity(new Intent(getApplicationContext()
-                                    ,FriendsActivity.class));
-                            overridePendingTransition(0,0);
-                            return true;
-                    }
-                    return false;
-                }
-            });
+
+        public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+            switch (menuItem.getItemId()){
+                case R.id.menu_home:
+                    startActivity(new Intent(getApplicationContext()
+                            ,SelfIntroductionActivity.class));
+                    overridePendingTransition(0,0);
+                    return true;
+                case R.id.menu_search:
+                    return true;
+                case R.id.menu_friends:
+                    //menuItem.setIcon(R.drawable.ic_people_black_24dp);
+                    startActivity(new Intent(getApplicationContext()
+                            ,FriendsActivity.class));
+                    overridePendingTransition(0,0);
+                    return true;
+            }
+            return false;
+        }
+    });
 
 }

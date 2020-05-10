@@ -1,6 +1,7 @@
 package tw.com.bussinessmeet.helper;
 
 import android.os.AsyncTask;
+import android.util.Log;
 
 import java.io.IOException;
 
@@ -23,6 +24,7 @@ public class AsyncTasKHelper<P, R> extends AsyncTask<P, Void, Response<ResponseB
     @Override
     protected Response<ResponseBody<R>> doInBackground(P... ps) {
         try {
+            Log.d("response","printtttt");
             return onResponseListener.request(ps).execute();
         } catch (IOException e) {
             e.printStackTrace();
@@ -34,6 +36,7 @@ public class AsyncTasKHelper<P, R> extends AsyncTask<P, Void, Response<ResponseB
     protected void onPostExecute(Response<ResponseBody<R>> response) {
         super.onPostExecute(response);
         if (response != null && response.isSuccessful()) {
+            Log.d("responess","pleaeseee");
             ResponseBody<R> body = response.body();
             if (body.getSuccess()) {
                 onResponseListener.onSuccess(body.getData());
