@@ -62,7 +62,7 @@ public class AvatarHelper {
     }
     public String setImageResource(ImageView avatar){
         Drawable avatarDraw = avatar.getDrawable();
-        Log.d("resultavatar",String.valueOf(avatarDraw));
+        //Log.d("resultavatar",String.valueOf(avatarDraw));
         if(avatarDraw == null){
             return "";
         }

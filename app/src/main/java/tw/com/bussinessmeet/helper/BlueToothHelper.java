@@ -5,7 +5,6 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
@@ -15,68 +14,43 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
-import android.content.res.Resources;
-import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Color;
-import android.location.LocationManager;
-import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Handler;
 import android.os.Message;
-import android.os.SystemClock;
 import android.provider.Settings;
-import android.text.TextUtils;
 import android.util.Log;
-import android.widget.TextView;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
-
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-import androidx.core.app.NotificationCompat;
-import androidx.recyclerview.widget.DividerItemDecoration;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import java.io.IOException;
 import java.io.OutputStream;
 import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.net.NetworkInterface;
-import java.net.SocketException;
-import java.util.ArrayList;
-import java.util.Enumeration;
-import java.util.Formatter;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
-
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import retrofit2.Call;
 import tw.com.bussinessmeet.AddIntroductionActivity;
+import tw.com.bussinessmeet.R;
 import tw.com.bussinessmeet.RequestCode;
+import tw.com.bussinessmeet.adapter.UnmatchedDeviceRecyclerViewAdapter;
+import tw.com.bussinessmeet.adapter.MatchedDeviceRecyclerViewAdapter;
 import tw.com.bussinessmeet.bean.MatchedBean;
 import tw.com.bussinessmeet.bean.ResponseBody;
 import tw.com.bussinessmeet.bean.UserInformationBean;
 import tw.com.bussinessmeet.dao.MatchedDAO;
 import tw.com.bussinessmeet.dao.UserInformationDAO;
-import tw.com.bussinessmeet.FriendsIntroductionActivity;
-import tw.com.bussinessmeet.adapter.MatchedDeviceRecyclerViewAdapter;
-import tw.com.bussinessmeet.NotificationActivity;
-import tw.com.bussinessmeet.R;
-import tw.com.bussinessmeet.UnmatchedDeviceRecyclerViewAdapter;
-import tw.com.bussinessmeet.helper.NotificationHelper;
 import tw.com.bussinessmeet.service.Impl.MatchedServiceImpl;
 import tw.com.bussinessmeet.service.Impl.UserInformationServiceImpl;
+import tw.com.bussinessmeet.helper.NotificationHelper;
 
 import static java.lang.Math.abs;
 import static java.lang.Math.pow;
-import android.graphics.BitmapFactory;
 
 public class BlueToothHelper { 
 
@@ -95,6 +69,8 @@ public class BlueToothHelper {
     private UnmatchedDeviceRecyclerViewAdapter unmatchedDeviceRecyclerViewAdapter;
     private UserInformationBean userInformationBean;
     private int distance = 0;
+    private BluetoothDevice device = null;
+    private NotificationHelper notificationHelper;
     private AsyncTasKHelper.OnResponseListener<String, UserInformationBean> getByIdResponseListener = new AsyncTasKHelper.OnResponseListener<String, UserInformationBean>() {
         @Override
         public Call<ResponseBody<UserInformationBean>> request(String... blueTooth) {
@@ -102,7 +78,7 @@ public class BlueToothHelper {
         }
     private SQLiteDatabase db;
 
-        public void onSuccess(UserInformationBean responseBean) { ;
+        public void onSuccess(UserInformationBean responseBean) {
             Log.d("blueToothSearch","success");
             userInformationBean = responseBean;
             matchedBean = new MatchedBean();
@@ -113,7 +89,7 @@ public class BlueToothHelper {
         @Override
         public void onFail(int status) {
     };
-        }
+        };
     private MatchedBean matchedBean;
     private AsyncTasKHelper.OnResponseListener<MatchedBean, List<MatchedBean>> matchedResponseListener = new AsyncTasKHelper.OnResponseListener<MatchedBean, List<MatchedBean>>() {
         @Override
@@ -122,11 +98,17 @@ public class BlueToothHelper {
         }
         @Override
         public void onSuccess(List<MatchedBean> matchedBeanList) {
+
             if (matchedBeanList.size() > 0) {
                 Log.d("blueToothSearchmatched",String.valueOf(distance));
                 matchedDeviceRecyclerViewAdapter.dataInsert(userInformationBean);
                 if (distance <= 5000) {
-                    sendMessage();
+                    Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS, Uri.parse("package:" + activity.getPackageName()));
+                    String action = intent.getAction();
+                    device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
+                    Log.d("sendmess", String.valueOf(device));
+                    notificationHelper.sendMessage(device.getAddress());
+                    device = null;
                 }
             }
         }
@@ -178,10 +160,10 @@ public class BlueToothHelper {
 
         //setting channel
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            NotificationChannel channel =
+            NotificationChannel CHANNEL_1_ID =
                     new NotificationChannel("MyNotifications", "MyNotifications", NotificationManager.IMPORTANCE_DEFAULT);
             NotificationManager manager = activity.getSystemService(NotificationManager.class);
-            manager.createNotificationChannel(channel1);
+            manager.createNotificationChannel(CHANNEL_1_ID);
 
         }
     }
@@ -199,7 +181,6 @@ public class BlueToothHelper {
                 // 從intent中獲取裝置
                 Log.d("intocode",action);
                 BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
-                                notificationHelper.sendMessage(device.getAddress());
                 Log.e("blueToothsearch",device.getAddress());
                     short rssi = intent.getExtras().getShort(BluetoothDevice.EXTRA_RSSI);
                     int iRssi = abs(rssi);
