@@ -9,8 +9,12 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.Intent;
+import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -34,9 +38,16 @@ import tw.com.bussinessmeet.helper.BlueToothHelper;
 import tw.com.bussinessmeet.service.Impl.MatchedServiceImpl;
 import tw.com.bussinessmeet.service.Impl.UserInformationServiceImpl;
 import tw.com.bussinessmeet.service.MatchedService;
-
+import tw.com.bussinessmeet.dao.MatchedDAO;
+import tw.com.bussinessmeet.dao.UserInformationDAO;
+import tw.com.bussinessmeet.helper.AvatarHelper;
+import tw.com.bussinessmeet.helper.BlueToothHelper;
+import tw.com.bussinessmeet.helper.DBHelper;
 public class FriendsActivity extends AppCompatActivity implements FriendsRecyclerViewAdapter.ClickListener {
     private Button button;
+    private UserInformationDAO userInformationDAO;
+    private DBHelper DH = null;
+    private MatchedDAO matchedDAO;
     private MatchedServiceImpl matchedService = new MatchedServiceImpl() ;
     private UserInformationServiceImpl userInformationService = new UserInformationServiceImpl();
     private BlueToothHelper blueToothHelper;
@@ -92,30 +103,34 @@ public class FriendsActivity extends AppCompatActivity implements FriendsRecycle
         recyclerViewFriends = findViewById(R.id.friendsView);
         //bottomNavigationView
         //Initialize And Assign Variable
+        openDB();
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
         //Set Home
         bottomNavigationView.setSelectedItemId(R.id.menu_friends);
         bottomNavigationView.setOnNavigationItemSelectedListener(navListener);
+        bottomNavigationView.setItemIconTintList(null);  //顯示頭像
+        Menu BVMenu = bottomNavigationView.getMenu();
+        AvatarHelper avatarHelper = new AvatarHelper();
+        UserInformationBean ufb = new UserInformationBean();
+        Cursor result = userInformationDAO.searchAll(ufb);
+        Log.e("result",String.valueOf(result));
+
+        MenuItem userItem = BVMenu.findItem(R.id.menu_home);
+        Bitmap myPhoto = avatarHelper.getImageResource(result.getString(result.getColumnIndex("avatar")));
+        userItem.setIcon(new BitmapDrawable(getResources(), myPhoto));
         createRecyclerViewFriends();
         blueToothHelper = new BlueToothHelper(this);
         MatchedBean matchedBean = new MatchedBean();
         matchedBean.setBlueTooth(blueToothHelper.getMyBuleTooth());
         Log.e("matched",matchedBean.getBlueTooth());
         AsyncTasKHelper.execute(searchResponseListener,matchedBean);
-/*        //轉跳頁面
-        //取得此Button的實體
-/*        button = (Button)findViewById(R.id.gotonotifi);
 
-        //實做OnClickListener界面
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent();
-                intent.setClass(FriendsActivity.this , NotificationActivity.class);
-                startActivity(intent);
-            }
-        });*/
-
+    }
+    private void openDB(){
+        Log.d("add","openDB");
+        DH = new DBHelper(this);
+        userInformationDAO = new UserInformationDAO(DH);
+        matchedDAO = new MatchedDAO(DH);
 
     }
     private void createRecyclerViewFriends() {
@@ -129,9 +144,21 @@ public class FriendsActivity extends AppCompatActivity implements FriendsRecycle
     }
     public void onClick(View view, int position){
 
+/*    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        MenuItem switchButton = menu.findItem(R.id.menu_friends);
+        boolean searchScriptDisplayed = false;
+        if(searchScriptDisplayed){
+            switchButton.setIcon(R.drawable.ic_people_blue_24dp);
+        }else{
+            switchButton.setIcon(R.drawable.ic_people_outline_blue_24dp);
+        }
+        return super.onPrepareOptionsMenu(menu);
+
+    }*/
     }
     //Perform ItemSelectedListener
-    private BottomNavigationView.OnNavigationItemSelectedListener navListener =
+    BottomNavigationView.OnNavigationItemSelectedListener navListener =
             (new BottomNavigationView.OnNavigationItemSelectedListener() {
                 @Override
         public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {

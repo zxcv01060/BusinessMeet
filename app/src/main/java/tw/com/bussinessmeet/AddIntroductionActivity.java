@@ -101,16 +101,18 @@ public class AddIntroductionActivity extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        if(resultCode == RESULT_OK){
-            Uri uri = data.getData();
-            Log.d("resultUri", uri.toString());
-            ContentResolver cr = this.getContentResolver();
-            try{
-                Bitmap bitmap = BitmapFactory.decodeStream(cr.openInputStream(uri));
+        if(requestCode !=RESULT_CANCELED) {
+            if (resultCode == RESULT_OK) {
+                Uri uri = data.getData();
+                Log.d("resultUri", uri.toString());
+                ContentResolver cr = this.getContentResolver();
+                try {
+                    Bitmap bitmap = BitmapFactory.decodeStream(cr.openInputStream(uri));
 
-                avatar.setImageBitmap(avatarHelper.toCircle(bitmap));
-            }catch(Exception e){
-                Log.d("Exception",e.getMessage());
+                    avatar.setImageBitmap(avatarHelper.toCircle(bitmap));
+                } catch (Exception e) {
+                    Log.d("Exception", e.getMessage());
+                }
             }
         }
         super.onActivityResult(requestCode, resultCode, data);
