@@ -62,7 +62,7 @@ public class AvatarHelper {
     }
     public String setImageResource(ImageView avatar){
         Drawable avatarDraw = avatar.getDrawable();
-        Log.d("resultavatar",String.valueOf(avatarDraw));
+        //Log.d("resultavatar",String.valueOf(avatarDraw));
         if(avatarDraw == null){
             return "";
         }
@@ -74,8 +74,10 @@ public class AvatarHelper {
     }
 
     public Bitmap getImageResource(String avatar){
+        Log.d("avatar",avatar);
         byte[] avatarByteArray = Base64.decode(avatar, Base64.NO_WRAP);
         Bitmap avatarBitmap = BitmapFactory.decodeByteArray(avatarByteArray, 0, avatarByteArray.length);
+
         return avatarBitmap;
     }
 }
