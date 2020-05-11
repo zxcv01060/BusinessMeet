@@ -3,6 +3,7 @@ package tw.com.bussinessmeet;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.NotificationCompat;
+
 import retrofit2.Call;
 import tw.com.bussinessmeet.bean.ResponseBody;
 import tw.com.bussinessmeet.bean.UserInformationBean;
@@ -12,6 +13,7 @@ import tw.com.bussinessmeet.helper.AsyncTasKHelper;
 import tw.com.bussinessmeet.helper.AvatarHelper;
 import tw.com.bussinessmeet.helper.BlueToothHelper;
 import tw.com.bussinessmeet.helper.DBHelper;
+import tw.com.bussinessmeet.service.Impl.MatchedServiceImpl;
 import tw.com.bussinessmeet.service.Impl.UserInformationServiceImpl;
 
 import android.app.NotificationManager;
@@ -31,13 +33,17 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import tw.com.bussinessmeet.bean.MatchedBean;
+
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+
 import tw.com.bussinessmeet.helper.DBHelper;
+import tw.com.bussinessmeet.service.UserInformationService;
 
 import java.util.List;
 
 public class FriendsIntroductionActivity extends AppCompatActivity {
-    private TextView userName,company,position,email,tel;
+    private TextView userName, company, position, email, tel;
     private Button editButton;
     private ImageView avatar;
     private UserInformationDAO userInformationDAO;
@@ -45,38 +51,33 @@ public class FriendsIntroductionActivity extends AppCompatActivity {
     private AvatarHelper avatarHelper = new AvatarHelper();
     private MatchedDAO matchedDAO;
     private UserInformationServiceImpl userInformationService = new UserInformationServiceImpl();
-    private AsyncTasKHelper.OnResponseListener<UserInformationBean, List<UserInformationBean>> searchResponseListener =
-            new AsyncTasKHelper.OnResponseListener<UserInformationBean, List<UserInformationBean>>() {
-                @Override
-                public Call<ResponseBody<List<UserInformationBean>>> request(UserInformationBean... userInformationBeans) {
+    private AsyncTasKHelper.OnResponseListener<String, UserInformationBean> userInfoResponseListener = new AsyncTasKHelper.OnResponseListener<String, UserInformationBean>() {
+        @Override
+        public Call<ResponseBody<UserInformationBean>> request(String... bluetooth) {
+            return userInformationService.getById(bluetooth[0]);
+        }
 
-                    return userInformationService.search(userInformationBeans[0]);
-                }
+        @Override
+        public void onSuccess(UserInformationBean userInformationBean) {
+            userName.append(userInformationBean.getUserName());
+            company.append(userInformationBean.getCompany());
+            position.append(userInformationBean.getPosition());
+            email.append(userInformationBean.getEmail());
+            tel.append(userInformationBean.getTel());
+            avatar.setImageBitmap(avatarHelper.getImageResource(userInformationBean.getAvatar()));
+        }
 
-                @Override
-                public void onSuccess(List<UserInformationBean> userInformationBeanList) {
-                    Log.d("nameeee", userInformationBeanList.get(0).getUserName());
-                    UserInformationBean userInformationBean = userInformationBeanList.get(0);
-/*                    String userName = userInformationBean.getUserName();
-                    String company = userInformationBean.getCompany();
-                    String position = userInformationBean.getPosition();
-                    String email = userInformationBean.getEmail();
-                    String tel  = userInformationBean.getTel();*/
-
-                }
-
-                @Override
-                public void onFail(int status) {
-
-                }
-            };
+        @Override
+        public void onFail(int status) {
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.friends_introduction);
-
+        String blueToothAddress = getIntent().getStringExtra("blueToothAddress");
+        AsyncTasKHelper.execute(userInfoResponseListener, blueToothAddress);
 
         userName = (TextView) findViewById(R.id.friends_name);
         company = (TextView) findViewById(R.id.friends_company);
@@ -85,7 +86,6 @@ public class FriendsIntroductionActivity extends AppCompatActivity {
         tel = (TextView) findViewById(R.id.friends_tel);
         avatar = (ImageView) findViewById(R.id.friends_photo);
         avatarHelper = new AvatarHelper();
-
 
 
 
@@ -109,7 +109,7 @@ public class FriendsIntroductionActivity extends AppCompatActivity {
         userItem.setIcon(new BitmapDrawable(getResources(), myPhoto));
 
 
-        String blueToothAddress = getIntent().getStringExtra("blueToothAddress");
+        String bluetooth = getIntent().getStringExtra("blueToothAddress");
 //        Log.e("blueToothAddress",blueToothAddress);
         //notification
         TextView friendName = findViewById(R.id.friends_name);
@@ -129,15 +129,16 @@ public class FriendsIntroductionActivity extends AppCompatActivity {
         friendTel.setText(tel);
 
 
-        if(getIntent().hasExtra("avatar")) {
+        if (getIntent().hasExtra("avatar")) {
             ImageView photo = findViewById(R.id.friends_photo);
             Bitmap profilePhoto = BitmapFactory.decodeByteArray(
                     getIntent().getByteArrayExtra("avatar"), 0, getIntent().getByteArrayExtra("avatar").length);
             photo.setImageBitmap(profilePhoto);
         }
     }
-    private void openDB(){
-        Log.d("add","openDB");
+
+    private void openDB() {
+        Log.d("add", "openDB");
         DH = new DBHelper(this);
         userInformationDAO = new UserInformationDAO(DH);
         matchedDAO = new MatchedDAO(DH);
@@ -149,16 +150,16 @@ public class FriendsIntroductionActivity extends AppCompatActivity {
             (new BottomNavigationView.OnNavigationItemSelectedListener() {
                 @Override
                 public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-                    switch (menuItem.getItemId()){
+                    switch (menuItem.getItemId()) {
                         case R.id.menu_home:
                             startActivity(new Intent(getApplicationContext()
-                                    ,SelfIntroductionActivity.class));
-                            overridePendingTransition(0,0);
+                                    , SelfIntroductionActivity.class));
+                            overridePendingTransition(0, 0);
                             return true;
                         case R.id.menu_search:
                             startActivity(new Intent(getApplicationContext()
-                                    ,SearchActivity.class));
-                            overridePendingTransition(0,0);
+                                    , SearchActivity.class));
+                            overridePendingTransition(0, 0);
                             return true;
                         case R.id.menu_friends:
                             menuItem.setIcon(R.drawable.ic_people_blue_24dp);
