@@ -143,6 +143,12 @@ public class FriendsActivity extends AppCompatActivity implements FriendsRecycle
         Log.d("resultMainAdapter", String.valueOf(friendsRecyclerViewAdapter.getItemCount()));
     }
     public void onClick(View view, int position){
+        Intent intent = new Intent();
+        intent.setClass(this,FriendsIntroductionActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putString("blueToothAddress",friendsRecyclerViewAdapter.getUserInformation(position).getBlueTooth());
+        intent.putExtras(bundle);
+        startActivity(intent);
 
 /*    @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
