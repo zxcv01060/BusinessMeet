@@ -4,6 +4,5 @@
         android:state_selected="true"
         android:color="@color/colorPrimary"/>
     <item
-        android:state_selected="false"
         android:color="@color/colorLabelGray"/>
 </selector>
