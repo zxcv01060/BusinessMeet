@@ -139,27 +139,6 @@ public class FriendsIntroductionActivity extends AppCompatActivity {
         Bitmap myPhoto = avatarHelper.getImageResource(result.getString(result.getColumnIndex("avatar")));
         userItem.setIcon(new BitmapDrawable(getResources(), myPhoto));
 
-
-        String bluetooth = getIntent().getStringExtra("blueToothAddress");
-//        Log.e("blueToothAddress",blueToothAddress);
-        //notification
-        TextView friendName = findViewById(R.id.friends_name);
-        String title = getIntent().getStringExtra("title");
-        friendName.setText(title);
-        TextView friendCompany = findViewById(R.id.friends_company);
-        String company = getIntent().getStringExtra("company");
-        friendCompany.setText(company);
-        TextView friendPosition = findViewById(R.id.friends_position);
-        String position = getIntent().getStringExtra("position");
-        friendPosition.setText(position);
-        TextView friendEmail = findViewById(R.id.friends_email);
-        String email = getIntent().getStringExtra("email");
-        friendEmail.setText(email);
-        TextView friendTel = findViewById(R.id.friends_tel);
-        String tel = getIntent().getStringExtra("tel");
-        friendTel.setText(tel);
-
-
         if (getIntent().hasExtra("avatar")) {
             ImageView photo = findViewById(R.id.friends_photo);
             Bitmap profilePhoto = BitmapFactory.decodeByteArray(

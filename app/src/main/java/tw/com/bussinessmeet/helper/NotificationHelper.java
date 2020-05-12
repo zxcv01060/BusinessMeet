@@ -1,18 +1,13 @@
 package tw.com.bussinessmeet.helper;
 
 import android.app.Activity;
-import android.app.Notification;
-import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Color;
-import android.os.Build;
-import android.os.SystemClock;
+import android.os.Bundle;
 import android.util.Log;
 
 import java.io.ByteArrayOutputStream;
@@ -22,17 +17,20 @@ import androidx.core.app.NotificationCompat;
 import retrofit2.Call;
 import tw.com.bussinessmeet.FriendsIntroductionActivity;
 import tw.com.bussinessmeet.R;
+import tw.com.bussinessmeet.bean.MatchedBean;
 import tw.com.bussinessmeet.bean.ResponseBody;
 import tw.com.bussinessmeet.bean.UserInformationBean;
-import tw.com.bussinessmeet.dao.UserInformationDAO;
 import tw.com.bussinessmeet.service.Impl.UserInformationServiceImpl;
-import tw.com.bussinessmeet.service.UserInformationService;
+import tw.com.bussinessmeet.adapter.MatchedDeviceRecyclerViewAdapter;
 
 public class NotificationHelper {
     private Activity activity;
     private UserInformationServiceImpl userInformationService = new UserInformationServiceImpl();
     private AvatarHelper avatarHelper = new AvatarHelper();
+    private MatchedBean matchedBean;
     private static int NOTIFICATION_ID = 0;
+    private String memo1;
+    private int position;
     //private static int NOTIFICATION_ID = 0x30001; //196610
     private static int SUMMARY_ID = 1;
     private AsyncTasKHelper.OnResponseListener<UserInformationBean, List<UserInformationBean>> searchResponseListener =
@@ -43,39 +41,47 @@ public class NotificationHelper {
                     return userInformationService.search(userInformationBeans[0]);
                 }
 
+
+                //public String memo1 = memo;
                 @Override
                 public void onSuccess(List<UserInformationBean> userInformationBeanList) {
                     Log.d("nameeee", userInformationBeanList.get(0).getUserName());
                     UserInformationBean userInformationBean = userInformationBeanList.get(0);
                     String userName = userInformationBean.getUserName();
                     String company = userInformationBean.getCompany();
-                    String position = userInformationBean.getPosition();
                     String email = userInformationBean.getEmail();
                     String tel = userInformationBean.getTel();
+
                     //String avatar = userInformationBean.getAvatar();
 
 
                     String title1 = userName;
                     String message1 = company;
+
                     /*String title2 = "李赫宰";
                     String message2 = " SM娛樂公司";*/
                     /**/
 
 
-
+                    NotificationCompat.BigTextStyle bigStyle = new NotificationCompat.BigTextStyle();
+                    bigStyle.bigText(memo1);
                     NotificationCompat.Builder notification1 = new NotificationCompat.Builder(
                             activity, CHANNEL_1_ID
                     )
                             .setSmallIcon(R.drawable.ic_insert_comment_black_24dp)
-                            .setContentTitle(title1)
-                            .setContentText(message1)
+                            .setContentTitle(title1 + " "  + message1)
+                            .setContentText(memo1)
                             .setPriority(NotificationCompat.PRIORITY_HIGH)
                             .setDefaults(NotificationCompat.DEFAULT_ALL)
                             .setAutoCancel(true)
                             .setColor(Color.rgb(4,42,88))
                             .setVisibility(NotificationCompat.VISIBILITY_PRIVATE)
                             .setLargeIcon(avatarHelper.getImageResource(userInformationBean.getAvatar()))
+                            //.setStyle(bigStyle)
+                            .setStyle(new NotificationCompat.BigTextStyle()
+                                    .bigText(memo1))
                             .setGroup("group");
+
 
 
                     /*NotificationCompat.Builder notification2 = new NotificationCompat.Builder(
@@ -112,14 +118,15 @@ public class NotificationHelper {
 
 
                     //宣告Intent物件 跳至friends_introduction
-                    Intent intent = new Intent(activity,
-                            FriendsIntroductionActivity.class);
+/*                    Intent intent = new Intent(activity,
+                            FriendsIntroductionActivity.class);*/
+
+                    Intent intent = new Intent();
+                    intent.setClass(activity,FriendsIntroductionActivity.class);
+                    Bundle bundle = new Bundle();
+                    bundle.putString("blueToothAddress",userInformationBean.getBlueTooth());
+                    intent.putExtras(bundle);
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                    intent.putExtra("title", userName);
-                    intent.putExtra("company", company);
-                    intent.putExtra("position", position);
-                    intent.putExtra("email", email);
-                    intent.putExtra("tel", tel);
                     //大頭貼---------------------
                     AvatarHelper avatarHelper = new AvatarHelper();
                     Bitmap profilePhoto = avatarHelper.getImageResource(userInformationBean.getAvatar());
@@ -194,14 +201,19 @@ public class NotificationHelper {
     }*/
 
 
-     public void sendMessage(String matchedBlueTooth) {
+
+     public void sendMessage(String matchedBlueTooth, String memo) {
+         memo1 = memo;
 
          Log.d("seedmess",matchedBlueTooth);
          UserInformationBean ufb = new UserInformationBean();
          ufb.setBlueTooth(matchedBlueTooth);
+         MatchedBean matchUfb = new MatchedBean();
+         matchUfb.setMemorandum(memo);
          AsyncTasKHelper.execute(searchResponseListener, ufb);
         Log.d("taskHelper","sucess");
-         //Bitmap profilePhoto = avatar.setImageBitmap(avatarHelper.getImageResource(result.getString(result.getColumnIndex("avatar"))));
-
     }
+
+
+
 }
