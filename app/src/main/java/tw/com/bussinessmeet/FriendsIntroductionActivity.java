@@ -29,6 +29,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -43,14 +44,17 @@ import tw.com.bussinessmeet.service.UserInformationService;
 import java.util.List;
 
 public class FriendsIntroductionActivity extends AppCompatActivity {
-    private TextView userName, company, position, email, tel;
+    private TextView userName, company, position, email, tel, memo;
     private Button editButton;
     private ImageView avatar;
     private UserInformationDAO userInformationDAO;
     private DBHelper DH;
     private AvatarHelper avatarHelper = new AvatarHelper();
+    private BlueToothHelper blueToothHelper;
     private MatchedDAO matchedDAO;
+    private MatchedBean matchedBean = new MatchedBean();
     private UserInformationServiceImpl userInformationService = new UserInformationServiceImpl();
+    private MatchedServiceImpl matchedService = new MatchedServiceImpl();
     private AsyncTasKHelper.OnResponseListener<String, UserInformationBean> userInfoResponseListener = new AsyncTasKHelper.OnResponseListener<String, UserInformationBean>() {
         @Override
         public Call<ResponseBody<UserInformationBean>> request(String... bluetooth) {
@@ -72,12 +76,36 @@ public class FriendsIntroductionActivity extends AppCompatActivity {
         }
     };
 
+    private AsyncTasKHelper.OnResponseListener<MatchedBean, List<MatchedBean>> friendsMemoResponseListener = new AsyncTasKHelper.OnResponseListener<MatchedBean, List<MatchedBean>>() {
+        @Override
+        public Call<ResponseBody<List<MatchedBean>>> request(MatchedBean... matchedBeans) {
+            return matchedService.search(matchedBeans[0]);
+        }
+
+        @Override
+        public void onSuccess(List<MatchedBean> matchedBeanList) {
+            Log.d("memo", matchedBeanList.get(0).getMemorandum());
+            memo.append(matchedBeanList.get(0).getMemorandum());
+        }
+
+        @Override
+        public void onFail(int status) {
+
+        }
+    };
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.friends_introduction);
         String blueToothAddress = getIntent().getStringExtra("blueToothAddress");
         AsyncTasKHelper.execute(userInfoResponseListener, blueToothAddress);
+        matchedBean.setMatchedBlueTooth(blueToothAddress);
+        blueToothHelper = new BlueToothHelper(this);
+        matchedBean.setBlueTooth(blueToothHelper.getMyBuleTooth());
+        Log.d("memo", matchedBean.getMatchedBlueTooth());
+        Log.d("memo", matchedBean.getBlueTooth());
+        AsyncTasKHelper.execute(friendsMemoResponseListener, matchedBean);
 
         userName = (TextView) findViewById(R.id.friends_name);
         company = (TextView) findViewById(R.id.friends_company);
@@ -85,7 +113,10 @@ public class FriendsIntroductionActivity extends AppCompatActivity {
         email = (TextView) findViewById(R.id.friends_email);
         tel = (TextView) findViewById(R.id.friends_tel);
         avatar = (ImageView) findViewById(R.id.friends_photo);
+        memo = (TextView) findViewById(R.id.friends_memo);
         avatarHelper = new AvatarHelper();
+        editButton = (Button) findViewById(R.id.editFriendsProfileButton);
+        editButton.setOnClickListener(editMemoButton);
 
 
 
@@ -144,6 +175,20 @@ public class FriendsIntroductionActivity extends AppCompatActivity {
         matchedDAO = new MatchedDAO(DH);
 
     }
+
+    public View.OnClickListener editMemoButton = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            changeToFriendsEditIntroductionPage();
+        }
+    };
+
+    public void changeToFriendsEditIntroductionPage() {
+        Intent intent = new Intent();
+        intent.setClass(FriendsIntroductionActivity.this, FriendsMemoActivity.class);
+        startActivity(intent);
+    }
+
 
     //Perform ItemSelectedListener
     private BottomNavigationView.OnNavigationItemSelectedListener navListener =
