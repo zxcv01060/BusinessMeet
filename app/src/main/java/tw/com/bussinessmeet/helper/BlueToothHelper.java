@@ -122,7 +122,7 @@ public class BlueToothHelper {
                 matchedDeviceRecyclerViewAdapter.dataInsert(userInformationBean);
                 if (distance <= 5000) {
                     //Log.d("sendmess", String.valueOf(device));
-                    notificationHelper.sendMessage(userInformationBean.getBlueTooth());
+                    notificationHelper.sendMessage(userInformationBean.getBlueTooth(), matchedBeanList.get(0).getMemorandum());
                     //device = null;
                 }
             }
