@@ -24,30 +24,35 @@ public class AvatarHelper {
 
         int width = avatar.getWidth();
         int height = avatar.getHeight();
-        if (width >= height) {
-            avatar = Bitmap.createBitmap(
-                    avatar,
-                    width / 2 - height / 2,
-                    0,
-                    height,
-                    height
-            );
-        } else {
-            avatar = Bitmap.createBitmap(
-                    avatar,
-                    0,
-                    height / 2 - width / 2,
-                    width,
-                    width
-            );
-        }
-        int r = 0;
+//        int width = 100;
+//        int height = 100;
+        int edge = 500;
+        Matrix matrix = new Matrix();
 
-        if(width > height) {
-            r = height;
-        } else {
-            r = width;
+        if(width < edge || height < edge){
+            if(width < height){
+                edge = width;
+            }else{
+                edge = height;
+            }
         }
+        matrix.postScale((edge/height),(edge/width));
+        avatar  = Bitmap.createBitmap(avatar,0,0,width,height,matrix,true);
+        avatar = Bitmap.createBitmap(
+                avatar,
+                width / 2 - edge/2,
+                height / 2 - edge/2,
+                edge,
+                edge
+        );
+
+        int r = edge;
+
+//        if(width > height) {
+//            r = height;
+//        } else {
+//            r = width;
+//        }
 
         Bitmap avatarCircle = Bitmap.createBitmap(r,r, Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(avatarCircle);
@@ -62,7 +67,7 @@ public class AvatarHelper {
     }
     public String setImageResource(ImageView avatar){
         Drawable avatarDraw = avatar.getDrawable();
-        //Log.d("resultavatar",String.valueOf(avatarDraw));
+        Log.d("resultavatar",String.valueOf(avatarDraw));
         if(avatarDraw == null){
             return "";
         }
@@ -74,10 +79,8 @@ public class AvatarHelper {
     }
 
     public Bitmap getImageResource(String avatar){
-        Log.d("avatar",avatar);
         byte[] avatarByteArray = Base64.decode(avatar, Base64.NO_WRAP);
         Bitmap avatarBitmap = BitmapFactory.decodeByteArray(avatarByteArray, 0, avatarByteArray.length);
-
         return avatarBitmap;
     }
 }
