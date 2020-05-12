@@ -207,7 +207,9 @@ public class FriendsIntroductionActivity extends AppCompatActivity {
                             overridePendingTransition(0, 0);
                             return true;
                         case R.id.menu_friends:
-                            menuItem.setIcon(R.drawable.ic_people_blue_24dp);
+                            startActivity(new Intent(getApplicationContext()
+                                    ,FriendsActivity.class));
+                            overridePendingTransition(0,0);
                             return true;
                     }
                     return false;
