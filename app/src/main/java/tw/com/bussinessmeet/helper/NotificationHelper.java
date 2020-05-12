@@ -52,30 +52,38 @@ public class NotificationHelper {
                     String position = userInformationBean.getPosition();
                     String email = userInformationBean.getEmail();
                     String tel = userInformationBean.getTel();
+                    //String memo = userInformationBean.getMemo();
                     //String avatar = userInformationBean.getAvatar();
 
 
                     String title1 = userName;
                     String message1 = company;
+                    String memo = "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.";
+                    //String memo = memo;
                     /*String title2 = "李赫宰";
                     String message2 = " SM娛樂公司";*/
                     /**/
 
 
-
+                    NotificationCompat.BigTextStyle bigStyle = new NotificationCompat.BigTextStyle();
+                    bigStyle.bigText(memo);
                     NotificationCompat.Builder notification1 = new NotificationCompat.Builder(
                             activity, CHANNEL_1_ID
                     )
                             .setSmallIcon(R.drawable.ic_insert_comment_black_24dp)
-                            .setContentTitle(title1)
-                            .setContentText(message1)
+                            .setContentTitle(title1 + " " +company)
+                            .setContentText(memo)
                             .setPriority(NotificationCompat.PRIORITY_HIGH)
                             .setDefaults(NotificationCompat.DEFAULT_ALL)
                             .setAutoCancel(true)
                             .setColor(Color.rgb(4,42,88))
                             .setVisibility(NotificationCompat.VISIBILITY_PRIVATE)
                             .setLargeIcon(avatarHelper.getImageResource(userInformationBean.getAvatar()))
+                            //.setStyle(bigStyle)
+                            .setStyle(new NotificationCompat.BigTextStyle()
+                                    .bigText(memo))
                             .setGroup("group");
+
 
 
                     /*NotificationCompat.Builder notification2 = new NotificationCompat.Builder(
