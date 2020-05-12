@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="23dp"
+        android:layout_marginRight="23dp">
+
+        <TextView
+            android:id="@+id/editPersonalProfile"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="備註"
+            android:textStyle="bold"
+            android:textColor="@color/colorAlmostBlack"
+            android:layout_marginTop="28dp"
+            android:textSize="24sp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <ImageButton
+            android:id="@+id/editProfileConfirmButtom"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:src="@drawable/checkbox"
+            android:textColor="@color/colorAlmostBlack"
+            android:background="#00000000"
+            android:scaleType="fitCenter"
+            app:layout_constraintTop_toTopOf="@+id/editPersonalProfile"
+            app:layout_constraintBottom_toBottomOf="@+id/editPersonalProfile"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <EditText
+            android:id="@+id/memo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:hint="備忘錄"
+            android:textColor="@color/colorAlmostBlack"
+            app:layout_constraintTop_toBottomOf="@+id/editPersonalProfile"
+            tools:layout_editor_absoluteX="0dp" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>
