@@ -69,7 +69,9 @@ public class BlueToothHelper {
     private UnmatchedDeviceRecyclerViewAdapter unmatchedDeviceRecyclerViewAdapter;
     private UserInformationBean userInformationBean;
     private int distance = 0;
+    private boolean first = true;
     //private BluetoothDevice device = null;
+
     private NotificationHelper notificationHelper;
     private AsyncTasKHelper.OnResponseListener<String, UserInformationBean> getByIdResponseListener = new AsyncTasKHelper.OnResponseListener<String, UserInformationBean>() {
         @Override
@@ -80,23 +82,8 @@ public class BlueToothHelper {
 
         public void onSuccess(UserInformationBean responseBean) {
             Log.d("blueToothSearch","success");
-            int count = matchedDeviceRecyclerViewAdapter.getItemCount();
-            boolean first = true;
-            for(int i = 0; i < count; i++ ){
-                if(!first)break;
-                if(matchedDeviceRecyclerViewAdapter.getUserInformation(i).getBlueTooth().equals(responseBean.getBlueTooth())){
-                    first = false;
-                }
-
-            }
-            count = unmatchedDeviceRecyclerViewAdapter.getItemCount();
-            for(int i = 0; i < count; i++ ){
-                if(!first)break;
-                if(unmatchedDeviceRecyclerViewAdapter.getUserInformation(i).getBlueTooth().equals(responseBean.getBlueTooth())){
-                    first = false;
-                }
-
-            }
+            int matchedCount = matchedDeviceRecyclerViewAdapter.getItemCount();
+            first = excludeRepeat(responseBean.getBlueTooth());
             if(first) {
                 userInformationBean = responseBean;
                 matchedBean = new MatchedBean();
@@ -120,7 +107,7 @@ public class BlueToothHelper {
             if (matchedBeanList.size() > 0) {
                 Log.d("blueToothSearchmatched",String.valueOf(distance));
                 matchedDeviceRecyclerViewAdapter.dataInsert(userInformationBean);
-                if (distance <= 5000) {
+                if (distance <= 5000 && first) {
                     //Log.d("sendmess", String.valueOf(device));
                     notificationHelper.sendMessage(userInformationBean.getBlueTooth(), matchedBeanList.get(0).getMemorandum());
                     //device = null;
@@ -451,5 +438,25 @@ public class BlueToothHelper {
     public void startThread(Handler handler) {
         acceptThread = new AcceptThreadHelper(mBluetoothAdapter, MY_UUID, activity, handler);
         acceptThread.start();
+    }
+    public boolean excludeRepeat(String blueToothAddress){
+        int matchedCount = matchedDeviceRecyclerViewAdapter.getItemCount();
+        boolean first = true;
+        for(int i = 0; i < matchedCount; i++ ){
+            if(!first)break;
+            if(matchedDeviceRecyclerViewAdapter.getUserInformation(i).getBlueTooth().equals(blueToothAddress)){
+                first = false;
+            }
+
+        }
+        int unmatchedCount = unmatchedDeviceRecyclerViewAdapter.getItemCount();
+        for(int i = 0; i < unmatchedCount; i++ ){
+            if(!first)break;
+            if(unmatchedDeviceRecyclerViewAdapter.getUserInformation(i).getBlueTooth().equals(blueToothAddress)){
+                first = false;
+            }
+
+        }
+        return  first;
     }
 }
