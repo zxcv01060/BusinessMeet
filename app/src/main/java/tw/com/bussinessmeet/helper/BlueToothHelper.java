@@ -6,6 +6,7 @@ import android.app.AlertDialog;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothClass;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
 import android.content.BroadcastReceiver;
@@ -28,6 +29,7 @@ import android.widget.Toast;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
@@ -151,11 +153,7 @@ public class BlueToothHelper {
         Set<BluetoothDevice> pairedDevices = mBluetoothAdapter.getBondedDevices();
         if (pairedDevices.size() > 0) {
             for (BluetoothDevice device : pairedDevices) {
-                UserInformationBean ufb = new UserInformationBean();
-                ufb.setBlueTooth(device.getAddress());
-                // 遍歷
-//                matchedBeanList.add(ufb);
-                //matchedDeviceRecyclerViewAdapter.dataInsert(ufb);
+                removeMatched(device.getAddress());
             }
         }
         activity.registerReceiver(receiver, filter);
@@ -375,7 +373,6 @@ public class BlueToothHelper {
             mBluetoothAdapter.cancelDiscovery();
         }
         createConnect(blueToothAddress, addResponseListener, matchedDAO);
-        Log.d("outputStream", "success~~~");
         String message = getMyBuleTooth() + ",ask";
         try {
             outputStream.write(message.getBytes("UTF-8"));
@@ -383,17 +380,6 @@ public class BlueToothHelper {
             e.printStackTrace();
         }
     }
-//    public void matchedSuccessReturn(String blueToothAddress){
-//        String message = getMyBuleTooth()+",accept";
-//
-//        try {
-//            createConnect(blueToothAddress,true);
-//            Log.e("successreturn",message);
-//            outputStream.write(message.getBytes("UTF-8"));
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//    }
 
     public void createConnect(String matchedAddress, AsyncTasKHelper.OnResponseListener<MatchedBean, MatchedBean> addResponseListener, MatchedDAO matchedDAO) {
         selectDevice = mBluetoothAdapter.getRemoteDevice(matchedAddress);
@@ -429,6 +415,7 @@ public class BlueToothHelper {
             AsyncTasKHelper.execute(addResponseListener, matchedBean);
             matchedDAO.add(matchedBean);
             Log.d("outputStream", String.valueOf(outputStream));
+            removeMatched(matchedAddress);
         } catch (Exception e) {
             e.printStackTrace();
             Toast.makeText(activity, "配對失敗，請稍後再試", Toast.LENGTH_LONG).show();
@@ -458,5 +445,15 @@ public class BlueToothHelper {
 
         }
         return  first;
+    }
+    public void removeMatched(String matchedAddress){
+        BluetoothDevice device = mBluetoothAdapter.getRemoteDevice(matchedAddress);
+        try {
+            Method m = device.getClass().getMethod("removeBond", (Class[]) null);
+            m.invoke(device, (Object[]) null);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
     }
 }

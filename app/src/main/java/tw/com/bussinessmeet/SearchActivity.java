@@ -67,17 +67,17 @@ public class SearchActivity extends AppCompatActivity implements MatchedDeviceRe
             try {
                 String[] message = ((String) msg.obj).split(",");
                 String myBlueToothAddress = blueTooth.getMyBuleTooth();
-                String matchedBlueTooth = message[0];
+                String matchedAddress = message[0];
 
-                Toast.makeText(SearchActivity.this, matchedBlueTooth, Toast.LENGTH_LONG).show();
+                Toast.makeText(SearchActivity.this, matchedAddress, Toast.LENGTH_LONG).show();
                 MatchedBean matchedBean = new MatchedBean();
                 Log.d("getblueTooth",blueTooth.getMyBuleTooth());
-                Log.d("getblueTooth",matchedBlueTooth);
+                Log.d("getblueTooth",matchedAddress);
                 matchedBean.setBlueTooth(blueTooth.getMyBuleTooth());
-                matchedBean.setMatchedBlueTooth(matchedBlueTooth);
+                matchedBean.setMatchedBlueTooth(matchedAddress);
                 AsyncTasKHelper.execute(addResponseListener, matchedBean);
                 matchedDAO.add(matchedBean);
-
+                blueToothHelper.removeMatched(matchedAddress);
 
 
             }catch(Exception e){
