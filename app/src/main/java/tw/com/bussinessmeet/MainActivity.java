@@ -30,6 +30,7 @@ public class MainActivity extends AppCompatActivity  {
         blueToothHelper = new BlueToothHelper(this);
         blueToothHelper.startBuleTooth();
         blueToothHelper.openGPS(this);
+
         Thread checkPermission = new Thread(){
             @Override
             public void run() {
