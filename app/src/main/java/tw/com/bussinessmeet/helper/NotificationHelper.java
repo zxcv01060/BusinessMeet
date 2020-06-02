@@ -1,12 +1,14 @@
 package tw.com.bussinessmeet.helper;
 
 import android.app.Activity;
+import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 
@@ -29,6 +31,7 @@ public class NotificationHelper {
     private AvatarHelper avatarHelper = new AvatarHelper();
     private MatchedBean matchedBean;
     private static int NOTIFICATION_ID = 0;
+    public static final String CHANNEL_1_ID = "channel1";
     private String memo1;
     private int position;
     //private static int NOTIFICATION_ID = 0x30001; //196610
@@ -135,6 +138,23 @@ public class NotificationHelper {
                     intent.putExtra("avatar", bs.toByteArray());
                     //.大頭貼---------------------
 
+                    // Since android Oreo notification channel is needed. 添加通道分配
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                        NotificationChannel channel1 =
+                                new NotificationChannel(
+                                        CHANNEL_1_ID,
+                                        "channel1",
+                                        NotificationManager.IMPORTANCE_HIGH
+                                );
+                        channel1.setDescription("This is channel 1");
+                        channel1.enableLights(true);
+                        channel1.enableVibration(true);
+
+                        NotificationManager manager = activity.getSystemService(NotificationManager.class);
+                        manager.createNotificationChannel(channel1);
+
+                    }
+                    //.添加通道分配
 
                     // 宣告一個 PendingIntent 的物件(執行完並不會馬上啟動,點訊息的時候才會跳到別的 Activity)
                     PendingIntent pendingIntent = PendingIntent.getActivity(activity,
@@ -178,14 +198,13 @@ public class NotificationHelper {
         this.activity = activity;
     }
 
-    public static final String CHANNEL_1_ID = "channel1";
 
 
     //public static final String CHANNEL_2_ID = "channel2";
 
 
-/*    public void createNotificationChannel() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+    //public void createNotificationChannel() {
+/*        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             NotificationChannel channel1 =
                     new NotificationChannel(
                             CHANNEL_1_ID,
@@ -193,12 +212,14 @@ public class NotificationHelper {
                             NotificationManager.IMPORTANCE_HIGH
                     );
             channel1.setDescription("This is channel 1");
+            channel1.enableLights(true);
+            channel1.enableVibration(true);
 
             NotificationManager manager = activity.getSystemService(NotificationManager.class);
             manager.createNotificationChannel(channel1);
 
-        }
-    }*/
+        }*/
+    //}
 
 
 
