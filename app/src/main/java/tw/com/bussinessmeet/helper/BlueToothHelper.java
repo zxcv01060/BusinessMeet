@@ -114,11 +114,14 @@ public class BlueToothHelper {
                     notificationHelper.sendMessage(userInformationBean.getBlueTooth(), matchedBeanList.get(0).getMemorandum());
                     //device = null;
                 }
+            }else{
+                unmatchedDeviceRecyclerViewAdapter.dataInsert(userInformationBean);
             }
         }
         @Override
         public void onFail(int status) {
-            unmatchedDeviceRecyclerViewAdapter.dataInsert(userInformationBean);
+            Log.d("intomatched","success");
+            //unmatchedDeviceRecyclerViewAdapter.dataInsert(userInformationBean);
         }
     };
     // UUID，蓝牙建立链接需要的
