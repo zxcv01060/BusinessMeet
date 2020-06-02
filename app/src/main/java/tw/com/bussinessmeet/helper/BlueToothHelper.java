@@ -110,7 +110,7 @@ public class BlueToothHelper {
                 Log.d("blueToothSearchmatched",String.valueOf(distance));
                 matchedDeviceRecyclerViewAdapter.dataInsert(userInformationBean);
                 if (distance <= 5000 && first) {
-                    //Log.d("sendmess", String.valueOf(device));
+                    Log.d("sendmess", String.valueOf("==========================="));
                     notificationHelper.sendMessage(userInformationBean.getBlueTooth(), matchedBeanList.get(0).getMemorandum());
                     //device = null;
                 }
@@ -249,8 +249,9 @@ public class BlueToothHelper {
     }
 
     public void bluetooth(Context context) {
-        Intent enableBtIntent = new Intent((BluetoothAdapter.ACTION_REQUEST_ENABLE));
-        activity.startActivityForResult(enableBtIntent, RequestCode.REQUEST_ENABLE_BT);
+//        Intent enableBtIntent = new Intent((BluetoothAdapter.ACTION_REQUEST_ENABLE));
+//        activity.startActivityForResult(enableBtIntent, RequestCode.REQUEST_ENABLE_BT);
+        discoverable();
     }
 
     public void openGPS(Context context) {
@@ -258,6 +259,7 @@ public class BlueToothHelper {
     }
 
     public void scanBluth() {
+
 // 設定進度條
         activity.setProgressBarIndeterminateVisibility(true);
         TextView search_title = activity.findViewById(R.id.search_title);
@@ -271,6 +273,13 @@ public class BlueToothHelper {
 //        // 这个可以用来设置时间
 
         mBluetoothAdapter.startDiscovery();
+    }
+    public void discoverable(){
+        Intent enable = new Intent(BluetoothAdapter.ACTION_REQUEST_DISCOVERABLE);
+        enable.putExtra(
+                BluetoothAdapter.EXTRA_DISCOVERABLE_DURATION,
+                3600);
+        activity.startActivityForResult(enable,RequestCode.REQUEST_DISCOVERABLE);
     }
 
 
@@ -304,7 +313,7 @@ public class BlueToothHelper {
 
 
                 } else {
-                    AlertDialog dialog = new AlertDialog.Builder(activity).setTitle("這些權限是為了搜尋附近藍芽裝置，拒絕將無法使用本應用程式。").setPositiveButton("我需要此权限!", new DialogInterface.OnClickListener() {
+                    AlertDialog dialog = new AlertDialog.Builder(activity).setTitle("這些權限是為了搜尋附近藍芽裝置，拒絕將無法使用本應用程式。").setPositiveButton("我需要此權限!", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             openGPS(activity);
@@ -318,10 +327,13 @@ public class BlueToothHelper {
                 checkPermission();
 
             }
+        }else if(requestCode == RequestCode.REQUEST_DISCOVERABLE){
+            Toast.makeText(activity,"test",Toast.LENGTH_LONG);
         }
     }
 
     public boolean checkPermission() {
+
         int permissionCheck = ContextCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_COARSE_LOCATION);
         if (permissionCheck == PackageManager.PERMISSION_GRANTED) {
             Intent intent = new Intent();
