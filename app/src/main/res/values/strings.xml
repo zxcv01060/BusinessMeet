@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">BussinessMeet</string>
+    <string name="app_name">BeMet</string>
     <string name="user_name">姓名</string>
     <string name="company">公司</string>
     <string name="position">職稱</string>
