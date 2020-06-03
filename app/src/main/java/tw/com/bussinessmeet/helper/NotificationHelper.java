@@ -16,6 +16,7 @@ import java.io.ByteArrayOutputStream;
 import java.util.List;
 
 import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 import retrofit2.Call;
 import tw.com.bussinessmeet.FriendsIntroductionActivity;
 import tw.com.bussinessmeet.R;
@@ -167,6 +168,7 @@ public class NotificationHelper {
                     NotificationManager notificationManager = (NotificationManager) activity.getSystemService(
                             Context.NOTIFICATION_SERVICE
                     );
+//                    NotificationManagerCompat.from(activity)
                     /*手機端有摘要通知，又有一般的通知的話改寫
                     NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);*/
 
@@ -177,7 +179,7 @@ public class NotificationHelper {
 
 
                     //notificationManager.notify(SUMMARY_ID, summaryNotification.build());
-                    if(NOTIFICATION_ID == 10) notificationManager.cancel(NOTIFICATION_ID - 10);// 取消之前的通知消息;
+                    if(NOTIFICATION_ID >= 10) notificationManager.cancel(NOTIFICATION_ID - 10);// 取消之前的通知消息;
                     Log.d("intomatchID",String.valueOf(NOTIFICATION_ID));
 /*                    SystemClock.sleep(1000);
                     notificationManager.notify(2, notification1.build());
@@ -201,27 +203,6 @@ public class NotificationHelper {
 
 
     //public static final String CHANNEL_2_ID = "channel2";
-
-
-    //public void createNotificationChannel() {
-/*        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            NotificationChannel channel1 =
-                    new NotificationChannel(
-                            CHANNEL_1_ID,
-                            "channel1",
-                            NotificationManager.IMPORTANCE_HIGH
-                    );
-            channel1.setDescription("This is channel 1");
-            channel1.enableLights(true);
-            channel1.enableVibration(true);
-
-            NotificationManager manager = activity.getSystemService(NotificationManager.class);
-            manager.createNotificationChannel(channel1);
-
-        }*/
-    //}
-
-
 
      public void sendMessage(String matchedBlueTooth, String memo) {
          memo1 = memo;
