@@ -110,18 +110,17 @@ public class BlueToothHelper {
         }
         @Override
         public void onSuccess(List<MatchedBean> matchedBeanList) {
-            if (matchedBeanList.size() > 0) {
+            MatchedBean matchedBean = matchedBeanList.get(0);
+            UserInformationBean userInformationBean = userInformationBeanMap.get(matchedBean.getMatchedBlueTooth());
+            if (matchedBeanList.size() > 1 || (matchedBeanList.size() == 1 && (matchedBeanList.get(0).getCreateDate() != null && !matchedBeanList.get(0).equals("")))) {
                Toast.makeText(activity,"success",Toast.LENGTH_SHORT);
-                MatchedBean matchedBean = matchedBeanList.get(0);
-                UserInformationBean userInformationBean = userInformationBeanMap.get(matchedBean.getMatchedBlueTooth());
                 matchedDeviceRecyclerViewAdapter.dataInsert(userInformationBean);
                 if (distance <= 5000 && first) {
                     Log.d("sendmess", String.valueOf("==========================="));
-                    notificationHelper.sendMessage(userInformationBean.getBlueTooth(), matchedBeanList.get(0).getMemorandum());
-                    //device = null;
+                    notificationHelper.sendMessage(userInformationBean, matchedBeanList.get(0).getMemorandum());
                 }
             }else{
-                unmatchedDeviceRecyclerViewAdapter.dataInsert(userInformationBeanMap.get(matchedBean.getMatchedBlueTooth()));
+                unmatchedDeviceRecyclerViewAdapter.dataInsert(userInformationBean);
             }
         }
         @Override
