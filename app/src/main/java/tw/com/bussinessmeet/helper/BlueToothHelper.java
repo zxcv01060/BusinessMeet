@@ -112,12 +112,12 @@ public class BlueToothHelper {
         public void onSuccess(List<MatchedBean> matchedBeanList) {
             MatchedBean matchedBean = matchedBeanList.get(0);
             UserInformationBean userInformationBean = userInformationBeanMap.get(matchedBean.getMatchedBlueTooth());
-            if (matchedBeanList.size() > 1 || (matchedBeanList.size() == 1 && (matchedBeanList.get(0).getCreateDate() != null))) {
+            if (matchedBeanList.size() > 1 || (matchedBeanList.size() == 1 && (matchedBeanList.get(0).getCreateDate() != null && !matchedBeanList.get(0).equals("")))) {
                Toast.makeText(activity,"success",Toast.LENGTH_SHORT);
                 matchedDeviceRecyclerViewAdapter.dataInsert(userInformationBean);
                 if (distance <= 5000 && first) {
                     Log.d("sendmess", String.valueOf("==========================="));
-                    notificationHelper.sendMessage(userInformationBean.getBlueTooth(), matchedBeanList.get(0).getMemorandum());
+                    notificationHelper.sendMessage(userInformationBean, matchedBeanList.get(0).getMemorandum());
                 }
             }else{
                 unmatchedDeviceRecyclerViewAdapter.dataInsert(userInformationBean);
