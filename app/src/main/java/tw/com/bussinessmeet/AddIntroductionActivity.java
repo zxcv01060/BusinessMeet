@@ -141,7 +141,7 @@ public class AddIntroductionActivity extends AppCompatActivity {
             if(checkData(ufb)) {
                 userInformationDAO.add(ufb);
                 AsyncTasKHelper.execute(addResponseListener, ufb);
-                changeToAnotherPage(SearchActivity.class);
+                changeToAnotherPage(SelfIntroductionActivity.class);
             }
         }
     };
