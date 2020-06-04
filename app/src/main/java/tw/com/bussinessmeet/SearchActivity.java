@@ -225,6 +225,7 @@ public class SearchActivity extends AppCompatActivity implements MatchedDeviceRe
         public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
             switch (menuItem.getItemId()){
                 case R.id.menu_home:
+                    blueTooth.cancelDiscovery();
                     startActivity(new Intent(getApplicationContext()
                             ,SelfIntroductionActivity.class));
                     overridePendingTransition(0,0);
@@ -232,6 +233,7 @@ public class SearchActivity extends AppCompatActivity implements MatchedDeviceRe
                 case R.id.menu_search:
                     return true;
                 case R.id.menu_friends:
+                    blueTooth.cancelDiscovery();
                     //menuItem.setIcon(R.drawable.ic_people_black_24dp);
                     startActivity(new Intent(getApplicationContext()
                             ,FriendsActivity.class));
