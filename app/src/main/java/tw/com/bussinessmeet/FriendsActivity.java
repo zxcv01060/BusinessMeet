@@ -65,10 +65,13 @@ public class FriendsActivity extends AppCompatActivity implements FriendsRecycle
                 @Override
                 public void onSuccess(List<MatchedBean> matchedBeanList) {
                     Log.e("MatchedBean","success");
-                    for(MatchedBean matchedBean : matchedBeanList) {
+                    if (matchedBeanList.size() > 1 || (matchedBeanList.size() == 1 && (matchedBeanList.get(0).getCreateDate() != null && !matchedBeanList.get(0).equals("")))) {
+
+                        for(MatchedBean matchedBean : matchedBeanList) {
                         AsyncTasKHelper.execute(getByIdResponseListener,matchedBean.getMatchedBlueTooth());
                         Log.e("MatchedBean", String.valueOf(matchedBean));
                         Log.e("MatchedBean", String.valueOf(matchedBean.getBlueTooth()));
+                        }
                     }
                 }
 
