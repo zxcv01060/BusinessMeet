@@ -24,6 +24,8 @@ import android.widget.TextView;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import androidx.core.content.ContextCompat;
+
+import tw.com.bussinessmeet.background.NotificationService;
 import tw.com.bussinessmeet.bean.UserInformationBean;
 import tw.com.bussinessmeet.dao.UserInformationDAO;
 import tw.com.bussinessmeet.helper.AvatarHelper;
@@ -81,7 +83,11 @@ public class SelfIntroductionActivity extends AppCompatActivity {
         MenuItem userItem = BVMenu.findItem(R.id.menu_home);
         Bitmap myPhoto = avatarHelper.getImageResource(result.getString(result.getColumnIndex("avatar")));
         userItem.setIcon(new BitmapDrawable(getResources(), myPhoto));
-
+        startBackgroundService();
+    }
+    private void startBackgroundService(){
+        Intent it = new Intent(SelfIntroductionActivity.this, NotificationService.class);
+        startService(it);
     }
     private void openDB(){
         Log.d("add","openDB");
