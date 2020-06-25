@@ -23,6 +23,7 @@ import android.widget.TextView;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
+import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
 import tw.com.bussinessmeet.bean.UserInformationBean;
 import tw.com.bussinessmeet.dao.UserInformationDAO;
@@ -39,6 +40,7 @@ public class SelfIntroductionActivity extends AppCompatActivity {
     private AvatarHelper avatarHelper;
     private BottomNavigationView menu ;
     private BlueToothHelper blueToothHelper;
+    private Toolbar toolbar;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,6 +57,19 @@ public class SelfIntroductionActivity extends AppCompatActivity {
         //this.personal = personal;
         blueToothHelper = new BlueToothHelper(this);
         avatarHelper = new AvatarHelper();
+        //toolbar
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        //toolbarMenu
+        toolbar.inflateMenu(R.menu.toolbarmenu);
+        toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener(){
+
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                return false;
+            }
+
+        });
+
 
         openDB();
         searchUserInformation();

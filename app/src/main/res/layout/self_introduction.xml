@@ -11,11 +11,11 @@ android:layout_height="match_parent">
         android:layout_height="wrap_content"
         android:layout_marginStart="23dp"
         android:layout_marginLeft="23dp"
-        android:layout_marginTop="28dp"
-        android:textStyle="bold"
+        android:layout_marginTop="15dp"
         android:text="個人檔案"
         android:textColor="@color/colorAlmostBlack"
         android:textSize="24sp"
+        android:textStyle="normal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
@@ -182,4 +182,26 @@ android:layout_height="match_parent">
         app:layout_constraintBottom_toBottomOf="parent"
         app:menu="@menu/menu_navigation"
         tools:layout_editor_absoluteX="16dp" />
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?attr/colorPrimary"
+        android:minHeight="?attr/actionBarSize"
+        android:theme="@style/AppTheme.ToolBarStyle"
+        app:popupTheme="@style/AppTheme.PopupOverlay"
+        app:layout_constraintTop_toTopOf="parent"
+        android:elevation="4dp"
+        tools:layout_editor_absoluteX="1dp">
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/colorAlmostBlack"
+        android:text="個人資料"
+        android:id="@+id/toolbar_title"
+        android:layout_gravity="center"
+        android:textStyle="bold"
+        tools:ignore="MissingConstraints" />
+    </androidx.appcompat.widget.Toolbar>
 </androidx.constraintlayout.widget.ConstraintLayout>
