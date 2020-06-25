@@ -200,7 +200,6 @@ android:layout_height="match_parent">
         android:textColor="@color/colorAlmostBlack"
         android:text="個人資料"
         android:id="@+id/toolbar_title"
-        android:layout_gravity="center"
         android:textStyle="bold"
         tools:ignore="MissingConstraints" />
     </androidx.appcompat.widget.Toolbar>
