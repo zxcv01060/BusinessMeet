@@ -2,14 +2,16 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:id="@+id/menu_bell"
+        android:id="@+id/menu_toolbar_search"
         app:showAsAction="ifRoom"
-        android:icon="@drawable/ic_bell_thin"
-        android:title="通知" />
+        android:icon="@drawable/ic_search_24dp"
+
+        android:title="搜尋" />
     <item
-        android:id="@+id/menu_add_calendar"
+        android:id="@+id/menu_addevent"
         app:showAsAction="ifRoom"
-        android:icon="@drawable/ic_calendar_add_thin"
-        android:title="新增時間軸" />
+        android:icon="@drawable/ic_add_24dp"
+        android:title="新增活動" />
+
 
 </menu>
