@@ -4,13 +4,13 @@
     <item
         android:id="@+id/menu_toolbar_search"
         app:showAsAction="ifRoom"
-        android:icon="@drawable/ic_search_24dp"
+        android:icon="@drawable/ic_search_16dp"
 
         android:title="搜尋" />
     <item
         android:id="@+id/menu_addevent"
         app:showAsAction="ifRoom"
-        android:icon="@drawable/ic_add_24dp"
+        android:icon="@drawable/ic_add_16dp"
         android:title="新增活動" />
 
 

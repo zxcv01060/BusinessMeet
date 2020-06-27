@@ -114,7 +114,7 @@ public class FriendsTimelineActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         //toolbarMenu
         toolbar.inflateMenu(R.menu.timeline_toolbarmenu);
-        toolbar.setNavigationIcon(R.drawable.ic_back_24dp);  //back
+        toolbar.setNavigationIcon(R.drawable.ic_back_16dp);  //back
         toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener(){
 
             @Override
