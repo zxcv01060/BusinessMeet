@@ -6,40 +6,55 @@
     android:layout_height="match_parent">
 
     <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbar"
+        android:id="@+id/friends_toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="?attr/colorPrimary"
         android:elevation="3dp"
+        android:minHeight="?attr/actionBarSize"
         android:theme="@style/AppTheme.ToolBarStyle"
         app:layout_constraintTop_toTopOf="parent"
         app:popupTheme="@style/AppTheme.PopupOverlay"
-        tools:layout_editor_absoluteX="0dp">
+        tools:layout_editor_absoluteX="1dp">
 
         <TextView
-            android:id="@+id/friends"
+            android:id="@+id/friends_toolbar_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
-            android:layout_marginLeft="20dp"
             android:text="聯絡人"
             android:textColor="@color/colorAlmostBlack"
-            android:textSize="24sp"
             android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="@id/toolbar"
-            app:layout_constraintStart_toStartOf="@+id/toolbar"
-            app:layout_constraintTop_toTopOf="@id/toolbar" />
-
-        <ImageButton
-            android:id="@+id/addActivity"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:layout_gravity="center|right"
-            android:layout_marginEnd="20dp"
-            android:layout_marginRight="20dp"
-            android:background="@drawable/ic_calendar_add_thin_24dp"
-            app:layout_constraintEnd_toEndOf="@id/toolbar" />
+            tools:ignore="MissingConstraints" />
     </androidx.appcompat.widget.Toolbar>
+
+    <EditText
+        android:id="@+id/friends_searchbar"
+        style="@style/searchBar"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/friends_toolbar"
+        app:layout_constraintBottom_toTopOf="@id/friendsView" />
+
+    <ImageView
+        android:id="@+id/friends_searchbar_icon"
+        style="@style/searchIcon"
+        app:layout_constraintStart_toStartOf="@id/friends_searchbar"
+        app:layout_constraintTop_toTopOf="@id/friends_searchbar"
+        app:layout_constraintBottom_toBottomOf="@id/friends_searchbar" />
+
+    <TextView
+        android:id="@+id/friends_searchbar_text"
+        style="@style/searchText"
+        app:layout_constraintStart_toStartOf="@id/friends_searchbar_icon"
+        app:layout_constraintTop_toTopOf="@id/friends_searchbar_icon"
+        app:layout_constraintBottom_toBottomOf="@id/friends_searchbar_icon" />
+
+    <ImageView
+        android:id="@+id/friends_searchbar_icon_cancel"
+        style="@style/searchIcon_cancel"
+        app:layout_constraintEnd_toEndOf="@id/friends_searchbar"
+        app:layout_constraintTop_toTopOf="@id/friends_searchbar"
+        app:layout_constraintBottom_toBottomOf="@id/friends_searchbar" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/friendsView"
@@ -49,7 +64,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/toolbar"
+        app:layout_constraintTop_toBottomOf="@+id/friends_searchbar"
         app:layout_constraintVertical_bias="1.0" />
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
@@ -64,8 +79,5 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@id/friendsView"
         app:menu="@menu/menu_navigation"
-        tools:layout_editor_absoluteX="16dp">
-
-    </com.google.android.material.bottomnavigation.BottomNavigationView>
-
+        tools:layout_editor_absoluteX="16dp" />
 </androidx.constraintlayout.widget.ConstraintLayout>
