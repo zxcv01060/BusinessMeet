@@ -41,6 +41,26 @@
             app:layout_constraintEnd_toEndOf="@id/toolbar" />
     </androidx.appcompat.widget.Toolbar>
 
+    <EditText
+        android:id="@+id/searchBar"
+        style="@style/searchBar"
+        app:layout_constraintBottom_toTopOf="@id/friendsView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/toolbar">
+
+        <ImageView
+            android:id="@+id/searchIcon"
+            style="@style/searchIcon"
+            app:layout_constraintBottom_toBottomOf="@id/searchBar"
+            app:layout_constraintStart_toStartOf="@id/searchBar"
+            app:layout_constraintTop_toTopOf="@id/searchBar" />
+
+        <TextView
+            android:id="@+id/searchText"
+            />
+    </EditText>
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/friendsView"
         android:layout_width="match_parent"
@@ -49,7 +69,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/toolbar"
+        app:layout_constraintTop_toBottomOf="@+id/searchBar"
         app:layout_constraintVertical_bias="1.0" />
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
