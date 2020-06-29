@@ -5,4 +5,13 @@
     <color name="colorAccent">#D81B60</color>
     <color name="colorAlmostBlack">#111111</color>
     <color name="colorLabelGray">#929191</color>
+    
+    <color name="timelineGreen">#ECF2F1</color>
+    <color name="timelineYellow">#FDF2D2</color>
+    <color name="timelineOrange">#FDD8D2</color>
+    <color name="timelineBlue">#CADDF0</color>
+    <color name="timelineRed">#F4A8AC</color>
+    <color name="timelineBrown">#B8ADAC</color>
+
+
 </resources>

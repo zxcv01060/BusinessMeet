@@ -57,10 +57,7 @@ public class FriendsTimelineActivity extends AppCompatActivity {
         @Override
         public void onSuccess(UserInformationBean userInformationBean) {
             userName.append(userInformationBean.getUserName());
-            company.append(userInformationBean.getCompany());
             position.append(userInformationBean.getPosition());
-            email.append(userInformationBean.getEmail());
-            tel.append(userInformationBean.getTel());
             avatar.setImageBitmap(avatarHelper.getImageResource(userInformationBean.getAvatar()));
         }
 
@@ -68,25 +65,6 @@ public class FriendsTimelineActivity extends AppCompatActivity {
         public void onFail(int status) {
         }
     };
-
-    private AsyncTasKHelper.OnResponseListener<MatchedBean, List<MatchedBean>> friendsMemoResponseListener = new AsyncTasKHelper.OnResponseListener<MatchedBean, List<MatchedBean>>() {
-        @Override
-        public Call<ResponseBody<List<MatchedBean>>> request(MatchedBean... matchedBeans) {
-            return matchedService.search(matchedBeans[0]);
-        }
-
-        @Override
-        public void onSuccess(List<MatchedBean> matchedBeanList) {
-            Log.d("memo", matchedBeanList.get(0).getMemorandum());
-            memo.append(matchedBeanList.get(0).getMemorandum());
-        }
-
-        @Override
-        public void onFail(int status) {
-
-        }
-    };
-
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -96,23 +74,16 @@ public class FriendsTimelineActivity extends AppCompatActivity {
         matchedBean.setMatchedBlueTooth(blueToothAddress);
         blueToothHelper = new BlueToothHelper(this);
         matchedBean.setBlueTooth(blueToothHelper.getMyBuleTooth());
-        Log.d("memo", matchedBean.getMatchedBlueTooth());
-        Log.d("memo", matchedBean.getBlueTooth());
-        AsyncTasKHelper.execute(friendsMemoResponseListener, matchedBean);
 
         userName = (TextView) findViewById(R.id.friends_name);
-        company = (TextView) findViewById(R.id.friends_company);
         position = (TextView) findViewById(R.id.friends_position);
-        email = (TextView) findViewById(R.id.friends_email);
-        tel = (TextView) findViewById(R.id.friends_tel);
         avatar = (ImageView) findViewById(R.id.friends_photo);
-        memo = (TextView) findViewById(R.id.friends_memo);
         avatarHelper = new AvatarHelper();
-        editButton = (Button) findViewById(R.id.editFriendsProfileButton);
-        editButton.setOnClickListener(editMemoButton);
+        Log.d("timephoto", avatarHelper.toString());
+        
         //toolbar
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        //toolbarMenu
+        //toolbarMenu    
         toolbar.inflateMenu(R.menu.timeline_toolbarmenu);
         toolbar.setNavigationIcon(R.drawable.ic_back_16dp);  //back
         toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener(){
@@ -144,12 +115,15 @@ public class FriendsTimelineActivity extends AppCompatActivity {
         MenuItem userItem = BVMenu.findItem(R.id.menu_home);
         Bitmap myPhoto = avatarHelper.getImageResource(result.getString(result.getColumnIndex("avatar")));
         userItem.setIcon(new BitmapDrawable(getResources(), myPhoto));
+        Log.d("timephoto1",myPhoto.toString());
 
         if (getIntent().hasExtra("avatar")) {
+            Log.d("timephoto2",avatar.toString());
             ImageView photo = findViewById(R.id.friends_photo);
             Bitmap profilePhoto = BitmapFactory.decodeByteArray(
                     getIntent().getByteArrayExtra("avatar"), 0, getIntent().getByteArrayExtra("avatar").length);
             photo.setImageBitmap(profilePhoto);
+            Log.d("timephoto3", profilePhoto.toString());
         }
     }
 
@@ -160,23 +134,6 @@ public class FriendsTimelineActivity extends AppCompatActivity {
         matchedDAO = new MatchedDAO(DH);
 
     }
-
-    public View.OnClickListener editMemoButton = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            changeToFriendsEditIntroductionPage();
-        }
-    };
-
-    public void changeToFriendsEditIntroductionPage() {
-        Intent intent = new Intent();
-        intent.setClass(FriendsTimelineActivity.this, FriendsMemoActivity.class);
-        Bundle bundle = new Bundle();
-        bundle.putString("blueToothAddress",getIntent().getStringExtra("blueToothAddress"));
-        intent.putExtras(bundle);
-        startActivity(intent);
-    }
-
 
     //Perform ItemSelectedListener
     private BottomNavigationView.OnNavigationItemSelectedListener navListener =
