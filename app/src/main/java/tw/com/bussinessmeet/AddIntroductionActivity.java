@@ -77,11 +77,15 @@ public class AddIntroductionActivity extends AppCompatActivity {
         blueTooth = new BlueToothHelper(this);
         blueTooth.startBuleTooth();
         String myBlueTooth = blueTooth.getMyBuleTooth();
-        Log.d("resultMy","getBlueTooth"+myBlueTooth);
+        Log.e("resultMy","======================");
+        System.out.println("myBlueTooth"+myBlueTooth);
+//        myBlueTooth = blueTooth.test();
+        Log.e("resultMy","======================");
+        System.out.println(myBlueTooth);
         String result = userInformationDAO.getById(myBlueTooth);
 
         if( result !=null && !result.equals("") ) {
-            changeToAnotherPage(SearchActivity.class);
+            changeToAnotherPage(SelfIntroductionActivity.class);
         }
         confirm.setOnClickListener(confirmClick);
         avatar.setOnClickListener(choseAvatar);

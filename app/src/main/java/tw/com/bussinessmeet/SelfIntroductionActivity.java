@@ -86,7 +86,9 @@ public class SelfIntroductionActivity extends AppCompatActivity {
         startBackgroundService();
     }
     private void startBackgroundService(){
+        Log.e("service ","self");
         Intent it = new Intent(SelfIntroductionActivity.this, NotificationService.class);
+        stopService(it);
         startService(it);
     }
     private void openDB(){

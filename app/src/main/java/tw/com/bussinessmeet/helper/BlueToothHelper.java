@@ -40,6 +40,9 @@ import java.util.UUID;
 
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+
+import net.vidageek.mirror.dsl.Mirror;
+
 import retrofit2.Call;
 import tw.com.bussinessmeet.AddIntroductionActivity;
 import tw.com.bussinessmeet.R;
@@ -58,12 +61,11 @@ import tw.com.bussinessmeet.helper.NotificationHelper;
 
 import static java.lang.Math.abs;
 import static java.lang.Math.pow;
-
 public class BlueToothHelper { 
 
 
     private Activity activity;
-    private BluetoothAdapter mBluetoothAdapter;
+    private BluetoothAdapter mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
     private IntentFilter filter;
     private UserInformationDAO userInformationDAO;
     private AvatarHelper avatarHelper;
@@ -119,7 +121,7 @@ public class BlueToothHelper {
                 matchedDeviceRecyclerViewAdapter.dataInsert(userInformationBean);
                 if (distance <= 5000 && first) {
                     Log.d("sendmess", String.valueOf("==========================="));
-                    notificationHelper.sendMessage(userInformationBean, matchedBeanList.get(0).getMemorandum());
+//                    notificationHelper.sendMessage(userInformationBean, matchedBeanList.get(0).getMemorandum());
                 }
             }else{
                 unmatchedDeviceRecyclerViewAdapter.dataInsert(userInformationBean);
@@ -145,37 +147,37 @@ public class BlueToothHelper {
     private final UUID MY_UUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
     private AcceptThreadHelper acceptThread;
 
-    private NotificationService notificationService;
+    private NotificationService notificationService = null;
     public BlueToothHelper(Activity activity) {
         this.activity = activity;
     }
     public BlueToothHelper(NotificationService notificationService) {
+        Log.e("service ","BlueToothHelper");
         this.notificationService = notificationService;
     }
-    public void backgroundSearch(){
 
-    }
     public void settingFilter(){
+        filter = null;
         filter = new IntentFilter();
         filter.addAction(BluetoothDevice.ACTION_FOUND);
         filter.addAction(BluetoothAdapter.ACTION_DISCOVERY_STARTED);
         filter.addAction(BluetoothAdapter.ACTION_DISCOVERY_FINISHED);
         filter.addAction(BluetoothAdapter.ACTION_STATE_CHANGED);
     }
-    public void settingNotificationChannel(){
-        //setting channel
+
+    public void searchBlueToothInBackground(){
+        Log.e("service ","searchBlueToothInBackground");
+        settingFilter();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             NotificationChannel CHANNEL_1_ID =
                     new NotificationChannel("MyNotifications", "MyNotifications", NotificationManager.IMPORTANCE_DEFAULT);
-            NotificationManager manager = activity.getSystemService(NotificationManager.class);
+            NotificationManager manager = notificationService.getSystemService(NotificationManager.class);
             manager.createNotificationChannel(CHANNEL_1_ID);
 
         }
-    }
-    public void searchBlueToothInBackground(){
-        settingFilter();
-        settingNotificationChannel();
+        notificationHelper = new NotificationHelper(notificationService);
         notificationService.registerReceiver(backgroundReceiver,filter);
+        mBluetoothAdapter.startDiscovery();
     }
     public void searchBlueTooth(UserInformationDAO userInformationDAO, MatchedDeviceRecyclerViewAdapter matchedDeviceRecyclerViewAdapter, UnmatchedDeviceRecyclerViewAdapter unmatchedDeviceRecyclerViewAdapter) {
         this.userInformationDAO = userInformationDAO;
@@ -190,7 +192,13 @@ public class BlueToothHelper {
             }
         }
         settingFilter();
-        settingNotificationChannel();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            NotificationChannel CHANNEL_1_ID =
+                    new NotificationChannel("MyNotifications", "MyNotifications", NotificationManager.IMPORTANCE_DEFAULT);
+            NotificationManager manager = activity.getSystemService(NotificationManager.class);
+            manager.createNotificationChannel(CHANNEL_1_ID);
+
+        }
         activity.registerReceiver(receiver, filter);
     }
 
@@ -234,7 +242,7 @@ public class BlueToothHelper {
                 openGPS(activity);
 
                 // 用於迴圈掃描藍芽的handler
-                mBLHandler.sendEmptyMessageDelayed(1, 10000);
+//                mBLHandler.sendEmptyMessageDelayed(1, 10000);
             } else if (BluetoothAdapter.ACTION_STATE_CHANGED.equals(action)) {
                 int state = intent.getIntExtra(BluetoothAdapter.EXTRA_STATE, -1);
                 switch (state) {
@@ -259,7 +267,7 @@ public class BlueToothHelper {
 
         @Override
         public void onReceive(Context context, Intent intent) {
-
+            Log.e("testbackground","success");
 
             // 收到的廣播型別
             String action = intent.getAction();
@@ -275,26 +283,16 @@ public class BlueToothHelper {
                 String searchAddress = device.getAddress();
                 AsyncTasKHelper.execute(backgroundUserInformationResponseListener, searchAddress);
 
-
-
-
-
             } else if (BluetoothAdapter.ACTION_DISCOVERY_FINISHED.equals(action)) {
-                // 關閉進度條
-//                activity.setProgressBarIndeterminateVisibility(true);
-                TextView search_title = activity.findViewById(R.id.search_title);
-                search_title.setText("搜尋完成!");
-                openGPS(activity);
 
-                // 用於迴圈掃描藍芽的handler
-                mBLHandler.sendEmptyMessageDelayed(1, 10000);
+                mBLHandler.sendEmptyMessageDelayed(1, 1000);
             } else if (BluetoothAdapter.ACTION_STATE_CHANGED.equals(action)) {
                 int state = intent.getIntExtra(BluetoothAdapter.EXTRA_STATE, -1);
                 switch (state) {
                     case BluetoothAdapter.STATE_TURNING_ON:
                         break;
                     case BluetoothAdapter.STATE_ON:
-                        scanBluth();
+                        mBluetoothAdapter.startDiscovery();
                         break;
                     case BluetoothAdapter.STATE_TURNING_OFF:
                         break;
@@ -308,6 +306,7 @@ public class BlueToothHelper {
 
 
     };
+
     public void startBuleTooth() {
         mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         if (mBluetoothAdapter == null) {
@@ -340,6 +339,7 @@ public class BlueToothHelper {
         ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, RequestCode.REQUEST_LOCATION);
     }
 
+
     public void scanBluth() {
 
 // 設定進度條
@@ -358,6 +358,7 @@ public class BlueToothHelper {
                 BluetoothAdapter.EXTRA_DISCOVERABLE_DURATION,
                 3600);
         activity.startActivityForResult(enable,RequestCode.REQUEST_DISCOVERABLE);
+        activity.unregisterReceiver(receiver);
     }
 
 
@@ -367,7 +368,7 @@ public class BlueToothHelper {
             super.handleMessage(msg);
             switch (msg.what) {
                 case 1:
-                    scanBluth();
+                    mBluetoothAdapter.startDiscovery();
                     break;
                 default:
                     break;
@@ -425,7 +426,8 @@ public class BlueToothHelper {
 
     public String getMyBuleTooth() {
         BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-        String bluetoothMacAddress = "";
+//        String bluetoothMacAddress = "F0:EE:10:FC:C5:2D";
+        String bluetoothMacAddress = "02:00:00:00:00:00";
         //確認版本號
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
             try {
@@ -438,7 +440,7 @@ public class BlueToothHelper {
                     bluetoothMacAddress = (String) btManagerService.getClass().getMethod("getAddress").invoke(btManagerService);
                 }
             } catch (Exception e) {
-
+                e.printStackTrace();
 
             }
         } else {
@@ -568,10 +570,10 @@ public class BlueToothHelper {
             MatchedBean matchedBean = matchedBeanList.get(0);
             UserInformationBean userInformationBean = backgroundBeanMap.get(matchedBean.getMatchedBlueTooth());
             if (matchedBeanList.size() > 1 || (matchedBeanList.size() == 1 && (matchedBeanList.get(0).getCreateDate() != null && !matchedBeanList.get(0).equals("")))) {
-                Toast.makeText(activity,"success",Toast.LENGTH_SHORT);
+
                 if (backgroundDistance <= 10000 ) {
                     Log.d("sendmess", String.valueOf("==========================="));
-                    notificationHelper.sendMessage(userInformationBean, matchedBeanList.get(0).getMemorandum());
+                    notificationHelper.sendBackgroundMessage(userInformationBean, matchedBeanList.get(0).getMemorandum());
                 }
             }
         }

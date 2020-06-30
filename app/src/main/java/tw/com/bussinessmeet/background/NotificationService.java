@@ -23,7 +23,7 @@ public class NotificationService  extends Service {
         }
     }
     private LocalBinder mLocBin = new LocalBinder();
-    private BlueToothHelper blueToothHelper;
+    private BlueToothHelper blueToothHelper = null;
     public void sendNotifitation(){
         Log.e("test","success");
     }
@@ -37,8 +37,10 @@ public class NotificationService  extends Service {
 
     @Override
     public void onCreate() {
+        Log.e("service ","serviceStart");
         blueToothHelper = new BlueToothHelper(this);
         blueToothHelper.searchBlueToothInBackground();
+        blueToothHelper.startBuleTooth();
         super.onCreate();
     }
 
