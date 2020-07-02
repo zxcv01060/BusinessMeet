@@ -15,26 +15,24 @@
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
     <style name="searchBar">
+        <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">30dp</item>
         <item name="android:background">@drawable/search_radius</item>
-        <item name="searchIcon">@drawable/ic_search_black_24dp</item>
-        <item name="android:layout_marginStart">20dp</item>
         <item name="android:layout_marginTop">8dp</item>
         <item name="android:layout_marginBottom">8dp</item>
-        <item name="android:layout_marginLeft">20dp</item>
-        <item name="android:layout_marginEnd">20dp</item>
-        <item name="android:layout_marginRight">20dp</item>
+        <item name="android:layout_marginLeft">14dp</item>
+        <item name="android:layout_marginRight">14dp</item>
         <item name="android:shape">rectangle</item>
     </style>
 
-    <style name="searchIcon">
+    <style name="search_icon">
         <item name="android:layout_height">20dp</item>
         <item name="android:layout_width">20dp</item>
         <item name="android:layout_marginLeft">10dp</item>
         <item name="android:background">@drawable/ic_search_black_512dp_toolbar</item>
     </style>
 
-    <style name="searchText">
+    <style name="search_text">
         <item name="android:text">Search</item>
         <item name="android:textColor">@color/colorAlmostBlack</item>
         <item name="android:layout_height">wrap_content</item>
@@ -42,11 +40,29 @@
         <item name="android:layout_marginLeft">26dp</item>
     </style>
 
-    <style name="searchIcon_cancel">
+    <style name="search_cancel">
         <item name="android:layout_height">12dp</item>
         <item name="android:layout_width">12dp</item>
-        <item name="android:layout_marginRight">12dp</item>
-        <item name="android:background">@drawable/ic_cancel_16dp</item>
+        <item name="android:layout_marginRight">10dp</item>
+        <item name="android:src">@drawable/ic_cancel_16dp</item>
+    </style>
+
+    <style name="search_back">
+        <item name="android:layout_height">16dp</item>
+        <item name="android:layout_width">16dp</item>
+        <item name="android:layout_gravity">center</item>
+        <item name="android:background">@drawable/ic_back_16dp</item>
+    </style>
+
+    <style name="search_fill">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">30dp</item>
+        <item name="android:layout_marginLeft">8dp</item>
+        <item name="android:layout_marginRight">8dp</item>
+        <item name="android:hint">Search</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:paddingLeft">14dp</item>
+        <item name="android:background">@drawable/search_radius</item>
     </style>
 
 </resources>

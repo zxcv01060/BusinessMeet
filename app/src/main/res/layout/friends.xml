@@ -27,34 +27,34 @@
             tools:ignore="MissingConstraints" />
     </androidx.appcompat.widget.Toolbar>
 
-    <EditText
+    <TextView
         android:id="@+id/friends_searchbar"
         style="@style/searchBar"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/friendsView"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/friends_toolbar"
-        app:layout_constraintBottom_toTopOf="@id/friendsView" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/friends_toolbar" />
 
     <ImageView
         android:id="@+id/friends_searchbar_icon"
-        style="@style/searchIcon"
+        style="@style/search_icon"
+        app:layout_constraintBottom_toBottomOf="@id/friends_searchbar"
         app:layout_constraintStart_toStartOf="@id/friends_searchbar"
-        app:layout_constraintTop_toTopOf="@id/friends_searchbar"
-        app:layout_constraintBottom_toBottomOf="@id/friends_searchbar" />
+        app:layout_constraintTop_toTopOf="@id/friends_searchbar" />
 
     <TextView
         android:id="@+id/friends_searchbar_text"
-        style="@style/searchText"
+        style="@style/search_text"
+        app:layout_constraintBottom_toBottomOf="@id/friends_searchbar_icon"
         app:layout_constraintStart_toStartOf="@id/friends_searchbar_icon"
-        app:layout_constraintTop_toTopOf="@id/friends_searchbar_icon"
-        app:layout_constraintBottom_toBottomOf="@id/friends_searchbar_icon" />
+        app:layout_constraintTop_toTopOf="@id/friends_searchbar_icon" />
 
     <ImageView
-        android:id="@+id/friends_searchbar_icon_cancel"
-        style="@style/searchIcon_cancel"
+        android:id="@+id/friends_searchbar_cancelIcon"
+        style="@style/search_cancel"
+        app:layout_constraintBottom_toBottomOf="@id/friends_searchbar"
         app:layout_constraintEnd_toEndOf="@id/friends_searchbar"
-        app:layout_constraintTop_toTopOf="@id/friends_searchbar"
-        app:layout_constraintBottom_toBottomOf="@id/friends_searchbar" />
+        app:layout_constraintTop_toTopOf="@id/friends_searchbar" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/friendsView"

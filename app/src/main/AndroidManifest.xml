@@ -10,12 +10,13 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar">
-        <activity android:name=".FriendsTimelineActivity"></activity>
+        <activity android:name=".FriendsTimelineActivity" />
         <activity android:name=".BaseActivity" />
         <activity android:name=".NotificationActivity" />
         <activity android:name=".FriendsActivity" />
         <activity android:name=".FriendsIntroductionActivity" />
         <activity android:name=".FriendsMemoActivity" />
+        <activity android:name=".FriendsSearchActivity" />
         <activity android:name=".EditIntroductionActivity" />
         <activity android:name=".SelfIntroductionActivity" />
         <activity android:name=".AddIntroductionActivity" />
