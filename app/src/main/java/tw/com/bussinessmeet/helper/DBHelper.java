@@ -8,8 +8,8 @@ import android.util.Log;
 
 public class DBHelper extends SQLiteOpenHelper {
     private final static int _DBVersion = 1;
-    private final static String _DBName = "Business_Meet.db";
-    private final static String[] _TableName = new String[]{"User_Information","Matched"};
+    private final static String _DBName = "BeMet.db";
+    private final static String[] _TableName = new String[]{"user_information","user_customization","friend","groups","friend_group","friend_customization","friend_label","friend_remark","timeline_properties","timeline","activity_label","activity_remind","activity_invite","problem_report"};
 
     public DBHelper(Context context) {
             super(context, _DBName, null, _DBVersion);
@@ -20,26 +20,126 @@ public class DBHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         Log.d("add","create");
-        String SQL = "CREATE TABLE IF NOT EXISTS "+ _TableName[0] + "( " +
-                        "blue_tooth varchar(18) PRIMARY KEY , " +
-                        "user_name NVARCHAR(100) NOT NULL, " +
-                        "company NVARCHAR(100) NOT NULL, " +
-                        "position NVARCHAR(100), " +
-                        "email VARCHAR(100)," +
-                        "tel VARCHAR(20)," +
-                        "avatar VARCHAR(1000)," +
-                        "create_date DATETIME NOT NULL," +
-                        "modify_date DATETIME" +
-                    ");";
-
+        String SQL = "create table if not exists"+ _TableName[0] + "("+
+                "user_no int AUTOINCREMENT primary key,"+
+                "account varchar(100) not null,"+
+                "password varchar(64) not null,"+
+                "name nvarchar(100) not null,"+
+                "gender  char(2) not null,"+
+                "mail    varchar(100) not null,"+
+                "profession  nvarchar(100) not null,"+
+                "bluetooth   varchar(17) not null,"+
+                "create_date datetime not null,"+
+                "modify_date datetime"+
+                ");";
         db.execSQL(SQL);
-        SQL= "CREATE TABLE IF NOT EXISTS " + _TableName[1] + "( " +
-                "m_sno INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                "blue_tooth VARCHAR(18) REFERENCES " + _TableName[0] +"(blue_tooth), " +
-                "matched_blue_tooth VARCHAR(18) REFERENCES " + _TableName[0] + "(blue_tooth),"+
-                "memorandum VARCHAR(1000)," +
-                "create_date DATETIME NOT NULL," +
-                "modify_date DATETIME" +
+        SQL = "create table if not exists"+ _TableName[1] + "("+
+                "user_customization_no   int AUTOINCREMENT primary key,"+
+                "user_no int  not null references"+ _TableName[0] + "(user_no)  ,"+
+                "column_name nvarchar(100) not null,"+
+                "content nvarchar(1000) not null,"+
+                "create_date datetime not null,"+
+                "modify_date datetime"+
+                ");";
+        db.execSQL(SQL);
+        SQL = "create table if not exists"+ _TableName[2] + "("+
+                "friend_no   int AUTOINCREMENT primary key,"+
+                "matchmaker  int not null references"+ _TableName[0] + "(user_no),  "+
+                "friend  int not null references"+ _TableName[0] + "(user_no),"+
+                "remark nvarchar(2500),"+
+                "create_date datetime not null,"+
+                "modify_date datetime"+
+                ");";
+        db.execSQL(SQL);
+        SQL = "create table if not exists"+ _TableName[3] + "("+
+                "group_no    int AUTOINCREMENT   primary key,"+
+                "name    nvarchar(100) not null,     "+
+                "user_no int not null references"+ _TableName[0] + "(user_no),"+
+                "create_date datetime not null,"+
+                "modify_date datetime    "+
+                ");";
+        db.execSQL(SQL);
+        SQL = "create table if not exists"+ _TableName[4] + "("+
+                "friendGroup_no  int AUTOINCREMENT primary key,"+
+                "group_no    int not null references"+ _TableName[3] + "(group_no),   "+
+                "friend_no   int not null references"+ _TableName[2] + "(friend_no),"+
+                "create_date datetime not null,"+
+                "modify_date datetime    "+
+                ");";
+        db.execSQL(SQL);
+        SQL = "create table if not exists"+ _TableName[5] + "("+
+                "friend_customization_no int AUTOINCREMENT   primary key,"+
+                "name    nvarchar(100) not null,"+
+                "friend_no   int not null references"+ _TableName[2] + "(friend_no),"+
+                "user_no int not null references"+ _TableName[0] + "(user_no),"+
+                "create_date datetime not null,"+
+                "modify_date datetime    "+
+                ");";
+        db.execSQL(SQL);
+        SQL = "create table if not exists"+ _TableName[6] + "("+
+                "friend_label_no int AUTOINCREMENT primary key,"+
+                "content nvarchar(50) not null,"+
+                "friend_customization_no not null int    references"+ _TableName[5] + "(friend_customization_no),"+
+                "create_date datetime not null,"+
+                "modify_date datetime"+
+                ");";
+        db.execSQL(SQL);
+        SQL = "create table if not exists"+ _TableName[7] + "("+
+                "friendRemarks_no    int AUTOINCREMENT primary key,"+
+                "friendLabel_no  int not null references"+ _TableName[6] + "(friend_label_no),"+
+                "friend_customization_no int not null references"+ _TableName[5] + "(friend_customization_no),  "+
+                "create_date datetime not null,"+
+                "modify_date datetime    "+
+                ");";
+        db.execSQL(SQL);
+        SQL = "create table if not exists"+ _TableName[8] + "("+
+                "timeline_properties_no  int AUTOINCREMENT primary key,"+
+                "name    nvarchar(100) not null,"+
+                "create_date datetime not null,"+
+                "modify_date datetime"+
+                ");";
+        db.execSQL(SQL);
+        SQL = "create table if not exists"+ _TableName[9] + "("+
+                "timeline_no int AUTOINCREMENT primary key,"+
+                "place   nvarchar(100) not null,"+
+                "title   nvarchar(100) not null,     "+
+                "remark  nvarchar(2500),     "+
+                "timeline_properties_no  int not null    references"+ _TableName[8] + "(timeline_properties_no),"+
+                "color varchar(7),"+
+                "create_date datetime not null,"+
+                "modify_date datetime"+
+                ");";
+        db.execSQL(SQL);
+                SQL = "create table if not exists"+ _TableName[10] + "("+
+                "activityLabel_no    int AUTOINCREMENT   primary key,"+
+                "activity_no int not null references"+ _TableName[9] + "(timeline_no),  "+
+                "content nvarchar(100) not null,"+
+                "create_date datetime not null,"+
+                "modify_date datetime        "+
+                ");";
+        db.execSQL(SQL);
+                SQL = "create table if not exists"+ _TableName[11] + "("+
+                "activity_remind_no  int  AUTOINCREMENT primary key,"+
+                "time datetime not null,     "+
+                "activity_no int not null references"+ _TableName[9] + "(timeline_no),"+
+                "create_date datetime not null ,"+
+                "modify_date datetime    "+
+                ");";
+        db.execSQL(SQL);
+        SQL = "create table if not exists"+ _TableName[12] + "("+
+                "activityInvite_no   int AUTOINCREMENT primary key,"+
+                "user_no int not null references"+ _TableName[0] + "(user_no),  "+
+                "activity_no int not null references"+ _TableName[9] + "(timeline_no),"+
+                "create_date datetime not null ,"+
+                "modify_date datetime    "+
+                ");";
+        db.execSQL(SQL);
+        SQL = "create table if not exists"+ _TableName[13] + "("+
+                "problem_report_no   int AUTOINCREMENT primary key,"+
+                "content nvarchar(3000) not null ,"+
+                "user_no int not null references"+ _TableName[0] + "(user_no),"+
+                "create_date datetime not null,"+
+                "modify_date datetime"+
                 ");";
         db.execSQL(SQL);
     }

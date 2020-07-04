@@ -18,7 +18,7 @@ import tw.com.bussinessmeet.helper.BlueToothHelper;
 public class NotificationService  extends Service {
     private Map<String, UserInformationBean> userInformationBeanMap = new HashMap<>();
     public class LocalBinder extends Binder{
-        NotificationService getService(){
+        public NotificationService getService(){
             return NotificationService.this;
         }
     }
