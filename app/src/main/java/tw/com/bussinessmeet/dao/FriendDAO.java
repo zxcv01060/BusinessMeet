@@ -11,13 +11,13 @@ import java.util.Date;
 import tw.com.bussinessmeet.bean.FriendBean;
 import tw.com.bussinessmeet.helper.DBHelper;
 
-public class MatchedDAO {
-    private String whereClause = "m_sno = ?";
+public class FriendDAO {
+    private String whereClause = "friend_no = ?";
     private String tableName = "friend";
     private String[] column = new String[]{"friend_no","matchmaker_id","friend_id","remark","create_date","modify_date"};
     private SQLiteDatabase db;
     private SimpleDateFormat dataFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-    public MatchedDAO(DBHelper DH){
+    public FriendDAO(DBHelper DH){
         db = DH.getWritableDatabase();
     }
     private ContentValues putValues(FriendBean friendBean){
