@@ -36,7 +36,7 @@ import tw.com.bussinessmeet.helper.BlueToothHelper;
 import tw.com.bussinessmeet.helper.DBHelper;
 
 public class SelfIntroductionActivity extends AppCompatActivity {
-    private TextView userName,company,position,email,tel;
+    private TextView userName,profession,gender,email,tel;
     private Button editButton;
     private ImageView avatar;
     private UserInformationDAO userInformationDAO;
@@ -50,9 +50,9 @@ public class SelfIntroductionActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.self_introduction);
         userName = (TextView) findViewById(R.id.profile_name);
-        company = (TextView) findViewById(R.id.profile_company);
-        position = (TextView) findViewById(R.id.profile_position);
-        email = (TextView) findViewById(R.id.profile_email);
+        profession = (TextView) findViewById(R.id.profile_profession);
+        gender = (TextView) findViewById(R.id.profile_gender);
+        email = (TextView) findViewById(R.id.profile_mail);
         tel = (TextView) findViewById(R.id.profile_tel);
         avatar = (ImageView) findViewById(R.id.edit_person_photo);
         editButton = (Button) findViewById(R.id.editPersonalProfileButton);
@@ -79,9 +79,7 @@ public class SelfIntroductionActivity extends AppCompatActivity {
         AvatarHelper avatarHelper = new AvatarHelper();
         blueToothHelper.startBuleTooth();
         Log.d("seedmess","ness");
-        UserInformationBean ufb = new UserInformationBean();
-        ufb.setBlueTooth(blueToothHelper.getMyBuleTooth());
-        Cursor result = userInformationDAO.searchAll(ufb);
+        Cursor result = userInformationDAO.getById(blueToothHelper.getUserId());
         Log.e("result",String.valueOf(result));
 
         MenuItem userItem = BVMenu.findItem(R.id.menu_home);
@@ -113,13 +111,8 @@ public class SelfIntroductionActivity extends AppCompatActivity {
     }
 
     public void searchUserInformation(){
-        UserInformationBean ufb = new UserInformationBean();
-        BlueToothHelper blueToothHelper = new BlueToothHelper(this);
-        blueToothHelper.startBuleTooth();
-        ufb.setBlueTooth(blueToothHelper.getMyBuleTooth());
 
-
-        Cursor result = userInformationDAO.searchAll(ufb);
+        Cursor result = userInformationDAO.getById(blueToothHelper.getUserId());
         Log.d("result",String.valueOf(result.getColumnCount()));
         Log.d("result",String.valueOf(result.getColumnIndex("user_name")));
 
@@ -130,9 +123,9 @@ public class SelfIntroductionActivity extends AppCompatActivity {
 
         if (result.moveToFirst()) {
             userName.append(result.getString(result.getColumnIndex("user_name")));
-            company.append(result.getString(result.getColumnIndex("company")));
-            position.append(result.getString(result.getColumnIndex("position")));
-            email.append(result.getString(result.getColumnIndex("email")));
+            gender.append(result.getString(result.getColumnIndex("gender")));
+            profession.append(result.getString(result.getColumnIndex("profession")));
+            email.append(result.getString(result.getColumnIndex("mail")));
             tel.append(result.getString(result.getColumnIndex("tel")));
             avatar.setImageBitmap(avatarHelper.getImageResource(result.getString(result.getColumnIndex("avatar"))));
 

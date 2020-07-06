@@ -13,9 +13,9 @@ import tw.com.bussinessmeet.bean.UserInformationBean;
 import tw.com.bussinessmeet.helper.DBHelper;
 
 public class UserInformationDAO {
-    private String whereClause = "blue_tooth = ?";
+    private String whereClause = "bluetooth = ?";
     private String tableName = "User_Information";
-    private  String[] column = new String[]{"blue_tooth", "user_name", "company", "position","email","tel","avatar","create_date","modify_date"};
+    private  String[] column = new String[]{ "userId","password","name", "gender","mail","profession","bluetooth","avatar","tel","create_date","modify_date"};
     private SQLiteDatabase db ;
     private SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     public UserInformationDAO(DBHelper DH){
@@ -23,13 +23,15 @@ public class UserInformationDAO {
     }
     private ContentValues putValues(UserInformationBean userInformationBean){
         ContentValues values = new ContentValues();
-        values.put("blue_tooth", userInformationBean.getBlueTooth());
-        values.put("user_name", userInformationBean.getUserName());
-        values.put("company",userInformationBean.getCompany());
-        values.put("position", userInformationBean.getPosition());
-        values.put("email",userInformationBean.getEmail());
-        values.put("tel",userInformationBean.getTel());
+        values.put("user_id", userInformationBean.getUserId());
+        values.put("password", userInformationBean.getPassword());
+        values.put("name", userInformationBean.getName());
+        values.put("gender",userInformationBean.getGender());
+        values.put("mail",userInformationBean.getMail());
+        values.put("profession", userInformationBean.getProfession());
+        values.put("bluetooth", userInformationBean.getBluetooth());
         values.put("avatar", userInformationBean.getAvatar());
+        values.put("tel",userInformationBean.getTel());
         return  values;
     }
     public void add (UserInformationBean userInformationBean){
@@ -53,7 +55,7 @@ public class UserInformationDAO {
 //        String[] whereArgs1 = {"#100", b.getStorage_id()};
 //        String whereClause1 = DatabaseSchema.TABLE_TALKS.COLUMN_TID + "=? AND " + DatabaseSchema.TABLE_TALKS.COLUMN_STORAGEID + "=?";
 //        db.update(DatabaseSchema.TABLE_TALKS.NAME, values1, whereClause1, whereArgs1);
-        db.update(tableName, values,whereClause , new String[]{userInformationBean.getBlueTooth()});
+        db.update(tableName, values,whereClause , new String[]{userInformationBean.getBluetooth()});
         db.close();
     }
     public  void delete(String blueTooth){
@@ -61,12 +63,22 @@ public class UserInformationDAO {
         db.delete(tableName, whereClause,new String[]{blueTooth});
         db.close();
     }
-    public String getById(String blueTooth) {
-        Cursor cursor = db.query(tableName, null, "blue_tooth = ?", new String[]{blueTooth}, null, null, null);
+    public Cursor getById(String userId) {
+        Cursor cursor = db.query(tableName, null, "user_id = ?", new String[]{userId}, null, null, null);
         cursor.moveToFirst();
-        int index = cursor.getColumnIndex("blue_tooth");
         try{
-            return cursor.getString(cursor.getColumnIndex("blue_tooth"));
+            if(cursor.moveToFirst())
+                return cursor;
+        }catch (Exception e){
+           e.printStackTrace();
+        }
+        return null;
+    } 
+    public String getId(String blueTooth) {
+        Cursor cursor = db.query(tableName, null, "bluetooth = ?", new String[]{blueTooth}, null, null, null);
+        cursor.moveToFirst();
+        try{
+            return cursor.getString(cursor.getColumnIndex("user_id"));
         }catch (Exception e){
             return null;
         }
@@ -74,12 +86,18 @@ public class UserInformationDAO {
     }
     public Cursor searchAll(UserInformationBean userInformationBean){
 
-        String blueTooth = userInformationBean.getBlueTooth();
-        String userName = userInformationBean.getUserName();
-        String company = userInformationBean.getCompany();
-        String position = userInformationBean.getPosition();
-        String[] searchValue = new String[]{blueTooth,userName,company,position};
-        String[] searchColumn = new String[]{column[0],column[1],column[2],column[3]};
+      
+        String userId = userInformationBean.getUserId();
+        String password = userInformationBean.getPassword();
+        String name = userInformationBean.getName();
+        String gender = userInformationBean.getGender();
+        String mail = userInformationBean.getMail();
+        String profession = userInformationBean.getProfession();
+        String blueTooth = userInformationBean.getBluetooth();
+        String avatar = userInformationBean.getAvatar();
+        String tel = userInformationBean.getTel();
+        String[] searchValue = new String[]{userId,password,name,gender,mail,profession,blueTooth,avatar,tel};
+        String[] searchColumn = new String[]{column[0],column[1],column[2],column[3],column[4],column[5],column[6],column[7],column[8]};
         String where = "";
         ArrayList<String> args = new ArrayList<>();
 

@@ -32,8 +32,8 @@ import tw.com.bussinessmeet.helper.AvatarHelper;
 
 public class EditIntroductionActivity extends AppCompatActivity {
 
-    private TextView userName, company, position, email, tel;
-    private String name, com, pos, mail, phone;
+    private TextView userName, profession, gender, email, tel;
+    private String name, pro, gen, mail, phone;
     private ImageView avatar;
     private ImageButton editConfirmButtom;
     private AvatarHelper avatarHelper;
@@ -68,17 +68,17 @@ public class EditIntroductionActivity extends AppCompatActivity {
         avatar = (ImageView) findViewById(R.id.profilePhoto);
         avatar.setOnClickListener(choseAvatar);
         userName = (TextView) findViewById(R.id.profileName);
-        company = (TextView) findViewById(R.id.profileCompany);
-        position = (TextView) findViewById(R.id.profilePosition);
+        profession = (TextView) findViewById(R.id.profileProfession);
+        gender = (TextView) findViewById(R.id.profileGender);
         tel = (TextView) findViewById(R.id.profileTel);
-        email = (TextView) findViewById(R.id.profileEmail);
+        email = (TextView) findViewById(R.id.profileMail);
         avatarHelper = new AvatarHelper();
 
         openDB();
         searchUserInformation();
         userName.append(name);
-        company.append(com);
-        position.append(pos);
+        profession.append(pro);
+        gender.append(gen);
         email.append(mail);
         tel.append(phone);
     }
@@ -93,16 +93,16 @@ public class EditIntroductionActivity extends AppCompatActivity {
         UserInformationBean ufb = new UserInformationBean();
         blueToothHelper = new BlueToothHelper(this);
         blueToothHelper.startBuleTooth();
-        ufb.setBlueTooth(blueToothHelper.getMyBuleTooth());
+        ufb.setUserId(blueToothHelper.getUserId());
         Cursor cursor = userInformationDAO.searchAll(ufb);
 
         if (cursor.moveToFirst()) {
             do {
                 name = cursor.getString(cursor.getColumnIndex("user_name"));
                 Log.d("edit", name);
-                com = cursor.getString(cursor.getColumnIndex("company"));
-                pos = cursor.getString(cursor.getColumnIndex("position"));
-                mail = cursor.getString(cursor.getColumnIndex("email"));
+                pro = cursor.getString(cursor.getColumnIndex("profession"));
+                gen = cursor.getString(cursor.getColumnIndex("gender"));
+                mail = cursor.getString(cursor.getColumnIndex("mail"));
                 phone = cursor.getString(cursor.getColumnIndex("tel"));
                 avatar.setImageBitmap(avatarHelper.getImageResource(cursor.getString(cursor.getColumnIndex("avatar"))));
             } while (cursor.moveToNext());
@@ -114,11 +114,11 @@ public class EditIntroductionActivity extends AppCompatActivity {
         @Override
         public void onClick(View v) {
             UserInformationBean ufb = new UserInformationBean();
-            ufb.setBlueTooth(blueToothHelper.getMyBuleTooth());
-            ufb.setUserName(userName.getText().toString());
-            ufb.setCompany(company.getText().toString());
-            ufb.setPosition(position.getText().toString());
-            ufb.setEmail(email.getText().toString());
+            ufb.setUserId(blueToothHelper.getUserId());
+            ufb.setName(userName.getText().toString());
+            ufb.setProfession(profession.getText().toString());
+            ufb.setGender(gender.getText().toString());
+            ufb.setMail(email.getText().toString());
             ufb.setTel(tel.getText().toString());
             ufb.setAvatar(avatarHelper.setImageResource(avatar));
             userInformationDAO.update(ufb);

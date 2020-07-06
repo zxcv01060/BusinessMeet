@@ -7,45 +7,47 @@ import android.database.sqlite.SQLiteDatabase;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.logging.SimpleFormatter;
 
-import tw.com.bussinessmeet.bean.MatchedBean;
+import tw.com.bussinessmeet.bean.FriendBean;
 import tw.com.bussinessmeet.helper.DBHelper;
 
 public class MatchedDAO {
     private String whereClause = "m_sno = ?";
     private String tableName = "Matched";
-    private String[] column = new String[]{"blue_tooth","matched_blue_tooth","memorandum","create_date","modify_date"};
+    private String[] column = new String[]{"friend_no","matchmaker_id","friend_id","remark","create_date","modify_date"};
     private SQLiteDatabase db;
     private SimpleDateFormat dataFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     public MatchedDAO(DBHelper DH){
         db = DH.getWritableDatabase();
     }
-    private ContentValues putValues(MatchedBean matchedBean){
+    private ContentValues putValues(FriendBean friendBean){
         ContentValues values = new ContentValues();
-        values.put(column[0],matchedBean.getBlueTooth());
-        values.put(column[1],matchedBean.getMatchedBlueTooth());
-        values.put(column[2],matchedBean.getMemorandum());
+        values.put(column[0],friendBean.getFriendNo());
+        values.put(column[1],friendBean.getMatchmakerId());
+        values.put(column[2],friendBean.getFriendId());
+        values.put(column[3],friendBean.getRemark());
+        values.put(column[4],friendBean.getCreateDate());
+        values.put(column[5],friendBean.getModifyDate());
         return values;
     }
-    public void add(MatchedBean matchedBean){
-        if(matchedBean.getMemorandum() == null || matchedBean.getMemorandum().equals("")) matchedBean.setMemorandum("");
-        ContentValues values = putValues(matchedBean);
-        values.put(column[3],dataFormat.format(new Date()));
+    public void add(FriendBean friendBean){
+        if(friendBean.getRemark() == null || friendBean.getRemark().equals("")) friendBean.setRemark("");
+        ContentValues values = putValues(friendBean);
+        values.put(column[4],dataFormat.format(new Date()));
         db.insert(tableName,null,values);
     }
-    public void update(MatchedBean matchedBean){
-        ContentValues values = putValues(matchedBean);
-        values.put(column[4],dataFormat.format(new Date()));
-        db.update(tableName,values,whereClause,new String[]{String.valueOf(matchedBean.getMSno())});
+    public void update(FriendBean friendBean){
+        ContentValues values = putValues(friendBean);
+        values.put(column[5],dataFormat.format(new Date()));
+        db.update(tableName,values,whereClause,new String[]{String.valueOf(friendBean.getFriendNo())});
         db.close();
     }
 
-    public Cursor search(MatchedBean matchedBean){
-        String blueTooth = matchedBean.getBlueTooth();
-        String matchedBlueTooth = matchedBean.getMatchedBlueTooth();
-        String[] searchValue = new String[]{blueTooth,matchedBlueTooth};
-        String[] searchColumn = new String[]{column[0],column[1]};
+    public Cursor search(FriendBean friendBean){
+        String matchmakerId = friendBean.getMatchmakerId();
+        String friendId = friendBean.getFriendId();
+        String[] searchValue = new String[]{matchmakerId,friendId};
+        String[] searchColumn = new String[]{column[1],column[2]};
         String where = "";
         ArrayList<String> args = new ArrayList<>();
         for(int i = 0; i < searchColumn.length; i ++){
@@ -65,15 +67,15 @@ public class MatchedDAO {
 
     // getById
 
-    public String getById(String blueTooth) {
-        Cursor cursor = db.query(tableName, null, "blue_tooth = ?", new String[]{blueTooth}, null, null, null);
-        cursor.moveToFirst();
-        int index = cursor.getColumnIndex("blue_tooth");
-        try {
-            return cursor.getString(cursor.getColumnIndex("blue_tooth"));
-        } catch (Exception e) {
-            return null;
-        }
-    }
+//    public String getById(String blueTooth) {
+//        Cursor cursor = db.query(tableName, null, "blue_tooth = ?", new String[]{blueTooth}, null, null, null);
+//        cursor.moveToFirst();
+//        int index = cursor.getColumnIndex("blue_tooth");
+//        try {
+//            return cursor.getString(cursor.getColumnIndex("blue_tooth"));
+//        } catch (Exception e) {
+//            return null;
+//        }
+//    }
 
 }

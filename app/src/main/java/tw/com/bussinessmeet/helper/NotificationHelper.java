@@ -5,7 +5,6 @@ import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
-import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -15,25 +14,20 @@ import android.os.Bundle;
 import android.util.Log;
 
 import java.io.ByteArrayOutputStream;
-import java.util.List;
 
 import androidx.core.app.NotificationCompat;
-import androidx.core.app.NotificationManagerCompat;
-import retrofit2.Call;
+
+
 import tw.com.bussinessmeet.FriendsIntroductionActivity;
 import tw.com.bussinessmeet.R;
 import tw.com.bussinessmeet.background.NotificationService;
-import tw.com.bussinessmeet.bean.MatchedBean;
-import tw.com.bussinessmeet.bean.ResponseBody;
 import tw.com.bussinessmeet.bean.UserInformationBean;
 import tw.com.bussinessmeet.service.Impl.UserInformationServiceImpl;
-import tw.com.bussinessmeet.adapter.MatchedDeviceRecyclerViewAdapter;
 
 public class NotificationHelper {
     private Activity activity;
     private UserInformationServiceImpl userInformationService = new UserInformationServiceImpl();
     private AvatarHelper avatarHelper = new AvatarHelper();
-    private MatchedBean matchedBean;
     private static int NOTIFICATION_ID = 0;
     public static final String CHANNEL_1_ID = "channel1";
     private int position;
@@ -60,16 +54,16 @@ public class NotificationHelper {
     //public static final String CHANNEL_2_ID = "channel2";
 
      public void sendMessage(UserInformationBean userInformationBean, String memo) {
-         String userName = userInformationBean.getUserName();
-         String company = userInformationBean.getCompany();
-         String email = userInformationBean.getEmail();
+         String userName = userInformationBean.getName();
+         String profession = userInformationBean.getProfession();
+         String mail = userInformationBean.getMail();
          String tel = userInformationBean.getTel();
 
          //String avatar = userInformationBean.getAvatar();
 
 
          String title1 = userName;
-         String message1 = company;
+         String message1 = profession;
 
                     /*String title2 = "李赫宰";
                     String message2 = " SM娛樂公司";*/
@@ -136,7 +130,7 @@ public class NotificationHelper {
          Intent intent = new Intent();
          intent.setClass(activity,FriendsIntroductionActivity.class);
          Bundle bundle = new Bundle();
-         bundle.putString("blueToothAddress",userInformationBean.getBlueTooth());
+         bundle.putString("friendId",userInformationBean.getUserId());
          intent.putExtras(bundle);
          intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
          //大頭貼---------------------
@@ -199,15 +193,15 @@ public class NotificationHelper {
 
 
     public void sendBackgroundMessage(UserInformationBean userInformationBean, String memo) {
-        String userName = userInformationBean.getUserName();
-        String company = userInformationBean.getCompany();
-        String email = userInformationBean.getEmail();
+        String userName = userInformationBean.getName();
+        String profession = userInformationBean.getProfession();
+        String mail = userInformationBean.getMail();
         String tel = userInformationBean.getTel();
 
         //String avatar = userInformationBean.getAvatar();
         Notification groupBuilder =
                 new NotificationCompat.Builder(notificationService, CHANNEL_1_ID)
-                        .setContentTitle(userName+" "+company)
+                        .setContentTitle(userName+" "+profession)
                         //set content text to support devices running API level < 24
                         .setSmallIcon(R.drawable.ic_insert_comment_black_24dp)
                         //build summary info into InboxStyle template
@@ -220,7 +214,7 @@ public class NotificationHelper {
                         .build();
 
         String title1 = userName;
-        String message1 = company;
+        String message1 = profession;
 
                     /*String title2 = "李赫宰";
                     String message2 = " SM娛樂公司";*/
@@ -288,7 +282,7 @@ Log.e("avatar",userInformationBean.getAvatar());
         Intent intent = new Intent();
         intent.setClass(notificationService,FriendsIntroductionActivity.class);
         Bundle bundle = new Bundle();
-        bundle.putString("blueToothAddress",userInformationBean.getBlueTooth());
+        bundle.putString("friendId",userInformationBean.getUserId());
         intent.putExtras(bundle);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         //大頭貼---------------------

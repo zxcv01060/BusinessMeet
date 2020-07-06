@@ -50,7 +50,7 @@ public class MenuNavigationActivity extends AppCompatActivity {
         avatarHelper = new AvatarHelper();
   /*      AvatarHelper avatarHelper = new AvatarHelper();
         UserInformationBean ufb = new UserInformationBean();
-        //ufb.setBlueTooth(getMyBuleTooth());
+        //ufb.setMatchmaker(getMyBuleTooth());
         Cursor result = userInformationDAO.searchAll(ufb);*/
 
         //Set Home

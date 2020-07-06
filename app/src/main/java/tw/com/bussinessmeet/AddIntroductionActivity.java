@@ -30,7 +30,7 @@ public class AddIntroductionActivity extends AppCompatActivity {
     private  String TAG = "MainActivity";
     //    private RecyclerView recyclerViewThrmatic;
 
-    private TextView userName,company,position,email,tel;
+    private TextView userId,password,userName,gender,mail,profession,tel;
     private ImageView avatar;
     private Button confirm;
     private BlueToothHelper blueTooth;
@@ -65,24 +65,26 @@ public class AddIntroductionActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.add_introduction);
         confirm = (Button)findViewById(R.id.confirm_introduction);
-        position = (TextView)findViewById(R.id.add_profile_position);
-        company = (TextView)findViewById(R.id.add_profile_company);
+        userId = (TextView)findViewById(R.id.add_profile_user_id);
+        password = (TextView)findViewById(R.id.add_profile_password);
         userName = (TextView) findViewById(R.id.add_profile_name);
+        gender = (TextView) findViewById(R.id.add_profile_gender);
+        profession = (TextView) findViewById(R.id.add_profile_profession);
         tel = (TextView) findViewById(R.id.add_profile_tel);
-        email = (TextView) findViewById(R.id.add_profile_email);
+        mail = (TextView) findViewById(R.id.add_profile_mail);
         avatar = (ImageView) findViewById(R.id.add_photo_button);
         avatarHelper = new AvatarHelper();
         openDB();
 //        //啟動藍芽
         blueTooth = new BlueToothHelper(this);
         blueTooth.startBuleTooth();
-        String myBlueTooth = blueTooth.getMyBuleTooth();
+        String myBlueTooth = blueTooth.getUserId();
         Log.e("resultMy","======================");
         System.out.println("myBlueTooth"+myBlueTooth);
 //        myBlueTooth = blueTooth.test();
         Log.e("resultMy","======================");
         System.out.println(myBlueTooth);
-        String result = userInformationDAO.getById(myBlueTooth);
+        String result = userInformationDAO.getId(myBlueTooth);
 
         if( result !=null && !result.equals("") ) {
             changeToAnotherPage(SelfIntroductionActivity.class);
@@ -132,15 +134,15 @@ public class AddIntroductionActivity extends AppCompatActivity {
         public void onClick(View v) {
             UserInformationBean ufb = new UserInformationBean();
 
-            ufb.setBlueTooth(blueTooth.getMyBuleTooth());
-            ufb.setCompany(company.getText().toString());
-            ufb.setPosition(position.getText().toString());
-            ufb.setUserName(userName.getText().toString());
-            ufb.setEmail(email.getText().toString());
+            ufb.setUserId(blueTooth.getUserId());
+            ufb.setPassword(password.getText().toString());
+            ufb.setName(userName.getText().toString());
+            ufb.setGender(gender.getText().toString());
+            ufb.setMail(mail.getText().toString());
+            ufb.setProfession(profession.getText().toString());
             ufb.setTel(tel.getText().toString());
             ufb.setAvatar(avatarHelper.setImageResource(avatar));
-//            ufb.setAvatar("1");
-            Log.d("add",ufb.getCompany());
+
 
             if(checkData(ufb)) {
                 userInformationDAO.add(ufb);
@@ -156,22 +158,28 @@ public class AddIntroductionActivity extends AppCompatActivity {
         startActivity(intent);
     }
     private boolean checkData(UserInformationBean userInformationBean){
-        String positionStr = userInformationBean.getPosition();
-        String companyStr = userInformationBean.getCompany();
-        String emailStr = userInformationBean.getEmail();
-        String telStr = userInformationBean.getTel();
-        String userNameStr = userInformationBean.getUserName();
+        String userIdStr = userInformationBean.getUserId();
+        String passwordStr = userInformationBean.getPassword();
+        String nameStr = userInformationBean.getName();
+        String genderStr = userInformationBean.getGender();
+        String mailStr = userInformationBean.getMail();
+        String professionStr = userInformationBean.getProfession();
         String avatarStr = userInformationBean.getAvatar();
-        if(positionStr ==null || positionStr.equals("")){
-            Toast.makeText(this,"請輸入職稱",Toast.LENGTH_LONG).show();
-        }else if(companyStr == null || companyStr.equals("")){
-            Toast.makeText(this,"請輸入公司",Toast.LENGTH_LONG).show();
-        }else if(emailStr == null || emailStr.equals("")){
+        String telStr = userInformationBean.getTel();
+        if(userIdStr ==null || userIdStr.equals("")){
+            Toast.makeText(this,"請輸入帳號",Toast.LENGTH_LONG).show();
+        }else if(passwordStr == null || passwordStr.equals("")){
+            Toast.makeText(this,"請輸入密碼",Toast.LENGTH_LONG).show();
+        }else if(nameStr == null || nameStr.equals("")){
+            Toast.makeText(this,"請輸入姓名",Toast.LENGTH_LONG).show();
+        }else if(genderStr == null || genderStr.equals("")){
+            Toast.makeText(this,"請輸入姓名",Toast.LENGTH_LONG).show();
+        }else if(mailStr == null || mailStr.equals("")){
             Toast.makeText(this,"請輸入信箱",Toast.LENGTH_LONG).show();
+        }else if(professionStr == null || professionStr.equals("")){
+            Toast.makeText(this,"請輸入職業",Toast.LENGTH_LONG).show();
         }else if(telStr == null || telStr.equals("")){
             Toast.makeText(this,"請輸入電話",Toast.LENGTH_LONG).show();
-        }else if(userNameStr == null || userNameStr.equals("")){
-            Toast.makeText(this,"請輸入姓名",Toast.LENGTH_LONG).show();
         }else if(avatarStr == null || avatarStr.equals("")) {
             Toast.makeText(this,"請上傳圖片",Toast.LENGTH_LONG).show();
         }else{

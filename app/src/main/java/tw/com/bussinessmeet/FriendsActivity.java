@@ -6,8 +6,6 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.bluetooth.BluetoothAdapter;
-import android.bluetooth.BluetoothDevice;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -18,30 +16,24 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.TextView;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
 import tw.com.bussinessmeet.adapter.FriendsRecyclerViewAdapter;
-import tw.com.bussinessmeet.bean.Empty;
-import tw.com.bussinessmeet.bean.MatchedBean;
+import tw.com.bussinessmeet.bean.FriendBean;
 import tw.com.bussinessmeet.bean.ResponseBody;
 import tw.com.bussinessmeet.bean.UserInformationBean;
 import tw.com.bussinessmeet.helper.AsyncTasKHelper;
 import tw.com.bussinessmeet.helper.BlueToothHelper;
 import tw.com.bussinessmeet.service.Impl.MatchedServiceImpl;
 import tw.com.bussinessmeet.service.Impl.UserInformationServiceImpl;
-import tw.com.bussinessmeet.service.MatchedService;
 import tw.com.bussinessmeet.dao.MatchedDAO;
 import tw.com.bussinessmeet.dao.UserInformationDAO;
 import tw.com.bussinessmeet.helper.AvatarHelper;
-import tw.com.bussinessmeet.helper.BlueToothHelper;
 import tw.com.bussinessmeet.helper.DBHelper;
 public class FriendsActivity extends AppCompatActivity implements FriendsRecyclerViewAdapter.ClickListener {
     private Button button;
@@ -54,23 +46,22 @@ public class FriendsActivity extends AppCompatActivity implements FriendsRecycle
     private RecyclerView recyclerViewFriends;
     private FriendsRecyclerViewAdapter friendsRecyclerViewAdapter;
     private List<UserInformationBean> userInformationBeanList = new ArrayList<>();
-    private AsyncTasKHelper.OnResponseListener<MatchedBean, List<MatchedBean>> searchResponseListener =
-            new AsyncTasKHelper.OnResponseListener<MatchedBean, List<MatchedBean>>() {
+    private AsyncTasKHelper.OnResponseListener<FriendBean, List<FriendBean>> searchResponseListener =
+            new AsyncTasKHelper.OnResponseListener<FriendBean, List<FriendBean>>() {
                 @Override
-                public Call<ResponseBody<List<MatchedBean>>> request(MatchedBean... matchedBean) {
+                public Call<ResponseBody<List<FriendBean>>> request(FriendBean... friendBean) {
 
-                    return matchedService.search(matchedBean[0]);
+                    return matchedService.search(friendBean[0]);
                 }
 
                 @Override
-                public void onSuccess(List<MatchedBean> matchedBeanList) {
-                    Log.e("MatchedBean","success");
-                    if (matchedBeanList.size() > 1 || (matchedBeanList.size() == 1 && (matchedBeanList.get(0).getCreateDate() != null && !matchedBeanList.get(0).equals("")))) {
+                public void onSuccess(List<FriendBean> friendBeanList) {
+                    Log.e("FriendBean","success");
+                    if (friendBeanList.size() > 1 || (friendBeanList.size() == 1 && (friendBeanList.get(0).getCreateDate() != null && !friendBeanList.get(0).equals("")))) {
 
-                        for(MatchedBean matchedBean : matchedBeanList) {
-                        AsyncTasKHelper.execute(getByIdResponseListener,matchedBean.getMatchedBlueTooth());
-                        Log.e("MatchedBean", String.valueOf(matchedBean));
-                        Log.e("MatchedBean", String.valueOf(matchedBean.getBlueTooth()));
+                        for(FriendBean friendBean : friendBeanList) {
+                        AsyncTasKHelper.execute(getByIdResponseListener, friendBean.getFriendId());
+                        Log.e("FriendBean", String.valueOf(friendBean));
                         }
                     }
                 }
@@ -90,7 +81,7 @@ public class FriendsActivity extends AppCompatActivity implements FriendsRecycle
 
                 @Override
                 public void onSuccess(UserInformationBean userInformationBean) {
-                    Log.e("MatchedBean","success");
+                    Log.e("FriendBean","success");
                     friendsRecyclerViewAdapter.dataInsert(userInformationBean);
                 }
 
@@ -123,10 +114,9 @@ public class FriendsActivity extends AppCompatActivity implements FriendsRecycle
         userItem.setIcon(new BitmapDrawable(getResources(), myPhoto));
         createRecyclerViewFriends();
         blueToothHelper = new BlueToothHelper(this);
-        MatchedBean matchedBean = new MatchedBean();
-        matchedBean.setBlueTooth(blueToothHelper.getMyBuleTooth());
-        Log.e("matched",matchedBean.getBlueTooth());
-        AsyncTasKHelper.execute(searchResponseListener,matchedBean);
+        FriendBean friendBean = new FriendBean();
+        friendBean.setMatchmakerId(blueToothHelper.getUserId());
+        AsyncTasKHelper.execute(searchResponseListener,friendBean);
 
     }
     private void openDB(){
@@ -149,7 +139,7 @@ public class FriendsActivity extends AppCompatActivity implements FriendsRecycle
         Intent intent = new Intent();
         intent.setClass(this,FriendsIntroductionActivity.class);
         Bundle bundle = new Bundle();
-        bundle.putString("blueToothAddress",friendsRecyclerViewAdapter.getUserInformation(position).getBlueTooth());
+        bundle.putString("friendId",friendsRecyclerViewAdapter.getUserInformation(position).getUserId());
         intent.putExtras(bundle);
         startActivity(intent);
 

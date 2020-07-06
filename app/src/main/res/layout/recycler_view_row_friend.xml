@@ -38,13 +38,13 @@
                 android:layout_weight="1"/>
 
             <TextView
-                android:id="@+id/friends_company"
+                android:id="@+id/friends_profession"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginStart="16dp"
                 android:layout_marginLeft="16dp"
                 android:layout_marginBottom="8dp"
-                android:text="SM Entertainment"
+                android:text="學生"
                 android:textColor="#6F6F6F"
                 android:textSize="14sp"
                 android:layout_weight="1"/>

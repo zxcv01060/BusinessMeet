@@ -6,7 +6,6 @@ import android.app.AlertDialog;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.bluetooth.BluetoothAdapter;
-import android.bluetooth.BluetoothClass;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
 import android.content.BroadcastReceiver;
@@ -15,7 +14,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
-import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Handler;
@@ -30,12 +28,10 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.TreeMap;
 import java.util.UUID;
 
 import androidx.core.app.ActivityCompat;
@@ -50,14 +46,13 @@ import tw.com.bussinessmeet.RequestCode;
 import tw.com.bussinessmeet.adapter.UnmatchedDeviceRecyclerViewAdapter;
 import tw.com.bussinessmeet.adapter.MatchedDeviceRecyclerViewAdapter;
 import tw.com.bussinessmeet.background.NotificationService;
-import tw.com.bussinessmeet.bean.MatchedBean;
+import tw.com.bussinessmeet.bean.FriendBean;
 import tw.com.bussinessmeet.bean.ResponseBody;
 import tw.com.bussinessmeet.bean.UserInformationBean;
 import tw.com.bussinessmeet.dao.MatchedDAO;
 import tw.com.bussinessmeet.dao.UserInformationDAO;
 import tw.com.bussinessmeet.service.Impl.MatchedServiceImpl;
 import tw.com.bussinessmeet.service.Impl.UserInformationServiceImpl;
-import tw.com.bussinessmeet.helper.NotificationHelper;
 
 import static java.lang.Math.abs;
 import static java.lang.Math.pow;
@@ -84,7 +79,7 @@ public class BlueToothHelper {
     private int backgroundDistance = 0;
     private boolean first = true;
     //private BluetoothDevice device = null;
-    private MatchedBean matchedBean;
+    private FriendBean friendBean;
     private NotificationHelper notificationHelper;
     private AsyncTasKHelper.OnResponseListener<String, UserInformationBean> getByIdResponseListener = new AsyncTasKHelper.OnResponseListener<String, UserInformationBean>() {
         @Override
@@ -93,13 +88,13 @@ public class BlueToothHelper {
         }
         public void onSuccess(UserInformationBean responseBean) {
             Log.d("blueToothSearch","success");
-                String searchAddress = responseBean.getBlueTooth();
+                String searchAddress = responseBean.getBluetooth();
                 userInformationBeanMap.remove(searchAddress);
                 userInformationBeanMap.put(searchAddress,responseBean);
-                matchedBean = new MatchedBean();
-                matchedBean.setBlueTooth(getMyBuleTooth());
-                matchedBean.setMatchedBlueTooth(userInformationBeanMap.get(searchAddress).getBlueTooth());
-                AsyncTasKHelper.execute(matchedResponseListener, matchedBean);
+                friendBean = new FriendBean();
+                friendBean.setMatchmakerId(getMyBuleTooth());
+                friendBean.setFriendId(userInformationBeanMap.get(searchAddress).getUserId());
+                AsyncTasKHelper.execute(matchedResponseListener, friendBean);
         }
         @Override
         public void onFail(int status) {
@@ -107,21 +102,21 @@ public class BlueToothHelper {
         };
     };
 
-    private AsyncTasKHelper.OnResponseListener<MatchedBean, List<MatchedBean>> matchedResponseListener = new AsyncTasKHelper.OnResponseListener<MatchedBean, List<MatchedBean>>() {
+    private AsyncTasKHelper.OnResponseListener<FriendBean, List<FriendBean>> matchedResponseListener = new AsyncTasKHelper.OnResponseListener<FriendBean, List<FriendBean>>() {
         @Override
-        public Call<ResponseBody<List<MatchedBean>>> request(MatchedBean... matchedBeans) {
-            return matchedService.search(matchedBeans[0]);
+        public Call<ResponseBody<List<FriendBean>>> request(FriendBean... friendBeans) {
+            return matchedService.search(friendBeans[0]);
         }
         @Override
-        public void onSuccess(List<MatchedBean> matchedBeanList) {
-            MatchedBean matchedBean = matchedBeanList.get(0);
-            UserInformationBean userInformationBean = userInformationBeanMap.get(matchedBean.getMatchedBlueTooth());
-            if (matchedBeanList.size() > 1 || (matchedBeanList.size() == 1 && (matchedBeanList.get(0).getCreateDate() != null && !matchedBeanList.get(0).equals("")))) {
+        public void onSuccess(List<FriendBean> friendBeanList) {
+            FriendBean friendBean = friendBeanList.get(0);
+            UserInformationBean userInformationBean = userInformationBeanMap.get(friendBean.getRemark());
+            if (friendBeanList.size() > 1 || (friendBeanList.size() == 1 && (friendBeanList.get(0).getCreateDate() != null && !friendBeanList.get(0).equals("")))) {
                Toast.makeText(activity,"success",Toast.LENGTH_SHORT);
                 matchedDeviceRecyclerViewAdapter.dataInsert(userInformationBean);
                 if (distance <= 5000 && first) {
                     Log.d("sendmess", String.valueOf("==========================="));
-//                    notificationHelper.sendMessage(userInformationBean, matchedBeanList.get(0).getMemorandum());
+//                    notificationHelper.sendMessage(userInformationBean, friendBeanList.get(0).getMemorandum());
                 }
             }else{
                 unmatchedDeviceRecyclerViewAdapter.dataInsert(userInformationBean);
@@ -446,7 +441,16 @@ public class BlueToothHelper {
         } else {
             bluetoothMacAddress = bluetoothAdapter.getAddress();
         }
+
         return bluetoothMacAddress;
+    }
+    public String getUserId() {
+        String bluetoothMacAddress = getMyBuleTooth();
+        String userId = "";
+        if(bluetoothMacAddress!=null && !bluetoothMacAddress.equals("02:00:00:00:00:00")){
+            userId = userInformationDAO.getId(bluetoothMacAddress);
+        }
+        return userId;
     }
 
     public void cancelDiscovery() {
@@ -455,11 +459,10 @@ public class BlueToothHelper {
         }
     }
 
-    public void matched(String blueToothAddress, String userName, AsyncTasKHelper.OnResponseListener<MatchedBean, MatchedBean> addResponseListener, MatchedDAO matchedDAO) {
+    public void matched(String blueToothAddress, String userName, AsyncTasKHelper.OnResponseListener<FriendBean, FriendBean> addResponseListener, MatchedDAO matchedDAO) {
         userName = "darkplume";
         // 实例接收客户端传过来的数据线程
 
-        Log.d("blueTooth", blueToothAddress);
         // 判斷是否在搜尋,如果在搜尋，就取消搜尋
         if (mBluetoothAdapter.isDiscovering()) {
             mBluetoothAdapter.cancelDiscovery();
@@ -468,7 +471,7 @@ public class BlueToothHelper {
 
     }
 
-    public void createConnect(String matchedAddress, AsyncTasKHelper.OnResponseListener<MatchedBean, MatchedBean> addResponseListener, MatchedDAO matchedDAO) {
+    public void createConnect(String matchedAddress, AsyncTasKHelper.OnResponseListener<FriendBean, FriendBean> addResponseListener, MatchedDAO matchedDAO) {
         selectDevice = mBluetoothAdapter.getRemoteDevice(matchedAddress);
         Log.d("selectDevice", String.valueOf(selectDevice));
         try {
@@ -497,13 +500,13 @@ public class BlueToothHelper {
                 }
             }
 
-                String message = getMyBuleTooth();
+                String message = getUserId();
                 outputStream.write(message.getBytes("UTF-8"));
-                MatchedBean matchedBean = new MatchedBean();
-            matchedBean.setBlueTooth(getMyBuleTooth());
-            matchedBean.setMatchedBlueTooth(matchedAddress);
-            AsyncTasKHelper.execute(addResponseListener, matchedBean);
-            matchedDAO.add(matchedBean);
+                FriendBean friendBean = new FriendBean();
+            friendBean.setMatchmakerId(getUserId());
+            friendBean.setFriendId(userInformationDAO.getId(matchedAddress));
+            AsyncTasKHelper.execute(addResponseListener, friendBean);
+            matchedDAO.add(friendBean);
             Log.d("outputStream", String.valueOf(outputStream));
 
         } catch (Exception e) {
@@ -522,7 +525,7 @@ public class BlueToothHelper {
         if(userInformationBeanMap.get(blueToothAddress)==null){
             first = true;
             UserInformationBean userInformationBean = new UserInformationBean();
-            userInformationBean.setBlueTooth(blueToothAddress);
+            userInformationBean.setBluetooth(blueToothAddress);
             userInformationBeanMap.put(blueToothAddress,userInformationBean);
             userInformationBeanMap.get(blueToothAddress);
         };
@@ -539,7 +542,7 @@ public class BlueToothHelper {
         }
 
     }
-    private MatchedBean backgroundBean;
+    private FriendBean backgroundBean;
     private AsyncTasKHelper.OnResponseListener<String, UserInformationBean> backgroundUserInformationResponseListener = new AsyncTasKHelper.OnResponseListener<String, UserInformationBean>() {
         @Override
         public Call<ResponseBody<UserInformationBean>> request(String... blueTooth) {
@@ -547,12 +550,12 @@ public class BlueToothHelper {
         }
         public void onSuccess(UserInformationBean responseBean) {
             Log.d("blueToothSearch","success");
-            String searchAddress = responseBean.getBlueTooth();
+            String searchAddress = responseBean.getBluetooth();
             backgroundBeanMap.remove(searchAddress);
             backgroundBeanMap.put(searchAddress,responseBean);
-            backgroundBean = new MatchedBean();
-            backgroundBean.setBlueTooth(getMyBuleTooth());
-            backgroundBean.setMatchedBlueTooth(backgroundBeanMap.get(searchAddress).getBlueTooth());
+            backgroundBean = new FriendBean();
+            backgroundBean.setMatchmakerId(getMyBuleTooth());
+            backgroundBean.setFriendId(backgroundBeanMap.get(searchAddress).getUserId());
             AsyncTasKHelper.execute(backgroundMatchedResponseListener, backgroundBean);
         }
         @Override
@@ -560,20 +563,20 @@ public class BlueToothHelper {
 
         };
     };
-    private AsyncTasKHelper.OnResponseListener<MatchedBean, List<MatchedBean>> backgroundMatchedResponseListener = new AsyncTasKHelper.OnResponseListener<MatchedBean, List<MatchedBean>>() {
+    private AsyncTasKHelper.OnResponseListener<FriendBean, List<FriendBean>> backgroundMatchedResponseListener = new AsyncTasKHelper.OnResponseListener<FriendBean, List<FriendBean>>() {
         @Override
-        public Call<ResponseBody<List<MatchedBean>>> request(MatchedBean... matchedBeans) {
-            return matchedService.search(matchedBeans[0]);
+        public Call<ResponseBody<List<FriendBean>>> request(FriendBean... friendBeans) {
+            return matchedService.search(friendBeans[0]);
         }
         @Override
-        public void onSuccess(List<MatchedBean> matchedBeanList) {
-            MatchedBean matchedBean = matchedBeanList.get(0);
-            UserInformationBean userInformationBean = backgroundBeanMap.get(matchedBean.getMatchedBlueTooth());
-            if (matchedBeanList.size() > 1 || (matchedBeanList.size() == 1 && (matchedBeanList.get(0).getCreateDate() != null && !matchedBeanList.get(0).equals("")))) {
+        public void onSuccess(List<FriendBean> friendBeanList) {
+            FriendBean friendBean = friendBeanList.get(0);
+            UserInformationBean userInformationBean = backgroundBeanMap.get(friendBean.getRemark());
+            if (friendBeanList.size() > 1 || (friendBeanList.size() == 1 && (friendBeanList.get(0).getCreateDate() != null && !friendBeanList.get(0).equals("")))) {
 
                 if (backgroundDistance <= 10000 ) {
                     Log.d("sendmess", String.valueOf("==========================="));
-                    notificationHelper.sendBackgroundMessage(userInformationBean, matchedBeanList.get(0).getMemorandum());
+                    notificationHelper.sendBackgroundMessage(userInformationBean, friendBeanList.get(0).getRemark());
                 }
             }
         }

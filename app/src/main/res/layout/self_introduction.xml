@@ -59,18 +59,18 @@ android:layout_height="match_parent">
     app:srcCompat="@drawable/avatar" />
 
     <TextView
-        android:id="@+id/label_profile_company"
+        android:id="@+id/label_profile_profession"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
-        android:text="公司"
+        android:text="職業"
         android:textColor="@color/colorLabelGray"
-        app:layout_constraintBottom_toTopOf="@+id/profile_company"
-        app:layout_constraintStart_toStartOf="@+id/profile_company"
+        app:layout_constraintBottom_toTopOf="@+id/profile_profession"
+        app:layout_constraintStart_toStartOf="@+id/profile_profession"
         tools:ignore="MissingConstraints" />
 
     <TextView
-        android:id="@+id/profile_company"
+        android:id="@+id/profile_profession"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="23dp"
@@ -84,53 +84,53 @@ android:layout_height="match_parent">
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/label_profile_position"
+        android:id="@+id/label_profile_gender"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:layout_marginBottom="8dp"
-        android:text="職稱"
+        android:text="性別"
         android:textColor="@color/colorLabelGray"
-        app:layout_constraintBottom_toTopOf="@+id/profile_position"
-        app:layout_constraintStart_toStartOf="@+id/profile_position"
-        app:layout_constraintTop_toBottomOf="@+id/profile_company"
+        app:layout_constraintBottom_toTopOf="@+id/profile_gender"
+        app:layout_constraintStart_toStartOf="@+id/profile_gender"
+        app:layout_constraintTop_toBottomOf="@+id/profile_profession"
         app:layout_constraintVertical_bias="0.2"
         tools:ignore="MissingConstraints" />
 
     <TextView
-        android:id="@+id/profile_position"
+        android:id="@+id/profile_gender"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="36dp"
         android:text=""
         android:textColor="@color/colorAlmostBlack"
-        app:layout_constraintStart_toStartOf="@+id/profile_company"
-        app:layout_constraintTop_toBottomOf="@+id/profile_company" />
+        app:layout_constraintStart_toStartOf="@+id/profile_profession"
+        app:layout_constraintTop_toBottomOf="@+id/profile_profession" />
 
 
     <TextView
-        android:id="@+id/label_profile_email"
+        android:id="@+id/label_profile_mail"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:layout_marginBottom="8dp"
         android:text="信箱"
         android:textColor="@color/colorLabelGray"
-        app:layout_constraintBottom_toTopOf="@+id/profile_email"
-        app:layout_constraintStart_toStartOf="@+id/profile_email"
-        app:layout_constraintTop_toBottomOf="@+id/profile_position"
+        app:layout_constraintBottom_toTopOf="@+id/profile_mail"
+        app:layout_constraintStart_toStartOf="@+id/profile_mail"
+        app:layout_constraintTop_toBottomOf="@+id/profile_gender"
         app:layout_constraintVertical_bias="0.20"
         tools:ignore="MissingConstraints" />
 
     <TextView
-        android:id="@+id/profile_email"
+        android:id="@+id/profile_mail"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="36dp"
         android:text=""
         android:textColor="@color/colorAlmostBlack"
-        app:layout_constraintStart_toStartOf="@+id/profile_company"
-        app:layout_constraintTop_toBottomOf="@+id/profile_position" />
+        app:layout_constraintStart_toStartOf="@+id/profile_profession"
+        app:layout_constraintTop_toBottomOf="@+id/profile_gender" />
 
 
     <TextView
@@ -143,7 +143,7 @@ android:layout_height="match_parent">
         android:textColor="@color/colorLabelGray"
         app:layout_constraintBottom_toTopOf="@+id/profile_tel"
         app:layout_constraintStart_toStartOf="@+id/profile_tel"
-        app:layout_constraintTop_toBottomOf="@+id/profile_email"
+        app:layout_constraintTop_toBottomOf="@+id/profile_mail"
         app:layout_constraintVertical_bias="0.2"
         tools:ignore="MissingConstraints" />
 
@@ -154,8 +154,8 @@ android:layout_height="match_parent">
         android:layout_marginTop="36dp"
         android:text=""
         android:textColor="@color/colorAlmostBlack"
-        app:layout_constraintStart_toStartOf="@+id/profile_position"
-        app:layout_constraintTop_toBottomOf="@+id/profile_email" />
+        app:layout_constraintStart_toStartOf="@+id/profile_gender"
+        app:layout_constraintTop_toBottomOf="@+id/profile_mail" />
 
     <TextView
         android:layout_width="wrap_content"
