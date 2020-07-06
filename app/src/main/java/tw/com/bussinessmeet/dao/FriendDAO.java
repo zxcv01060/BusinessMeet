@@ -13,7 +13,7 @@ import tw.com.bussinessmeet.helper.DBHelper;
 
 public class MatchedDAO {
     private String whereClause = "m_sno = ?";
-    private String tableName = "Matched";
+    private String tableName = "friend";
     private String[] column = new String[]{"friend_no","matchmaker_id","friend_id","remark","create_date","modify_date"};
     private SQLiteDatabase db;
     private SimpleDateFormat dataFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");

@@ -13,8 +13,8 @@ public class UserInformationBean {
 	private String avatar;
 	private String profession;
 	private String bluetooth;
-	private Date createDate;
-	private Date modifyDate;
+	private String createDate;
+	private String modifyDate;
 
 	public String getUserId() {
 		return userId;

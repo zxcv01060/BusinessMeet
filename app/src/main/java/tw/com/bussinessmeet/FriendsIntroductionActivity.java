@@ -7,7 +7,7 @@ import retrofit2.Call;
 import tw.com.bussinessmeet.bean.FriendBean;
 import tw.com.bussinessmeet.bean.ResponseBody;
 import tw.com.bussinessmeet.bean.UserInformationBean;
-import tw.com.bussinessmeet.dao.MatchedDAO;
+import tw.com.bussinessmeet.dao.FriendDAO;
 import tw.com.bussinessmeet.dao.UserInformationDAO;
 import tw.com.bussinessmeet.helper.AsyncTasKHelper;
 import tw.com.bussinessmeet.helper.AvatarHelper;
@@ -42,7 +42,7 @@ public class FriendsIntroductionActivity extends AppCompatActivity {
     private DBHelper DH;
     private AvatarHelper avatarHelper = new AvatarHelper();
     private BlueToothHelper blueToothHelper;
-    private MatchedDAO matchedDAO;
+    private FriendDAO friendDAO;
     private FriendBean friendBean = new FriendBean();
     private UserInformationServiceImpl userInformationService = new UserInformationServiceImpl();
     private MatchedServiceImpl matchedService = new MatchedServiceImpl();
@@ -140,7 +140,7 @@ public class FriendsIntroductionActivity extends AppCompatActivity {
         Log.d("add", "openDB");
         DH = new DBHelper(this);
         userInformationDAO = new UserInformationDAO(DH);
-        matchedDAO = new MatchedDAO(DH);
+        friendDAO = new FriendDAO(DH);
 
     }
 

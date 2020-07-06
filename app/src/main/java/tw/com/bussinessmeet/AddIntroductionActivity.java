@@ -72,13 +72,20 @@ public class AddIntroductionActivity extends AppCompatActivity {
         profession = (TextView) findViewById(R.id.add_profile_profession);
         tel = (TextView) findViewById(R.id.add_profile_tel);
         mail = (TextView) findViewById(R.id.add_profile_mail);
+        userId.setText("1");
+        password.setText("1");
+        userName.setText("1");
+        gender.setText("1");
+        profession.setText("1");
+        tel.setText("1");;
+        mail.setText("1");;
         avatar = (ImageView) findViewById(R.id.add_photo_button);
         avatarHelper = new AvatarHelper();
         openDB();
 //        //啟動藍芽
         blueTooth = new BlueToothHelper(this);
         blueTooth.startBuleTooth();
-        String myBlueTooth = blueTooth.getUserId();
+        String myBlueTooth = blueTooth.getMyBuleTooth();
         Log.e("resultMy","======================");
         System.out.println("myBlueTooth"+myBlueTooth);
 //        myBlueTooth = blueTooth.test();
@@ -135,6 +142,7 @@ public class AddIntroductionActivity extends AppCompatActivity {
             UserInformationBean ufb = new UserInformationBean();
 
             ufb.setUserId(blueTooth.getUserId());
+            ufb.setUserId(userId.getText().toString());
             ufb.setPassword(password.getText().toString());
             ufb.setName(userName.getText().toString());
             ufb.setGender(gender.getText().toString());
@@ -142,7 +150,7 @@ public class AddIntroductionActivity extends AppCompatActivity {
             ufb.setProfession(profession.getText().toString());
             ufb.setTel(tel.getText().toString());
             ufb.setAvatar(avatarHelper.setImageResource(avatar));
-
+            ufb.setBluetooth(blueTooth.getMyBuleTooth());
 
             if(checkData(ufb)) {
                 userInformationDAO.add(ufb);

@@ -13,9 +13,9 @@ import tw.com.bussinessmeet.bean.UserInformationBean;
 import tw.com.bussinessmeet.helper.DBHelper;
 
 public class UserInformationDAO {
-    private String whereClause = "bluetooth = ?";
-    private String tableName = "User_Information";
-    private  String[] column = new String[]{ "userId","password","name", "gender","mail","profession","bluetooth","avatar","tel","create_date","modify_date"};
+    private String whereClause = "user_id = ?";
+    private String tableName = "user_information";
+    private  String[] column = new String[]{ "user_id","password","name", "gender","mail","profession","bluetooth","avatar","tel","create_date","modify_date"};
     private SQLiteDatabase db ;
     private SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     public UserInformationDAO(DBHelper DH){
@@ -23,15 +23,43 @@ public class UserInformationDAO {
     }
     private ContentValues putValues(UserInformationBean userInformationBean){
         ContentValues values = new ContentValues();
-        values.put("user_id", userInformationBean.getUserId());
-        values.put("password", userInformationBean.getPassword());
-        values.put("name", userInformationBean.getName());
-        values.put("gender",userInformationBean.getGender());
-        values.put("mail",userInformationBean.getMail());
-        values.put("profession", userInformationBean.getProfession());
-        values.put("bluetooth", userInformationBean.getBluetooth());
-        values.put("avatar", userInformationBean.getAvatar());
-        values.put("tel",userInformationBean.getTel());
+        String userId = userInformationBean.getUserId();
+        String password = userInformationBean.getPassword();
+        String name = userInformationBean.getName();
+        String gender = userInformationBean.getGender();
+        String mail = userInformationBean.getMail();
+        String profession = userInformationBean.getProfession();
+        String tel = userInformationBean.getTel();
+        String avatar = userInformationBean.getAvatar();
+        String bluetooth = userInformationBean.getBluetooth();
+        if(userId != null && !userId.equals("")){
+            values.put("user_id", userInformationBean.getUserId());
+        }
+        if(password != null && !password.equals("")){
+            values.put("password", userInformationBean.getPassword());
+        }
+        if(name != null && !name.equals("")){
+            values.put("name", userInformationBean.getName());
+        }
+        if(mail != null && !mail.equals("")){
+            values.put("mail",userInformationBean.getMail());
+        }
+        if(gender != null && !gender.equals("")){
+            values.put("gender",userInformationBean.getGender());
+        }
+        if(profession != null && !profession.equals("")){
+            values.put("profession", userInformationBean.getProfession());
+        }
+        if(tel != null && !tel.equals("")){
+            values.put("tel",userInformationBean.getTel());
+        }
+        if(avatar != null && !avatar.equals("")) {
+            values.put("avatar", userInformationBean.getAvatar());
+        }
+        if(bluetooth != null && !bluetooth.equals("")){
+            values.put("bluetooth", userInformationBean.getBluetooth());
+        }
+       
         return  values;
     }
     public void add (UserInformationBean userInformationBean){
@@ -55,7 +83,9 @@ public class UserInformationDAO {
 //        String[] whereArgs1 = {"#100", b.getStorage_id()};
 //        String whereClause1 = DatabaseSchema.TABLE_TALKS.COLUMN_TID + "=? AND " + DatabaseSchema.TABLE_TALKS.COLUMN_STORAGEID + "=?";
 //        db.update(DatabaseSchema.TABLE_TALKS.NAME, values1, whereClause1, whereArgs1);
-        db.update(tableName, values,whereClause , new String[]{userInformationBean.getBluetooth()});
+        System.out.println("====================="+userInformationBean.getUserId());
+        System.out.println(values);
+        db.update(tableName, values,whereClause , new String[]{userInformationBean.getUserId()});
         db.close();
     }
     public  void delete(String blueTooth){

@@ -114,7 +114,6 @@ public class SelfIntroductionActivity extends AppCompatActivity {
 
         Cursor result = userInformationDAO.getById(blueToothHelper.getUserId());
         Log.d("result",String.valueOf(result.getColumnCount()));
-        Log.d("result",String.valueOf(result.getColumnIndex("user_name")));
 
         for(int i = 0; i<result.getColumnCount(); i++){
             Log.d("result",result.getColumnName(i));
@@ -122,7 +121,7 @@ public class SelfIntroductionActivity extends AppCompatActivity {
 
 
         if (result.moveToFirst()) {
-            userName.append(result.getString(result.getColumnIndex("user_name")));
+            userName.append(result.getString(result.getColumnIndex("name")));
             gender.append(result.getString(result.getColumnIndex("gender")));
             profession.append(result.getString(result.getColumnIndex("profession")));
             email.append(result.getString(result.getColumnIndex("mail")));

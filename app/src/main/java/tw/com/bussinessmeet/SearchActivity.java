@@ -34,7 +34,7 @@ import tw.com.bussinessmeet.adapter.UnmatchedDeviceRecyclerViewAdapter;
 import tw.com.bussinessmeet.service.Impl.MatchedServiceImpl;
 import tw.com.bussinessmeet.bean.ResponseBody;
 import tw.com.bussinessmeet.bean.UserInformationBean;
-import tw.com.bussinessmeet.dao.MatchedDAO;
+import tw.com.bussinessmeet.dao.FriendDAO;
 import tw.com.bussinessmeet.dao.UserInformationDAO;
 import tw.com.bussinessmeet.helper.AsyncTasKHelper;
 import tw.com.bussinessmeet.helper.BlueToothHelper;
@@ -52,7 +52,7 @@ public class SearchActivity extends AppCompatActivity implements MatchedDeviceRe
     private MatchedServiceImpl matchedApi = new MatchedServiceImpl();
     private MatchedServiceImpl matchedService = new MatchedServiceImpl();
     private TextView search_title;
-    private MatchedDAO matchedDAO;
+    private FriendDAO friendDAO;
     private BlueToothHelper blueToothHelper;
 
     Handler handler = new Handler() {
@@ -97,7 +97,7 @@ public class SearchActivity extends AppCompatActivity implements MatchedDeviceRe
 
                 @Override
                 public void onSuccess(FriendBean friendBean) {
-                    matchedDAO.add(friendBean);
+                    friendDAO.add(friendBean);
                 }
 
                 @Override
@@ -154,7 +154,7 @@ public class SearchActivity extends AppCompatActivity implements MatchedDeviceRe
         Log.d("add","openDB");
         DH = new DBHelper(this);
         userInformationDAO = new UserInformationDAO(DH);
-        matchedDAO = new MatchedDAO(DH);
+        friendDAO = new FriendDAO(DH);
 
     }
     private void createRecyclerViewMatched() {
@@ -202,7 +202,7 @@ public class SearchActivity extends AppCompatActivity implements MatchedDeviceRe
         UserInformationBean userInformationBean = unmatchedRecyclerViewAdapter.getUserInformation(position);
         String address = userInformationBean.getBluetooth();
         String userName = userInformationBean.getName();
-        blueTooth.matched(address,userName,addResponseListener,matchedDAO);
+        blueTooth.matched(address,userName,addResponseListener, friendDAO);
         Intent intent = new Intent();
         intent.setClass(SearchActivity.this,FriendsIntroductionActivity.class);
         Bundle bundle = new Bundle();

@@ -42,15 +42,15 @@ public class EditIntroductionActivity extends AppCompatActivity {
     private DBHelper DH;
     private UserInformationDAO userInformationDAO;
     private UserInformationServiceImpl userInformationService = new UserInformationServiceImpl();
-    private AsyncTasKHelper.OnResponseListener<UserInformationBean, Empty> updateResponseListener =
-            new AsyncTasKHelper.OnResponseListener<UserInformationBean, Empty>() {
+    private AsyncTasKHelper.OnResponseListener<UserInformationBean, UserInformationBean> updateResponseListener =
+            new AsyncTasKHelper.OnResponseListener<UserInformationBean, UserInformationBean>() {
                 @Override
-                public Call<ResponseBody<Empty>> request(UserInformationBean... userInformationBeans) {
+                public Call<ResponseBody<UserInformationBean>> request(UserInformationBean... userInformationBeans) {
                     return userInformationService.update(userInformationBeans[0]);
                 }
 
                 @Override
-                public void onSuccess(Empty Empty) {
+                public void onSuccess(UserInformationBean userInformationBean) {
 
                 }
 
@@ -98,7 +98,7 @@ public class EditIntroductionActivity extends AppCompatActivity {
 
         if (cursor.moveToFirst()) {
             do {
-                name = cursor.getString(cursor.getColumnIndex("user_name"));
+                name = cursor.getString(cursor.getColumnIndex("name"));
                 Log.d("edit", name);
                 pro = cursor.getString(cursor.getColumnIndex("profession"));
                 gen = cursor.getString(cursor.getColumnIndex("gender"));
@@ -115,6 +115,7 @@ public class EditIntroductionActivity extends AppCompatActivity {
         public void onClick(View v) {
             UserInformationBean ufb = new UserInformationBean();
             ufb.setUserId(blueToothHelper.getUserId());
+            ufb.setBluetooth(blueToothHelper.getMyBuleTooth());
             ufb.setName(userName.getText().toString());
             ufb.setProfession(profession.getText().toString());
             ufb.setGender(gender.getText().toString());

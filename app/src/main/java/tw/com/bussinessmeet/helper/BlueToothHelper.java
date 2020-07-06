@@ -37,7 +37,6 @@ import java.util.UUID;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
-import net.vidageek.mirror.dsl.Mirror;
 
 import retrofit2.Call;
 import tw.com.bussinessmeet.AddIntroductionActivity;
@@ -49,7 +48,7 @@ import tw.com.bussinessmeet.background.NotificationService;
 import tw.com.bussinessmeet.bean.FriendBean;
 import tw.com.bussinessmeet.bean.ResponseBody;
 import tw.com.bussinessmeet.bean.UserInformationBean;
-import tw.com.bussinessmeet.dao.MatchedDAO;
+import tw.com.bussinessmeet.dao.FriendDAO;
 import tw.com.bussinessmeet.dao.UserInformationDAO;
 import tw.com.bussinessmeet.service.Impl.MatchedServiceImpl;
 import tw.com.bussinessmeet.service.Impl.UserInformationServiceImpl;
@@ -144,6 +143,8 @@ public class BlueToothHelper {
 
     private NotificationService notificationService = null;
     public BlueToothHelper(Activity activity) {
+        DBHelper dbHelper = new DBHelper(activity);
+        this.userInformationDAO = new UserInformationDAO(dbHelper);
         this.activity = activity;
     }
     public BlueToothHelper(NotificationService notificationService) {
@@ -175,7 +176,6 @@ public class BlueToothHelper {
         mBluetoothAdapter.startDiscovery();
     }
     public void searchBlueTooth(UserInformationDAO userInformationDAO, MatchedDeviceRecyclerViewAdapter matchedDeviceRecyclerViewAdapter, UnmatchedDeviceRecyclerViewAdapter unmatchedDeviceRecyclerViewAdapter) {
-        this.userInformationDAO = userInformationDAO;
         this.matchedDeviceRecyclerViewAdapter = matchedDeviceRecyclerViewAdapter;
         this.unmatchedDeviceRecyclerViewAdapter = unmatchedDeviceRecyclerViewAdapter;
         notificationHelper = new NotificationHelper(activity);
@@ -450,6 +450,7 @@ public class BlueToothHelper {
         if(bluetoothMacAddress!=null && !bluetoothMacAddress.equals("02:00:00:00:00:00")){
             userId = userInformationDAO.getId(bluetoothMacAddress);
         }
+        System.out.println(userId);
         return userId;
     }
 
@@ -459,7 +460,7 @@ public class BlueToothHelper {
         }
     }
 
-    public void matched(String blueToothAddress, String userName, AsyncTasKHelper.OnResponseListener<FriendBean, FriendBean> addResponseListener, MatchedDAO matchedDAO) {
+    public void matched(String blueToothAddress, String userName, AsyncTasKHelper.OnResponseListener<FriendBean, FriendBean> addResponseListener, FriendDAO friendDAO) {
         userName = "darkplume";
         // 实例接收客户端传过来的数据线程
 
@@ -467,11 +468,11 @@ public class BlueToothHelper {
         if (mBluetoothAdapter.isDiscovering()) {
             mBluetoothAdapter.cancelDiscovery();
         }
-        createConnect(blueToothAddress, addResponseListener, matchedDAO);
+        createConnect(blueToothAddress, addResponseListener, friendDAO);
 
     }
 
-    public void createConnect(String matchedAddress, AsyncTasKHelper.OnResponseListener<FriendBean, FriendBean> addResponseListener, MatchedDAO matchedDAO) {
+    public void createConnect(String matchedAddress, AsyncTasKHelper.OnResponseListener<FriendBean, FriendBean> addResponseListener, FriendDAO friendDAO) {
         selectDevice = mBluetoothAdapter.getRemoteDevice(matchedAddress);
         Log.d("selectDevice", String.valueOf(selectDevice));
         try {
@@ -506,7 +507,7 @@ public class BlueToothHelper {
             friendBean.setMatchmakerId(getUserId());
             friendBean.setFriendId(userInformationDAO.getId(matchedAddress));
             AsyncTasKHelper.execute(addResponseListener, friendBean);
-            matchedDAO.add(friendBean);
+            friendDAO.add(friendBean);
             Log.d("outputStream", String.valueOf(outputStream));
 
         } catch (Exception e) {

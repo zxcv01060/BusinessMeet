@@ -12,10 +12,9 @@ import java.util.List;
 import androidx.appcompat.app.AppCompatActivity;
 
 import retrofit2.Call;
-import tw.com.bussinessmeet.bean.Empty;
 import tw.com.bussinessmeet.bean.FriendBean;
 import tw.com.bussinessmeet.bean.ResponseBody;
-import tw.com.bussinessmeet.dao.MatchedDAO;
+import tw.com.bussinessmeet.dao.FriendDAO;
 import tw.com.bussinessmeet.helper.AsyncTasKHelper;
 import tw.com.bussinessmeet.helper.BlueToothHelper;
 import tw.com.bussinessmeet.helper.DBHelper;
@@ -36,7 +35,7 @@ public class FriendsMemoActivity extends AppCompatActivity {
 
         @Override
         public void onSuccess(FriendBean friendBean) {
-            matchedDAO.update(friendBean);
+            friendDAO.update(friendBean);
             Intent intent = new Intent();
             intent.setClass(FriendsMemoActivity.this, FriendsIntroductionActivity.class);
             Bundle bundle = new Bundle();
@@ -67,7 +66,7 @@ public class FriendsMemoActivity extends AppCompatActivity {
         }
     };
     private DBHelper DH;
-    private MatchedDAO matchedDAO;
+    private FriendDAO friendDAO;
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.friends_edit_introduction);
@@ -86,7 +85,7 @@ public class FriendsMemoActivity extends AppCompatActivity {
     }
     private void openDB() {
         DH = new DBHelper(this);
-        matchedDAO = new MatchedDAO(DH);
+        friendDAO = new FriendDAO(DH);
     }
     public View.OnClickListener editConfirmClick = new View.OnClickListener() {
         @Override
@@ -98,7 +97,7 @@ public class FriendsMemoActivity extends AppCompatActivity {
             friendBean.setRemark(memo.getText().toString());
             Log.d("String.valueOf",String.valueOf(memo.getText()));
             AsyncTasKHelper.execute(updateResponseListener,friendBean);
-            matchedDAO.update(friendBean);
+            friendDAO.update(friendBean);
 
         }
     };

@@ -31,7 +31,7 @@ import tw.com.bussinessmeet.helper.AsyncTasKHelper;
 import tw.com.bussinessmeet.helper.BlueToothHelper;
 import tw.com.bussinessmeet.service.Impl.MatchedServiceImpl;
 import tw.com.bussinessmeet.service.Impl.UserInformationServiceImpl;
-import tw.com.bussinessmeet.dao.MatchedDAO;
+import tw.com.bussinessmeet.dao.FriendDAO;
 import tw.com.bussinessmeet.dao.UserInformationDAO;
 import tw.com.bussinessmeet.helper.AvatarHelper;
 import tw.com.bussinessmeet.helper.DBHelper;
@@ -39,7 +39,7 @@ public class FriendsActivity extends AppCompatActivity implements FriendsRecycle
     private Button button;
     private UserInformationDAO userInformationDAO;
     private DBHelper DH = null;
-    private MatchedDAO matchedDAO;
+    private FriendDAO friendDAO;
     private MatchedServiceImpl matchedService = new MatchedServiceImpl() ;
     private UserInformationServiceImpl userInformationService = new UserInformationServiceImpl();
     private BlueToothHelper blueToothHelper;
@@ -123,7 +123,7 @@ public class FriendsActivity extends AppCompatActivity implements FriendsRecycle
         Log.d("add","openDB");
         DH = new DBHelper(this);
         userInformationDAO = new UserInformationDAO(DH);
-        matchedDAO = new MatchedDAO(DH);
+        friendDAO = new FriendDAO(DH);
 
     }
     private void createRecyclerViewFriends() {
