@@ -37,4 +37,9 @@ public class UserInformationServiceImpl implements UserInformationService{
     public Call<ResponseBody<UserInformationBean>> getById(String userId) {
         return userInformationAPI.getById(userId);
     }
+
+    @Override
+    public Call<ResponseBody<UserInformationBean>> getByBlueTooth(String bluetooth) {
+        return userInformationAPI.getByBlueTooth(bluetooth);
+    }
 }

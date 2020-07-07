@@ -40,7 +40,7 @@ public class FriendDAO {
         ContentValues values = putValues(friendBean);
         values.put(column[5],dataFormat.format(new Date()));
         db.update(tableName,values,whereClause,new String[]{String.valueOf(friendBean.getFriendNo())});
-        db.close();
+
     }
 
     public Cursor search(FriendBean friendBean){

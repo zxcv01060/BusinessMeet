@@ -20,4 +20,6 @@ public interface UserInformationService {
     Call<ResponseBody<UserInformationBean>> update (@Body UserInformationBean userinformationBean);
     @POST(baseRoute+"get/{userId}")
     Call<ResponseBody<UserInformationBean>> getById(@Path("userId") String userId);
+    @POST(baseRoute+"getBluetooth/{bluetooth}")
+    Call<ResponseBody<UserInformationBean>> getByBlueTooth(@Path("bluetooth") String bluetooth);
 }

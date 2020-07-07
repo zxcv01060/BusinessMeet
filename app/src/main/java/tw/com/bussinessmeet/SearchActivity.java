@@ -187,7 +187,7 @@ public class SearchActivity extends AppCompatActivity implements MatchedDeviceRe
         Intent intent = new Intent();
         intent.setClass(SearchActivity.this,FriendsIntroductionActivity.class);
         Bundle bundle = new Bundle();
-        bundle.putString("friendId",matchedRecyclerViewAdapter.getUserInformation(position).getBluetooth());
+        bundle.putString("friendId",matchedRecyclerViewAdapter.getUserInformation(position).getUserId());
         intent.putExtras(bundle);
         startActivity(intent);
         Log.e("send","============================");
@@ -206,7 +206,7 @@ public class SearchActivity extends AppCompatActivity implements MatchedDeviceRe
         Intent intent = new Intent();
         intent.setClass(SearchActivity.this,FriendsIntroductionActivity.class);
         Bundle bundle = new Bundle();
-        bundle.putString("friendId",unmatchedRecyclerViewAdapter.getUserInformation(position).getBluetooth());
+        bundle.putString("friendId",unmatchedRecyclerViewAdapter.getUserInformation(position).getUserId());
         intent.putExtras(bundle);
         startActivity(intent);
     }

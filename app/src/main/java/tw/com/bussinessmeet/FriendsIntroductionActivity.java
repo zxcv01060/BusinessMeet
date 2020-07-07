@@ -38,6 +38,7 @@ public class FriendsIntroductionActivity extends AppCompatActivity {
     private TextView userName, profession, gender, email, tel, remark;
     private Button editButton;
     private ImageView avatar;
+    private String friendId;
     private UserInformationDAO userInformationDAO;
     private DBHelper DH;
     private AvatarHelper avatarHelper = new AvatarHelper();
@@ -48,12 +49,21 @@ public class FriendsIntroductionActivity extends AppCompatActivity {
     private MatchedServiceImpl matchedService = new MatchedServiceImpl();
     private AsyncTasKHelper.OnResponseListener<String, UserInformationBean> userInfoResponseListener = new AsyncTasKHelper.OnResponseListener<String, UserInformationBean>() {
         @Override
-        public Call<ResponseBody<UserInformationBean>> request(String... bluetooth) {
-            return userInformationService.getById(bluetooth[0]);
+        public Call<ResponseBody<UserInformationBean>> request(String... userId) {
+            return userInformationService.getById(userId[0]);
         }
 
         @Override
         public void onSuccess(UserInformationBean userInformationBean) {
+            if(userInformationBean ==null){
+                Cursor cursor = userInformationDAO.getById(friendId);
+                userInformationBean.setName(cursor.getString(cursor.getColumnIndex("name")));
+                userInformationBean.setProfession(cursor.getString(cursor.getColumnIndex("profession")));
+                userInformationBean.setGender(cursor.getString(cursor.getColumnIndex("gender")));
+                userInformationBean.setMail(cursor.getString(cursor.getColumnIndex("mail")));
+                userInformationBean.setTel(cursor.getString(cursor.getColumnIndex("tel")));
+                userInformationBean.setAvatar(cursor.getString(cursor.getColumnIndex("avatar")));
+            }
             userName.append(userInformationBean.getName());
             profession.append(userInformationBean.getProfession());
             gender.append(userInformationBean.getGender());
@@ -75,8 +85,10 @@ public class FriendsIntroductionActivity extends AppCompatActivity {
 
         @Override
         public void onSuccess(List<FriendBean> friendBeanList) {
-            Log.d("memo", friendBeanList.get(0).getRemark());
-            remark.append(friendBeanList.get(0).getRemark());
+           System.out.println(friendBeanList.get(0).getRemark()+"=============================");
+           System.out.println(friendBeanList.size()+"=============================");
+           if(friendBeanList.get(0).getRemark()!=null)
+               remark.append(friendBeanList.get(0).getRemark());
         }
 
         @Override
@@ -89,7 +101,8 @@ public class FriendsIntroductionActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.friends_introduction);
-        String friendId = getIntent().getStringExtra("friendId");
+         friendId = getIntent().getStringExtra("friendId");
+        Log.e("friendId: ",friendId );
         AsyncTasKHelper.execute(userInfoResponseListener, friendId);
         friendBean.setFriendId(friendId);
         blueToothHelper = new BlueToothHelper(this);

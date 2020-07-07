@@ -74,14 +74,14 @@ public class FriendsActivity extends AppCompatActivity implements FriendsRecycle
     private AsyncTasKHelper.OnResponseListener<String,UserInformationBean> getByIdResponseListener =
             new AsyncTasKHelper.OnResponseListener<String,UserInformationBean>() {
                 @Override
-                public Call<ResponseBody<UserInformationBean>> request(String... blueTooth) {
+                public Call<ResponseBody<UserInformationBean>> request(String... userId) {
 
-                    return userInformationService.getById(blueTooth[0]);
+                    return userInformationService.getById(userId[0]);
                 }
 
                 @Override
                 public void onSuccess(UserInformationBean userInformationBean) {
-                    Log.e("FriendBean","success");
+                    Log.e("FriendBean","user");
                     friendsRecyclerViewAdapter.dataInsert(userInformationBean);
                 }
 

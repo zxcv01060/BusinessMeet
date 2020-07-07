@@ -57,7 +57,8 @@ public class FriendsMemoActivity extends AppCompatActivity {
 
         @Override
         public void onSuccess(List<FriendBean> friendBeanList) {
-            memo.append(friendBeanList.get(0).getRemark());
+            if(friendBeanList.get(0).getRemark()!=null)
+                memo.append(friendBeanList.get(0).getRemark());
         }
 
         @Override
