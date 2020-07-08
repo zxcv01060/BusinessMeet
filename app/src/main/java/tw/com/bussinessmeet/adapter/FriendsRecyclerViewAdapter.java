@@ -40,7 +40,7 @@ public class FriendsRecyclerViewAdapter extends RecyclerView.Adapter<FriendsRecy
     @Override
     public void onBindViewHolder(@NonNull FriendsRecyclerViewAdapter.ViewHolder holder, int position) {
         UserInformationBean ufb = userInformationBeanList.get(position);
-        holder.bindInformation(ufb.getUserName(),ufb.getAvatar(),ufb.getCompany());
+        holder.bindInformation(ufb.getName(),ufb.getAvatar(),ufb.getProfession());
     }
 
     @Override
@@ -52,7 +52,7 @@ public class FriendsRecyclerViewAdapter extends RecyclerView.Adapter<FriendsRecy
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         ImageView friends_photo;
         TextView friends_name;
-        TextView friends_company;
+        TextView friends_profession;
 
 
 
@@ -60,14 +60,14 @@ public class FriendsRecyclerViewAdapter extends RecyclerView.Adapter<FriendsRecy
             super(itemView);
             friends_photo = itemView.findViewById(R.id.friends_photo);
             friends_name = itemView.findViewById(R.id.friends_name);
-            friends_company = itemView.findViewById(R.id.friends_company);
+            friends_profession = itemView.findViewById(R.id.friends_profession);
             itemView.setOnClickListener(this);
         }
 
-        void bindInformation(String userName, String avatar,String userCompany){
+        void bindInformation(String userName, String avatar,String userProfession){
             friends_photo.setImageBitmap(avatarHelper.getImageResource(avatar));
             friends_name.setText(userName);
-            friends_company.setText(userCompany);
+            friends_profession.setText(userProfession);
         }
 
         @Override
@@ -85,7 +85,7 @@ public class FriendsRecyclerViewAdapter extends RecyclerView.Adapter<FriendsRecy
         this.clickLinster = clickLinster;
     }
     public void dataInsert(UserInformationBean userInformationBean){
-        Log.d("resultDataInsert",userInformationBean.getBlueTooth());
+        Log.d("resultDataInsert",userInformationBean.getBluetooth());
         userInformationBeanList.add(userInformationBean);
         notifyItemInserted(getItemCount());
     }
