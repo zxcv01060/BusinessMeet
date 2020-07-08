@@ -3,7 +3,9 @@ package tw.com.bussinessmeet;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.ComponentName;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.database.Cursor;
 import android.database.MatrixCursor;
 import android.graphics.Bitmap;
@@ -11,6 +13,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.util.Base64;
 import android.util.Log;
 import android.view.Menu;
@@ -25,6 +28,8 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
+
+import tw.com.bussinessmeet.background.NotificationService;
 import tw.com.bussinessmeet.bean.UserInformationBean;
 import tw.com.bussinessmeet.dao.UserInformationDAO;
 import tw.com.bussinessmeet.helper.AvatarHelper;
@@ -32,7 +37,7 @@ import tw.com.bussinessmeet.helper.BlueToothHelper;
 import tw.com.bussinessmeet.helper.DBHelper;
 
 public class SelfIntroductionActivity extends AppCompatActivity {
-    private TextView userName,company,position,email,tel;
+    private TextView userName,profession,gender,email,tel;
     private Button editButton;
     private ImageView avatar;
     private UserInformationDAO userInformationDAO;
@@ -40,15 +45,16 @@ public class SelfIntroductionActivity extends AppCompatActivity {
     private AvatarHelper avatarHelper;
     private BottomNavigationView menu ;
     private BlueToothHelper blueToothHelper;
+    private NotificationService notificationService = null;
     private Toolbar toolbar;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.self_introduction);
         userName = (TextView) findViewById(R.id.profile_name);
-        company = (TextView) findViewById(R.id.profile_company);
-        position = (TextView) findViewById(R.id.profile_position);
-        email = (TextView) findViewById(R.id.profile_email);
+        profession = (TextView) findViewById(R.id.profile_profession);
+        gender = (TextView) findViewById(R.id.profile_gender);
+        email = (TextView) findViewById(R.id.profile_mail);
         tel = (TextView) findViewById(R.id.profile_tel);
         avatar = (ImageView) findViewById(R.id.edit_person_photo);
         editButton = (Button) findViewById(R.id.editPersonalProfileButton);
@@ -88,15 +94,30 @@ public class SelfIntroductionActivity extends AppCompatActivity {
         AvatarHelper avatarHelper = new AvatarHelper();
         blueToothHelper.startBuleTooth();
         Log.d("seedmess","ness");
-        UserInformationBean ufb = new UserInformationBean();
-        ufb.setBlueTooth(blueToothHelper.getMyBuleTooth());
-        Cursor result = userInformationDAO.searchAll(ufb);
+        Cursor result = userInformationDAO.getById(blueToothHelper.getUserId());
         Log.e("result",String.valueOf(result));
 
         MenuItem userItem = BVMenu.findItem(R.id.menu_home);
         Bitmap myPhoto = avatarHelper.getImageResource(result.getString(result.getColumnIndex("avatar")));
         userItem.setIcon(new BitmapDrawable(getResources(), myPhoto));
+        startBackgroundService();
+    }
+//    private ServiceConnection notificationServiceConnect = new ServiceConnection() {
+//        @Override
+//        public void onServiceConnected(ComponentName name, IBinder service) {
+//            notificationService = ((NotificationService.LocalBinder)service).getService();
+//        }
+//
+//        @Override
+//        public void onServiceDisconnected(ComponentName name) {
+//
+//        }
+//    };
+    private void startBackgroundService(){
 
+        Intent it = new Intent(SelfIntroductionActivity.this, NotificationService.class);
+        stopService(it);
+        startService(it);
     }
     private void openDB(){
         Log.d("add","openDB");
@@ -105,15 +126,9 @@ public class SelfIntroductionActivity extends AppCompatActivity {
     }
 
     public void searchUserInformation(){
-        UserInformationBean ufb = new UserInformationBean();
-        BlueToothHelper blueToothHelper = new BlueToothHelper(this);
-        blueToothHelper.startBuleTooth();
-        ufb.setBlueTooth(blueToothHelper.getMyBuleTooth());
 
-
-        Cursor result = userInformationDAO.searchAll(ufb);
+        Cursor result = userInformationDAO.getById(blueToothHelper.getUserId());
         Log.d("result",String.valueOf(result.getColumnCount()));
-        Log.d("result",String.valueOf(result.getColumnIndex("user_name")));
 
         for(int i = 0; i<result.getColumnCount(); i++){
             Log.d("result",result.getColumnName(i));
@@ -121,10 +136,10 @@ public class SelfIntroductionActivity extends AppCompatActivity {
 
 
         if (result.moveToFirst()) {
-            userName.append(result.getString(result.getColumnIndex("user_name")));
-            company.append(result.getString(result.getColumnIndex("company")));
-            position.append(result.getString(result.getColumnIndex("position")));
-            email.append(result.getString(result.getColumnIndex("email")));
+            userName.append(result.getString(result.getColumnIndex("name")));
+            gender.append(result.getString(result.getColumnIndex("gender")));
+            profession.append(result.getString(result.getColumnIndex("profession")));
+            email.append(result.getString(result.getColumnIndex("mail")));
             tel.append(result.getString(result.getColumnIndex("tel")));
             avatar.setImageBitmap(avatarHelper.getImageResource(result.getString(result.getColumnIndex("avatar"))));
 

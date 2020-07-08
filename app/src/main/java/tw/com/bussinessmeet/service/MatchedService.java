@@ -6,15 +6,15 @@ import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.POST;
 import tw.com.bussinessmeet.bean.Empty;
-import tw.com.bussinessmeet.bean.MatchedBean;
+import tw.com.bussinessmeet.bean.FriendBean;
 import tw.com.bussinessmeet.bean.ResponseBody;
 
 public interface MatchedService {
-    String baseRoute = "matched/";
+    String baseRoute = "friend/";
     @POST(baseRoute+"search")
-    Call<ResponseBody<List<MatchedBean>>> search(@Body MatchedBean matchedBean);
+    Call<ResponseBody<List<FriendBean>>> search(@Body FriendBean friendBean);
     @POST(baseRoute+"add")
-    Call<ResponseBody<MatchedBean>> add(@Body MatchedBean matchedBean);
+    Call<ResponseBody<FriendBean>> add(@Body FriendBean friendBean);
     @POST(baseRoute+"update")
-    Call<ResponseBody<Empty>> update (@Body MatchedBean matchedBean);
+    Call<ResponseBody<FriendBean>> update (@Body FriendBean friendBean);
 }

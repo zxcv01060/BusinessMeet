@@ -2,12 +2,12 @@ package tw.com.bussinessmeet;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.NotificationCompat;
 
 import retrofit2.Call;
+import tw.com.bussinessmeet.bean.FriendBean;
 import tw.com.bussinessmeet.bean.ResponseBody;
 import tw.com.bussinessmeet.bean.UserInformationBean;
-import tw.com.bussinessmeet.dao.MatchedDAO;
+import tw.com.bussinessmeet.dao.FriendDAO;
 import tw.com.bussinessmeet.dao.UserInformationDAO;
 import tw.com.bussinessmeet.helper.AsyncTasKHelper;
 import tw.com.bussinessmeet.helper.AvatarHelper;
@@ -16,14 +16,10 @@ import tw.com.bussinessmeet.helper.DBHelper;
 import tw.com.bussinessmeet.service.Impl.MatchedServiceImpl;
 import tw.com.bussinessmeet.service.Impl.UserInformationServiceImpl;
 
-import android.app.NotificationManager;
-import android.app.PendingIntent;
-import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.util.Log;
@@ -34,39 +30,44 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import tw.com.bussinessmeet.bean.MatchedBean;
-
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-
-import tw.com.bussinessmeet.helper.DBHelper;
-import tw.com.bussinessmeet.service.UserInformationService;
 
 import java.util.List;
 
 public class FriendsIntroductionActivity extends AppCompatActivity {
-    private TextView userName, company, position, email, tel, memo;
+    private TextView userName, profession, gender, email, tel, remark;
     private Button editButton;
     private ImageView avatar;
+    private String friendId;
     private UserInformationDAO userInformationDAO;
     private DBHelper DH;
     private AvatarHelper avatarHelper = new AvatarHelper();
     private BlueToothHelper blueToothHelper;
-    private MatchedDAO matchedDAO;
-    private MatchedBean matchedBean = new MatchedBean();
+    private FriendDAO friendDAO;
+    private FriendBean friendBean = new FriendBean();
     private UserInformationServiceImpl userInformationService = new UserInformationServiceImpl();
     private MatchedServiceImpl matchedService = new MatchedServiceImpl();
     private AsyncTasKHelper.OnResponseListener<String, UserInformationBean> userInfoResponseListener = new AsyncTasKHelper.OnResponseListener<String, UserInformationBean>() {
         @Override
-        public Call<ResponseBody<UserInformationBean>> request(String... bluetooth) {
-            return userInformationService.getById(bluetooth[0]);
+        public Call<ResponseBody<UserInformationBean>> request(String... userId) {
+            return userInformationService.getById(userId[0]);
         }
 
         @Override
         public void onSuccess(UserInformationBean userInformationBean) {
-            userName.append(userInformationBean.getUserName());
-            company.append(userInformationBean.getCompany());
-            position.append(userInformationBean.getPosition());
-            email.append(userInformationBean.getEmail());
+            if(userInformationBean ==null){
+                Cursor cursor = userInformationDAO.getById(friendId);
+                userInformationBean.setName(cursor.getString(cursor.getColumnIndex("name")));
+                userInformationBean.setProfession(cursor.getString(cursor.getColumnIndex("profession")));
+                userInformationBean.setGender(cursor.getString(cursor.getColumnIndex("gender")));
+                userInformationBean.setMail(cursor.getString(cursor.getColumnIndex("mail")));
+                userInformationBean.setTel(cursor.getString(cursor.getColumnIndex("tel")));
+                userInformationBean.setAvatar(cursor.getString(cursor.getColumnIndex("avatar")));
+            }
+            userName.append(userInformationBean.getName());
+            profession.append(userInformationBean.getProfession());
+            gender.append(userInformationBean.getGender());
+            email.append(userInformationBean.getMail());
             tel.append(userInformationBean.getTel());
             avatar.setImageBitmap(avatarHelper.getImageResource(userInformationBean.getAvatar()));
         }
@@ -76,16 +77,18 @@ public class FriendsIntroductionActivity extends AppCompatActivity {
         }
     };
 
-    private AsyncTasKHelper.OnResponseListener<MatchedBean, List<MatchedBean>> friendsMemoResponseListener = new AsyncTasKHelper.OnResponseListener<MatchedBean, List<MatchedBean>>() {
+    private AsyncTasKHelper.OnResponseListener<FriendBean, List<FriendBean>> friendsMemoResponseListener = new AsyncTasKHelper.OnResponseListener<FriendBean, List<FriendBean>>() {
         @Override
-        public Call<ResponseBody<List<MatchedBean>>> request(MatchedBean... matchedBeans) {
-            return matchedService.search(matchedBeans[0]);
+        public Call<ResponseBody<List<FriendBean>>> request(FriendBean... friendBeans) {
+            return matchedService.search(friendBeans[0]);
         }
 
         @Override
-        public void onSuccess(List<MatchedBean> matchedBeanList) {
-            Log.d("memo", matchedBeanList.get(0).getMemorandum());
-            memo.append(matchedBeanList.get(0).getMemorandum());
+        public void onSuccess(List<FriendBean> friendBeanList) {
+           System.out.println(friendBeanList.get(0).getRemark()+"=============================");
+           System.out.println(friendBeanList.size()+"=============================");
+           if(friendBeanList.get(0).getRemark()!=null)
+               remark.append(friendBeanList.get(0).getRemark());
         }
 
         @Override
@@ -98,22 +101,21 @@ public class FriendsIntroductionActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.friends_introduction);
-        String blueToothAddress = getIntent().getStringExtra("blueToothAddress");
-        AsyncTasKHelper.execute(userInfoResponseListener, blueToothAddress);
-        matchedBean.setMatchedBlueTooth(blueToothAddress);
+         friendId = getIntent().getStringExtra("friendId");
+        Log.e("friendId: ",friendId );
+        AsyncTasKHelper.execute(userInfoResponseListener, friendId);
+        friendBean.setFriendId(friendId);
         blueToothHelper = new BlueToothHelper(this);
-        matchedBean.setBlueTooth(blueToothHelper.getMyBuleTooth());
-        Log.d("memo", matchedBean.getMatchedBlueTooth());
-        Log.d("memo", matchedBean.getBlueTooth());
-        AsyncTasKHelper.execute(friendsMemoResponseListener, matchedBean);
+        friendBean.setMatchmakerId(blueToothHelper.getUserId());
+        AsyncTasKHelper.execute(friendsMemoResponseListener, friendBean);
 
         userName = (TextView) findViewById(R.id.friends_name);
-        company = (TextView) findViewById(R.id.friends_company);
-        position = (TextView) findViewById(R.id.friends_position);
-        email = (TextView) findViewById(R.id.friends_email);
+        profession = (TextView) findViewById(R.id.friends_profession);
+        gender = (TextView) findViewById(R.id.friends_gender);
+        email = (TextView) findViewById(R.id.friends_mail);
         tel = (TextView) findViewById(R.id.friends_tel);
         avatar = (ImageView) findViewById(R.id.friends_photo);
-        memo = (TextView) findViewById(R.id.friends_memo);
+        remark = (TextView) findViewById(R.id.friends_memo);
         avatarHelper = new AvatarHelper();
         editButton = (Button) findViewById(R.id.editFriendsProfileButton);
         editButton.setOnClickListener(editMemoButton);
@@ -151,7 +153,7 @@ public class FriendsIntroductionActivity extends AppCompatActivity {
         Log.d("add", "openDB");
         DH = new DBHelper(this);
         userInformationDAO = new UserInformationDAO(DH);
-        matchedDAO = new MatchedDAO(DH);
+        friendDAO = new FriendDAO(DH);
 
     }
 
@@ -166,7 +168,7 @@ public class FriendsIntroductionActivity extends AppCompatActivity {
         Intent intent = new Intent();
         intent.setClass(FriendsIntroductionActivity.this, FriendsMemoActivity.class);
         Bundle bundle = new Bundle();
-        bundle.putString("blueToothAddress",getIntent().getStringExtra("blueToothAddress"));
+        bundle.putString("friendId",getIntent().getStringExtra("friendId"));
         intent.putExtras(bundle);
         startActivity(intent);
     }
