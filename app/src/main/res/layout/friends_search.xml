@@ -6,7 +6,7 @@
     android:layout_height="match_parent">
 
     <androidx.appcompat.widget.Toolbar
-        android:id="@+id/friendsFilter_toolbar"
+        android:id="@+id/friendsSearch_toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="?attr/colorPrimary"
@@ -25,34 +25,46 @@
             android:orientation="horizontal">
 
             <ImageButton
-                android:id="@+id/friendsFilter_toolbar_backIcon"
+                android:id="@+id/friendsSearch_toolbar_backIcon"
                 style="@style/search_back"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
 
-            <EditText
-                android:id="@+id/friendsFilter_searchbar"
-                style="@style/search_fill"
-                android:layout_weight="1" />
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1">
+
+                <EditText
+                    android:id="@+id/friendsSearch_searchbar"
+                    style="@style/search_fill"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_weight="1"
+                    app:layout_constraintStart_toStartOf="parent"
+                    tools:ignore="MissingConstraints"
+                    tools:layout_editor_absoluteY="0dp" />
+
+                <ImageButton
+                    android:id="@+id/friendsSearch_searchbar_cancelIcon"
+                    android:layout_width="12dp"
+                    android:layout_height="12dp"
+                    android:layout_gravity="center"
+                    android:layout_marginRight="10dp"
+                    android:background="@drawable/ic_cancel_16dp"
+                    app:layout_constraintBottom_toBottomOf="@id/friendsSearch_searchbar"
+                    app:layout_constraintEnd_toEndOf="@id/friendsSearch_searchbar"
+                    app:layout_constraintTop_toTopOf="@id/friendsSearch_searchbar" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
             <ImageButton
-                android:id="@+id/friendsFilter_searchbar_cancelIcon"
-                android:layout_width="12dp"
-                android:layout_height="12dp"
-                android:layout_gravity="center"
-                android:layout_marginRight="10dp"
-                android:background="@drawable/ic_cancel_16dp"
-                app:layout_constraintBottom_toBottomOf="@id/friendsFilter_searchbar"
-                app:layout_constraintEnd_toEndOf="@id/friendsFilter_searchbar"
-                app:layout_constraintTop_toTopOf="@id/friendsFilter_searchbar" />
-
-            <ImageButton
-                android:id="@+id/friendsFilter_toolbar_filterIcon"
+                android:id="@+id/friendsSearch_toolbar_filterIcon"
                 android:layout_width="20dp"
                 android:layout_height="20dp"
                 android:layout_gravity="center"
                 android:background="@drawable/ic_filter" />
-
         </LinearLayout>
 
     </androidx.appcompat.widget.Toolbar>
@@ -65,7 +77,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/friendsFilter_toolbar"
+        app:layout_constraintTop_toBottomOf="@+id/friendsSearch_toolbar"
         app:layout_constraintVertical_bias="1.0" />
 
     <com.google.android.material.bottomnavigation.BottomNavigationView

@@ -33,9 +33,9 @@ public class FriendsSearchActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.friends_search);
         openDB();
-        back = (ImageButton) findViewById(R.id.friendsFilter_toolbar_backIcon);
+        back = (ImageButton) findViewById(R.id.friendsSearch_toolbar_backIcon);
         back.setOnClickListener(backFriendsClick);
-        filter = (ImageButton) findViewById(R.id.friendsFilter_toolbar_filterIcon);
+        filter = (ImageButton) findViewById(R.id.friendsSearch_toolbar_filterIcon);
         filter.setOnClickListener(friendsFilterClick);
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
         bottomNavigationView.setSelectedItemId(R.id.menu_friends);
