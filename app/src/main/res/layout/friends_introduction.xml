@@ -12,7 +12,7 @@
         android:layout_marginStart="23dp"
         android:layout_marginLeft="23dp"
         android:layout_marginTop="52dp"
-        android:text="簡歷"
+        android:text="好友簡歷"
         android:textColor="@color/colorAlmostBlack"
         android:textSize="24sp"
         android:textStyle="bold"
@@ -72,14 +72,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:text="公司"
+                android:text="職業"
                 android:textColor="@color/colorLabelGray"
                 app:layout_constraintStart_toStartOf="@+id/editFriendsProfileButton"
                 app:layout_constraintTop_toBottomOf="@+id/editFriendsProfileButton"
                 tools:ignore="MissingConstraints" />
 
             <TextView
-                android:id="@+id/friends_company"
+                android:id="@+id/friends_profession"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
@@ -89,46 +89,46 @@
                 app:layout_constraintTop_toBottomOf="@+id/label_friendsProfile" />
 
             <TextView
-                android:id="@+id/label_friends_position"
+                android:id="@+id/label_friends_gender"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:text="職稱"
+                android:text="性別"
                 android:textColor="@color/colorLabelGray"
-                app:layout_constraintStart_toStartOf="@+id/friends_company"
-                app:layout_constraintTop_toBottomOf="@+id/friends_company"
+                app:layout_constraintStart_toStartOf="@+id/friends_profession"
+                app:layout_constraintTop_toBottomOf="@+id/friends_profession"
                 tools:ignore="MissingConstraints" />
 
             <TextView
-                android:id="@+id/friends_position"
+                android:id="@+id/friends_gender"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:text=""
                 android:textColor="@color/colorAlmostBlack"
-                app:layout_constraintStart_toStartOf="@+id/label_friends_position"
-                app:layout_constraintTop_toBottomOf="@+id/label_friends_position" />
+                app:layout_constraintStart_toStartOf="@+id/label_friends_gender"
+                app:layout_constraintTop_toBottomOf="@+id/label_friends_gender" />
 
             <TextView
-                android:id="@+id/label_friends_email"
+                android:id="@+id/label_friends_mail"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:text="信箱"
                 android:textColor="@color/colorLabelGray"
-                app:layout_constraintStart_toStartOf="@+id/friends_position"
-                app:layout_constraintTop_toBottomOf="@+id/friends_position"
+                app:layout_constraintStart_toStartOf="@+id/friends_gender"
+                app:layout_constraintTop_toBottomOf="@+id/friends_gender"
                 tools:ignore="MissingConstraints" />
 
             <TextView
-                android:id="@+id/friends_email"
+                android:id="@+id/friends_mail"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:text=""
                 android:textColor="@color/colorAlmostBlack"
-                app:layout_constraintStart_toStartOf="@+id/label_friends_email"
-                app:layout_constraintTop_toBottomOf="@+id/label_friends_email" />
+                app:layout_constraintStart_toStartOf="@+id/label_friends_mail"
+                app:layout_constraintTop_toBottomOf="@+id/label_friends_mail" />
 
             <TextView
                 android:id="@+id/label_friends_tel"
@@ -137,8 +137,8 @@
                 android:layout_marginTop="8dp"
                 android:text="電話"
                 android:textColor="@color/colorLabelGray"
-                app:layout_constraintStart_toStartOf="@+id/friends_email"
-                app:layout_constraintTop_toBottomOf="@+id/friends_email"
+                app:layout_constraintStart_toStartOf="@+id/friends_mail"
+                app:layout_constraintTop_toBottomOf="@+id/friends_mail"
                 tools:ignore="MissingConstraints" />
 
 
