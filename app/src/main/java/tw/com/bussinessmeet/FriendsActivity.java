@@ -16,6 +16,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
@@ -42,7 +43,7 @@ public class FriendsActivity extends AppCompatActivity implements FriendsRecycle
     private DBHelper DH = null;
     private TextView searchbar;
     private FriendDAO friendDAO;
-    private MatchedServiceImpl matchedService = new MatchedServiceImpl() ;
+    private MatchedServiceImpl matchedService = new MatchedServiceImpl();
     private UserInformationServiceImpl userInformationService = new UserInformationServiceImpl();
     private BlueToothHelper blueToothHelper;
     private RecyclerView recyclerViewFriends;
@@ -58,12 +59,12 @@ public class FriendsActivity extends AppCompatActivity implements FriendsRecycle
 
                 @Override
                 public void onSuccess(List<FriendBean> friendBeanList) {
-                    Log.e("FriendBean","success");
+                    Log.e("FriendBean", "success");
                     if (friendBeanList.size() > 1 || (friendBeanList.size() == 1 && (friendBeanList.get(0).getCreateDate() != null && !friendBeanList.get(0).equals("")))) {
 
-                        for(FriendBean friendBean : friendBeanList) {
-                        AsyncTasKHelper.execute(getByIdResponseListener, friendBean.getFriendId());
-                        Log.e("FriendBean", String.valueOf(friendBean));
+                        for (FriendBean friendBean : friendBeanList) {
+                            AsyncTasKHelper.execute(getByIdResponseListener, friendBean.getFriendId());
+                            Log.e("FriendBean", String.valueOf(friendBean));
                         }
                     }
                 }
@@ -83,7 +84,7 @@ public class FriendsActivity extends AppCompatActivity implements FriendsRecycle
 
                 @Override
                 public void onSuccess(UserInformationBean userInformationBean) {
-                    Log.e("FriendBean","user");
+                    Log.e("FriendBean", "user");
                     friendsRecyclerViewAdapter.dataInsert(userInformationBean);
                 }
 
@@ -121,13 +122,15 @@ public class FriendsActivity extends AppCompatActivity implements FriendsRecycle
         blueToothHelper = new BlueToothHelper(this);
         FriendBean friendBean = new FriendBean();
         friendBean.setMatchmakerId(blueToothHelper.getUserId());
-        AsyncTasKHelper.execute(searchResponseListener,friendBean);
+        AsyncTasKHelper.execute(searchResponseListener, friendBean);
+    }
 
     private void openDB() {
         Log.d("add", "openDB");
         DH = new DBHelper(this);
         userInformationDAO = new UserInformationDAO(DH);
         friendDAO = new FriendDAO(DH);
+    }
 
     private void createRecyclerViewFriends() {
         recyclerViewFriends.setLayoutManager(new LinearLayoutManager(this));
@@ -143,7 +146,7 @@ public class FriendsActivity extends AppCompatActivity implements FriendsRecycle
         Intent intent = new Intent();
         intent.setClass(this, FriendsTimelineActivity.class);
         Bundle bundle = new Bundle();
-        bundle.putString("friendId",friendsRecyclerViewAdapter.getUserInformation(position).getUserId());
+        bundle.putString("friendId", friendsRecyclerViewAdapter.getUserInformation(position).getUserId());
         intent.putExtras(bundle);
         startActivity(intent);
 
@@ -172,7 +175,7 @@ public class FriendsActivity extends AppCompatActivity implements FriendsRecycle
         Intent intent = new Intent();
         intent.setClass(FriendsActivity.this, FriendsSearchActivity.class);
         Bundle bundle = new Bundle();
-        bundle.putString("blueToothAddress",getIntent().getStringExtra("blueToothAddress"));
+        bundle.putString("blueToothAddress", getIntent().getStringExtra("blueToothAddress"));
         intent.putExtras(bundle);
         startActivity(intent);
     }

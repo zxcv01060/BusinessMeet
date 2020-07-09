@@ -1,9 +1,9 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+    <style name="AppTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
         <!-- Customize your theme here. -->
-        <item name="colorPrimary">?android:attr/windowBackground</item>
+        <item name="colorPrimary">@color/white</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
     </style>
 
@@ -63,6 +63,42 @@
         <item name="android:textSize">12sp</item>
         <item name="android:paddingLeft">14dp</item>
         <item name="android:background">@drawable/search_radius</item>
+    </style>
+
+    <!-- Button. -->
+    <style name="button" parent="Widget.MaterialComponents.Button.OutlinedButton">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:minWidth">0dp</item>
+        <item name="android:minHeight">0dp</item>
+    </style>
+
+    <!-- Profile basic information title. -->
+    <style name="friends_profile_information_basic_title">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:layout_marginTop">12dp</item>
+        <item name="android:textColor">@color/grey_60</item>
+    </style>
+
+    <!-- Profile input. -->
+    <style name="input">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:layout_marginTop">6dp</item>
+        <item name="android:textColor">@color/black</item>
+    </style>
+
+    <!-- Profile memo information title. -->
+    <style name="friends_profile_information_memo_title">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:layout_marginTop">18dp</item>
+        <item name="android:textColor">@color/grey_60</item>
     </style>
 
 </resources>
