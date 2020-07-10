@@ -27,6 +27,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -37,6 +38,7 @@ import java.util.List;
 public class FriendsTimelineActivity extends AppCompatActivity {
     private TextView userName, company, position, email, tel, memo;
     private Button editButton;
+    private ImageButton goProfile;
     private ImageView avatar;
     private UserInformationDAO userInformationDAO;
     private DBHelper DH;
@@ -76,6 +78,8 @@ public class FriendsTimelineActivity extends AppCompatActivity {
         matchedBean.setMatchmakerId(blueToothHelper.getUserId());
 
         userName = (TextView) findViewById(R.id.friends_name);
+        goProfile = (ImageButton) findViewById(R.id.goProfile);
+        goProfile.setOnClickListener(goProfileClick);
         position = (TextView) findViewById(R.id.friends_position);
         avatar = (ImageView) findViewById(R.id.friends_photo);
         avatarHelper = new AvatarHelper();
@@ -133,6 +137,22 @@ public class FriendsTimelineActivity extends AppCompatActivity {
         userInformationDAO = new UserInformationDAO(DH);
         matchedDAO = new FriendDAO(DH);
 
+    }
+
+    public View.OnClickListener goProfileClick = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            changeToFriendsIntroductionActivityPage();
+        }
+    };
+
+    public void changeToFriendsIntroductionActivityPage() {
+        Intent intent = new Intent();
+        intent.setClass(FriendsTimelineActivity.this, FriendsIntroductionActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putString("friendId",getIntent().getStringExtra("friendId"));
+        intent.putExtras(bundle);
+        startActivity(intent);
     }
 
     //Perform ItemSelectedListener

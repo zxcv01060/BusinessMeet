@@ -35,7 +35,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import java.util.List;
 
 public class FriendsIntroductionActivity extends AppCompatActivity {
-    private TextView userName, profession, gender, email, tel, remark;
+    private TextView userName, id, profession, gender, email, tel, remark;
     private Button editButton;
     private ImageView avatar;
     private String friendId;
@@ -55,7 +55,7 @@ public class FriendsIntroductionActivity extends AppCompatActivity {
 
         @Override
         public void onSuccess(UserInformationBean userInformationBean) {
-            if(userInformationBean ==null){
+            if (userInformationBean == null) {
                 Cursor cursor = userInformationDAO.getById(friendId);
                 userInformationBean.setName(cursor.getString(cursor.getColumnIndex("name")));
                 userInformationBean.setProfession(cursor.getString(cursor.getColumnIndex("profession")));
@@ -64,6 +64,7 @@ public class FriendsIntroductionActivity extends AppCompatActivity {
                 userInformationBean.setTel(cursor.getString(cursor.getColumnIndex("tel")));
                 userInformationBean.setAvatar(cursor.getString(cursor.getColumnIndex("avatar")));
             }
+            id.append(userInformationBean.getUserId());
             userName.append(userInformationBean.getName());
             profession.append(userInformationBean.getProfession());
             gender.append(userInformationBean.getGender());
@@ -85,10 +86,10 @@ public class FriendsIntroductionActivity extends AppCompatActivity {
 
         @Override
         public void onSuccess(List<FriendBean> friendBeanList) {
-           System.out.println(friendBeanList.get(0).getRemark()+"=============================");
-           System.out.println(friendBeanList.size()+"=============================");
-           if(friendBeanList.get(0).getRemark()!=null)
-               remark.append(friendBeanList.get(0).getRemark());
+            System.out.println(friendBeanList.get(0).getRemark() + "=============================");
+            System.out.println(friendBeanList.size() + "=============================");
+            if (friendBeanList.get(0).getRemark() != null)
+                remark.append(friendBeanList.get(0).getRemark());
         }
 
         @Override
@@ -100,26 +101,26 @@ public class FriendsIntroductionActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.friends_introduction);
-         friendId = getIntent().getStringExtra("friendId");
-        Log.e("friendId: ",friendId );
+        setContentView(R.layout.friends_profile);
+        openDB();
+        friendId = getIntent().getStringExtra("friendId");
         AsyncTasKHelper.execute(userInfoResponseListener, friendId);
         friendBean.setFriendId(friendId);
         blueToothHelper = new BlueToothHelper(this);
         friendBean.setMatchmakerId(blueToothHelper.getUserId());
         AsyncTasKHelper.execute(friendsMemoResponseListener, friendBean);
 
-        userName = (TextView) findViewById(R.id.friends_name);
-        profession = (TextView) findViewById(R.id.friends_profession);
-        gender = (TextView) findViewById(R.id.friends_gender);
-        email = (TextView) findViewById(R.id.friends_mail);
-        tel = (TextView) findViewById(R.id.friends_tel);
-        avatar = (ImageView) findViewById(R.id.friends_photo);
-        remark = (TextView) findViewById(R.id.friends_memo);
+        userName = (TextView) findViewById(R.id.friends_profile_information_name);
+        id = (TextView) findViewById(R.id.friends_profile_information_id);
+        profession = (TextView) findViewById(R.id.friends_profile_information_occupation);
+        gender = (TextView) findViewById(R.id.friends_profile_information_gender);
+        email = (TextView) findViewById(R.id.friends_profile_information_email);
+        tel = (TextView) findViewById(R.id.friends_profile_information_phone);
+        avatar = (ImageView) findViewById(R.id.friends_profile_information_photo);
+        //remark = (TextView) findViewById(R.id.friends_memo);
         avatarHelper = new AvatarHelper();
-        editButton = (Button) findViewById(R.id.editFriendsProfileButton);
+        editButton = (Button) findViewById(R.id.friends_profile_information_edit);
         editButton.setOnClickListener(editMemoButton);
-
 
 
         //searchUserInformation();
@@ -130,7 +131,7 @@ public class FriendsIntroductionActivity extends AppCompatActivity {
         //Set Home
         bottomNavigationView.setSelectedItemId(R.id.menu_friends);
         bottomNavigationView.setOnNavigationItemSelectedListener(navListener);
-        openDB();
+
         bottomNavigationView.setItemIconTintList(null);  //顯示頭像
         Menu BVMenu = bottomNavigationView.getMenu();
         AvatarHelper avatarHelper = new AvatarHelper();
@@ -168,7 +169,7 @@ public class FriendsIntroductionActivity extends AppCompatActivity {
         Intent intent = new Intent();
         intent.setClass(FriendsIntroductionActivity.this, FriendsMemoActivity.class);
         Bundle bundle = new Bundle();
-        bundle.putString("friendId",getIntent().getStringExtra("friendId"));
+        bundle.putString("friendId", getIntent().getStringExtra("friendId"));
         intent.putExtras(bundle);
         startActivity(intent);
     }
@@ -192,8 +193,8 @@ public class FriendsIntroductionActivity extends AppCompatActivity {
                             return true;
                         case R.id.menu_friends:
                             startActivity(new Intent(getApplicationContext()
-                                    ,FriendsActivity.class));
-                            overridePendingTransition(0,0);
+                                    , FriendsActivity.class));
+                            overridePendingTransition(0, 0);
                             return true;
                     }
                     return false;
