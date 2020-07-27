@@ -50,7 +50,7 @@ import tw.com.bussinessmeet.bean.ResponseBody;
 import tw.com.bussinessmeet.bean.UserInformationBean;
 import tw.com.bussinessmeet.dao.FriendDAO;
 import tw.com.bussinessmeet.dao.UserInformationDAO;
-import tw.com.bussinessmeet.service.Impl.MatchedServiceImpl;
+import tw.com.bussinessmeet.service.Impl.FriendServiceImpl;
 import tw.com.bussinessmeet.service.Impl.UserInformationServiceImpl;
 
 import static java.lang.Math.abs;
@@ -67,7 +67,7 @@ public class BlueToothHelper {
 
     private static final String CHANNEL_1_ID = "channel1" ;
     private UserInformationServiceImpl userInformationService = new UserInformationServiceImpl() ;
-    private MatchedServiceImpl matchedService = new MatchedServiceImpl();
+    private FriendServiceImpl matchedService = new FriendServiceImpl();
     private MatchedDeviceRecyclerViewAdapter matchedDeviceRecyclerViewAdapter;
     private UnmatchedDeviceRecyclerViewAdapter unmatchedDeviceRecyclerViewAdapter;
 

@@ -29,7 +29,7 @@ import tw.com.bussinessmeet.bean.ResponseBody;
 import tw.com.bussinessmeet.bean.UserInformationBean;
 import tw.com.bussinessmeet.helper.AsyncTasKHelper;
 import tw.com.bussinessmeet.helper.BlueToothHelper;
-import tw.com.bussinessmeet.service.Impl.MatchedServiceImpl;
+import tw.com.bussinessmeet.service.Impl.FriendServiceImpl;
 import tw.com.bussinessmeet.service.Impl.UserInformationServiceImpl;
 import tw.com.bussinessmeet.dao.FriendDAO;
 import tw.com.bussinessmeet.dao.UserInformationDAO;
@@ -40,7 +40,7 @@ public class FriendsActivity extends AppCompatActivity implements FriendsRecycle
     private UserInformationDAO userInformationDAO;
     private DBHelper DH = null;
     private FriendDAO friendDAO;
-    private MatchedServiceImpl matchedService = new MatchedServiceImpl() ;
+    private FriendServiceImpl matchedService = new FriendServiceImpl() ;
     private UserInformationServiceImpl userInformationService = new UserInformationServiceImpl();
     private BlueToothHelper blueToothHelper;
     private RecyclerView recyclerViewFriends;

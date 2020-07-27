@@ -13,7 +13,7 @@ import tw.com.bussinessmeet.helper.AsyncTasKHelper;
 import tw.com.bussinessmeet.helper.AvatarHelper;
 import tw.com.bussinessmeet.helper.BlueToothHelper;
 import tw.com.bussinessmeet.helper.DBHelper;
-import tw.com.bussinessmeet.service.Impl.MatchedServiceImpl;
+import tw.com.bussinessmeet.service.Impl.FriendServiceImpl;
 import tw.com.bussinessmeet.service.Impl.UserInformationServiceImpl;
 
 import android.content.Intent;
@@ -25,14 +25,11 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-
-import java.util.List;
 
 public class FriendsTimelineActivity extends AppCompatActivity {
     private TextView userName, company, position, email, tel, memo;
@@ -45,7 +42,7 @@ public class FriendsTimelineActivity extends AppCompatActivity {
     private FriendDAO matchedDAO;
     private FriendBean matchedBean = new FriendBean();
     private UserInformationServiceImpl userInformationService = new UserInformationServiceImpl();
-    private MatchedServiceImpl matchedService = new MatchedServiceImpl();
+    private FriendServiceImpl matchedService = new FriendServiceImpl();
     private AsyncTasKHelper.OnResponseListener<String, UserInformationBean> userInfoResponseListener = new AsyncTasKHelper.OnResponseListener<String, UserInformationBean>() {
     private Toolbar toolbar;
 

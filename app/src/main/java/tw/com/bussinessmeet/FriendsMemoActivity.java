@@ -18,7 +18,7 @@ import tw.com.bussinessmeet.dao.FriendDAO;
 import tw.com.bussinessmeet.helper.AsyncTasKHelper;
 import tw.com.bussinessmeet.helper.BlueToothHelper;
 import tw.com.bussinessmeet.helper.DBHelper;
-import tw.com.bussinessmeet.service.Impl.MatchedServiceImpl;
+import tw.com.bussinessmeet.service.Impl.FriendServiceImpl;
 
 
 public class FriendsMemoActivity extends AppCompatActivity {
@@ -26,7 +26,7 @@ public class FriendsMemoActivity extends AppCompatActivity {
     private String friendId;
     private ImageButton editProfileConfirmButtom;
     private BlueToothHelper blueToothHelper;
-    private MatchedServiceImpl matchedService = new MatchedServiceImpl();
+    private FriendServiceImpl matchedService = new FriendServiceImpl();
     private AsyncTasKHelper.OnResponseListener<FriendBean, FriendBean> updateResponseListener = new AsyncTasKHelper.OnResponseListener<FriendBean, FriendBean>() {
         @Override
         public Call<ResponseBody<FriendBean>> request(FriendBean... friendBeans) {
