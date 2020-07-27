@@ -9,7 +9,7 @@ import tw.com.bussinessmeet.bean.Empty;
 import tw.com.bussinessmeet.bean.FriendBean;
 import tw.com.bussinessmeet.bean.ResponseBody;
 
-public interface MatchedService {
+public interface FriendService {
     String baseRoute = "friend/";
     @POST(baseRoute+"search")
     Call<ResponseBody<List<FriendBean>>> search(@Body FriendBean friendBean);

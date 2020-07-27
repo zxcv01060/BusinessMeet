@@ -13,7 +13,7 @@ import tw.com.bussinessmeet.helper.AsyncTasKHelper;
 import tw.com.bussinessmeet.helper.AvatarHelper;
 import tw.com.bussinessmeet.helper.BlueToothHelper;
 import tw.com.bussinessmeet.helper.DBHelper;
-import tw.com.bussinessmeet.service.Impl.MatchedServiceImpl;
+import tw.com.bussinessmeet.service.Impl.FriendServiceImpl;
 import tw.com.bussinessmeet.service.Impl.UserInformationServiceImpl;
 
 import android.content.Intent;
@@ -46,7 +46,7 @@ public class FriendsIntroductionActivity extends AppCompatActivity {
     private FriendDAO friendDAO;
     private FriendBean friendBean = new FriendBean();
     private UserInformationServiceImpl userInformationService = new UserInformationServiceImpl();
-    private MatchedServiceImpl matchedService = new MatchedServiceImpl();
+    private FriendServiceImpl matchedService = new FriendServiceImpl();
     private AsyncTasKHelper.OnResponseListener<String, UserInformationBean> userInfoResponseListener = new AsyncTasKHelper.OnResponseListener<String, UserInformationBean>() {
         @Override
         public Call<ResponseBody<UserInformationBean>> request(String... userId) {
