@@ -65,7 +65,7 @@ public class BlueToothHelper {
     private AvatarHelper avatarHelper;
     private ImageView avatar;
 
-    private static final String CHANNEL_1_ID = "channel1" ;
+
     private UserInformationServiceImpl userInformationService = new UserInformationServiceImpl() ;
     private FriendServiceImpl matchedService = new FriendServiceImpl();
     private MatchedDeviceRecyclerViewAdapter matchedDeviceRecyclerViewAdapter;
