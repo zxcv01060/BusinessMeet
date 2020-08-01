@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="tw.com.bussinessmeet">
+    package="tw.com.businessmeet">
     <!-- 網路許可 -->
     <application
         android:allowBackup="true"
