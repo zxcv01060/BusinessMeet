@@ -1,5 +1,6 @@
 package tw.com.bussinessmeet;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 
@@ -30,7 +31,7 @@ public class MainActivity extends AppCompatActivity  {
         blueToothHelper = new BlueToothHelper(this);
         blueToothHelper.startBuleTooth();
         blueToothHelper.openGPS(this);
-
+        permission = false;
         Thread checkPermission = new Thread(){
             @Override
             public void run() {
@@ -57,4 +58,10 @@ public class MainActivity extends AppCompatActivity  {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         blueToothHelper.requestPermissionsResult(requestCode,grantResults);
     }
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        blueToothHelper.activityResult(requestCode, resultCode, data);
+    }//onActivityResult
 }

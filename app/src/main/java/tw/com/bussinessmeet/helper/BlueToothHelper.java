@@ -334,7 +334,7 @@ public class BlueToothHelper {
     public void bluetooth(Context context) {
 //        Intent enableBtIntent = new Intent((BluetoothAdapter.ACTION_REQUEST_ENABLE));
 //        activity.startActivityForResult(enableBtIntent, RequestCode.REQUEST_ENABLE_BT);
-        discoverable();
+        openBlueTooth();
     }
 
     public void openGPS(Context context) {
@@ -354,14 +354,15 @@ public class BlueToothHelper {
 // 開始搜尋
         mBluetoothAdapter.startDiscovery();
     }
-    public void discoverable(){
+    public void openBlueTooth(){
         Intent enable = new Intent(BluetoothAdapter.ACTION_REQUEST_DISCOVERABLE);
         enable.putExtra(
                 BluetoothAdapter.EXTRA_DISCOVERABLE_DURATION,
                 3600);
         activity.startActivityForResult(enable,RequestCode.REQUEST_DISCOVERABLE);
-        activity.unregisterReceiver(receiver);
+//        activity.unregisterReceiver(receiver);
     }
+
 
 
     private Handler mBLHandler = new Handler() {
@@ -378,6 +379,19 @@ public class BlueToothHelper {
         }
     };
 
+    public void activityResult(int requestCode, int resultCode, Intent data) {
+
+
+        if(requestCode == RequestCode.REQUEST_DISCOVERABLE){
+
+            if(!mBluetoothAdapter.isEnabled()){
+                Toast.makeText(activity, "開啟藍芽位置才可搜尋附近藍牙裝置，拒絕將無法使用本應用程式。", Toast.LENGTH_LONG).show();
+                openBlueTooth();
+            }else{
+                Toast.makeText(activity, "已開啟藍牙", Toast.LENGTH_LONG).show();
+            }
+        }
+    }//onActivityResult
     public void requestPermissionsResult(int requestCode, int[] grantResults) {
         if (requestCode == RequestCode.REQUEST_LOCATION) {
             // 因為這個 method 會帶回任何權限視窗的結果，所以我們要用 requestCode 來判斷這是哪一個權限
@@ -408,19 +422,19 @@ public class BlueToothHelper {
                 checkPermission();
 
             }
-        }else if(requestCode == RequestCode.REQUEST_DISCOVERABLE){
-//            Toast.makeText(activity,"test",Toast.LENGTH_LONG);
         }
     }
 
     public boolean checkPermission() {
 
         int permissionCheck = ContextCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_COARSE_LOCATION);
-        if (permissionCheck == PackageManager.PERMISSION_GRANTED) {
-            Intent intent = new Intent();
-            intent.setClass(activity, AddIntroductionActivity.class);
-            activity.startActivity(intent);
-            return true;
+        if (permissionCheck == PackageManager.PERMISSION_GRANTED && mBluetoothAdapter.isEnabled()) {
+                System.out.println("mBluetoothAdapter.isEnabled() : " + mBluetoothAdapter.isEnabled());
+                Intent intent = new Intent();
+                intent.setClass(activity, AddIntroductionActivity.class);
+                activity.startActivity(intent);
+                return true;
+
         } else {
             return false;
         }
