@@ -3,6 +3,8 @@ package tw.com.businessmeet.bean;
 import java.util.Date;
 
 public class ProblemReportBean {
+
+    private static String[] column = new String[]{"problem_report_no","content","user_id","status","start_date","end_date","create_date","modify_date"};
     private Integer problemReportNo;
     private String content;
     private String userId;
@@ -12,6 +14,10 @@ public class ProblemReportBean {
     private String createDate;
     private String modifyDate;
     private Integer statusCode;
+
+    public static String[] getColumn() {
+        return column;
+    }
 
     public Integer getProblemReportNo() {
         return problemReportNo;

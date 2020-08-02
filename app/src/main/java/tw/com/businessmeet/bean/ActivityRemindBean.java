@@ -3,12 +3,17 @@ package tw.com.businessmeet.bean;
 import java.util.Date;
 
 public class ActivityRemindBean {
+    private static String[] column = new String[]{"activityRemind_no","time","activity_no","create_date","modify_date"};
     private Integer activityRemindNo;
     private String time;
     private Integer activityNo;
     private String createDate;
     private String modifyDate;
     private Integer statusCode;
+
+    public static String[] getColumn() {
+        return column;
+    }
 
     public Integer getActivityRemindNo() {
         return activityRemindNo;

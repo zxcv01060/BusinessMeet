@@ -3,6 +3,8 @@ package tw.com.businessmeet.bean;
 import java.util.Date;
 
 public class UserCustomizationBean {
+    private static String[] column = new String[]{ "user_customization","user_id","column_name", "content","create_date","modify_date"};
+
     private Integer userCustomizationNo;
     private String userId;
     private String columnName;
@@ -10,6 +12,10 @@ public class UserCustomizationBean {
     private String createDate;
     private String modifyDate;
     private Integer statusCode;
+
+    public static String[] getColumn() {
+        return column;
+    }
 
     public Integer getUserCustomizationNo() {
         return userCustomizationNo;

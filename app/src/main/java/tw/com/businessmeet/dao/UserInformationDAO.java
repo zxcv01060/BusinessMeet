@@ -15,7 +15,7 @@ import tw.com.businessmeet.helper.DBHelper;
 public class UserInformationDAO {
     private String whereClause = "user_id = ?";
     private String tableName = "user_information";
-    private  String[] column = new String[]{ "user_id","password","name", "gender","mail","profession","bluetooth","avatar","tel","create_date","modify_date"};
+    private  String[] column = UserInformationBean.getColumn();
     private SQLiteDatabase db ;
     private SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     public UserInformationDAO(DBHelper DH){

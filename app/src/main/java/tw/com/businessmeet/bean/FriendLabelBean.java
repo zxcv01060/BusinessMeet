@@ -3,12 +3,18 @@ package tw.com.businessmeet.bean;
 import java.util.Date;
 
 public class FriendLabelBean {
+
+    private static String[] column = new String[]{"friend_label_no","content","friend_customization_no","create_date","modify_date"};
     private Integer friendLabelNo;
     private String content;
     private Integer friendCustomizationNo;
     private String createDate;
     private String modifyDate;
     private Integer statusCode;
+
+    public static String[] getColumn() {
+        return column;
+    }
 
     public Integer getFriendLabelNo() {
         return friendLabelNo;

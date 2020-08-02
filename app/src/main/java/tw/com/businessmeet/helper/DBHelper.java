@@ -75,7 +75,6 @@ public class DBHelper extends SQLiteOpenHelper {
                 "friend_customization_no int    primary key,"+
                 "name    nvarchar(100) not null,"+
                 "friend_no   int not null references "+ _TableName[2] + "(friend_no),"+
-                "user_id varchar(100) not null references "+ _TableName[0] + "(user_id),"+
                 "create_date datetime not null,"+
                 "modify_date datetime    "+
                 ");";
@@ -96,7 +95,6 @@ public class DBHelper extends SQLiteOpenHelper {
                 "modify_date datetime    "+
                 ");";
         db.execSQL(SQL);
-        SimpleDateFormat dataFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         SQL = "create table if not exists "+ _TableName[8] + "("+
                 "timeline_properties_no  int  primary key,"+
                 "name    nvarchar(100) not null,"+
@@ -106,7 +104,7 @@ public class DBHelper extends SQLiteOpenHelper {
         db.execSQL(SQL);
         SQL = "insert into "+_TableName[8]+"(timeline_properties_no,name,create_date,modify_date)"+
                 "values(1,'活動',datetime('now'),null)," +
-                "values(2,'遇見',datetime('now'),null);";
+                "(2,'遇見',datetime('now'),null);";
         db.execSQL(SQL);
 
         SQL = "create table if not exists "+ _TableName[9] + "("+
