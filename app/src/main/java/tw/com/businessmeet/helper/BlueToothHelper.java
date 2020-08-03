@@ -14,8 +14,14 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
+import android.location.Address;
+import android.location.Geocoder;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.provider.Settings;
@@ -28,8 +34,10 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
@@ -42,39 +50,47 @@ import retrofit2.Call;
 import tw.com.businessmeet.AddIntroductionActivity;
 import tw.com.businessmeet.R;
 import tw.com.businessmeet.RequestCode;
+import tw.com.businessmeet.SelfIntroductionActivity;
 import tw.com.businessmeet.adapter.UnmatchedDeviceRecyclerViewAdapter;
 import tw.com.businessmeet.adapter.MatchedDeviceRecyclerViewAdapter;
 import tw.com.businessmeet.background.NotificationService;
 import tw.com.businessmeet.bean.FriendBean;
 import tw.com.businessmeet.bean.ResponseBody;
+import tw.com.businessmeet.bean.TimelineBean;
 import tw.com.businessmeet.bean.UserInformationBean;
 import tw.com.businessmeet.dao.FriendDAO;
+import tw.com.businessmeet.dao.TimelineDAO;
 import tw.com.businessmeet.dao.UserInformationDAO;
 import tw.com.businessmeet.service.Impl.FriendServiceImpl;
+import tw.com.businessmeet.service.Impl.TimelineServiceImpl;
 import tw.com.businessmeet.service.Impl.UserInformationServiceImpl;
 
 import static java.lang.Math.abs;
 import static java.lang.Math.pow;
-public class BlueToothHelper { 
 
+public class BlueToothHelper {
 
+    private double longitude;
+    private double latitude;
     private Activity activity;
     private BluetoothAdapter mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
     private IntentFilter filter;
     private UserInformationDAO userInformationDAO;
+    private TimelineDAO timelineDAO;
     private AvatarHelper avatarHelper;
     private ImageView avatar;
 
-
-    private UserInformationServiceImpl userInformationService = new UserInformationServiceImpl() ;
+    private LocationListener locationListener = new MyLocationListener();
+    private UserInformationServiceImpl userInformationService = new UserInformationServiceImpl();
     private FriendServiceImpl matchedService = new FriendServiceImpl();
+    private TimelineServiceImpl timelineService = new TimelineServiceImpl();
     private MatchedDeviceRecyclerViewAdapter matchedDeviceRecyclerViewAdapter;
     private UnmatchedDeviceRecyclerViewAdapter unmatchedDeviceRecyclerViewAdapter;
 
-    private  Map<String,UserInformationBean> userInformationBeanMap = new HashMap<>();
-    private  Map<String,UserInformationBean> repeatBeanMap = new HashMap<>();
+    private Map<String, UserInformationBean> userInformationBeanMap = new HashMap<>();
+    private Map<String, UserInformationBean> repeatBeanMap = new HashMap<>();
 
-    private  Map<String,UserInformationBean> backgroundBeanMap = new HashMap<>();
+    private Map<String, UserInformationBean> backgroundBeanMap = new HashMap<>();
     private int distance = 0;
     private int backgroundDistance = 0;
     private boolean first = true;
@@ -86,23 +102,27 @@ public class BlueToothHelper {
         public Call<ResponseBody<UserInformationBean>> request(String... blueTooth) {
             return userInformationService.getByBlueTooth(blueTooth[0]);
         }
-        public void onSuccess(UserInformationBean responseBean) {
-            Log.d("blueToothSearch","success");
-                String searchId = responseBean.getUserId();
 
-                userInformationBeanMap.put(searchId,responseBean);
-                String userId = userInformationDAO.getId(responseBean.getBluetooth());
-                if(userId==null)
-                    userInformationDAO.add(responseBean);
-                friendBean = new FriendBean();
-                friendBean.setMatchmakerId(getUserId());
-                friendBean.setFriendId(userInformationBeanMap.get(searchId).getUserId());
-                AsyncTasKHelper.execute(matchedResponseListener, friendBean);
+        public void onSuccess(UserInformationBean responseBean) {
+            Log.d("blueToothSearch", "success");
+            String searchId = responseBean.getUserId();
+
+            userInformationBeanMap.put(searchId, responseBean);
+            String userId = userInformationDAO.getId(responseBean.getBluetooth());
+            if (userId == null)
+                userInformationDAO.add(responseBean);
+            friendBean = new FriendBean();
+            friendBean.setMatchmakerId(getUserId());
+            friendBean.setFriendId(userInformationBeanMap.get(searchId).getUserId());
+            AsyncTasKHelper.execute(matchedResponseListener, friendBean);
         }
+
         @Override
         public void onFail(int status) {
 
-        };
+        }
+
+        ;
     };
 
     private AsyncTasKHelper.OnResponseListener<FriendBean, List<FriendBean>> matchedResponseListener = new AsyncTasKHelper.OnResponseListener<FriendBean, List<FriendBean>>() {
@@ -110,24 +130,26 @@ public class BlueToothHelper {
         public Call<ResponseBody<List<FriendBean>>> request(FriendBean... friendBeans) {
             return matchedService.search(friendBeans[0]);
         }
+
         @Override
         public void onSuccess(List<FriendBean> friendBeanList) {
             FriendBean friendBean = friendBeanList.get(0);
             UserInformationBean userInformationBean = userInformationBeanMap.get(friendBean.getFriendId());
             if (friendBeanList.size() > 1 || (friendBeanList.size() == 1 && (friendBeanList.get(0).getCreateDate() != null && !friendBeanList.get(0).equals("")))) {
-               Toast.makeText(activity,"success",Toast.LENGTH_SHORT);
+                Toast.makeText(activity, "success", Toast.LENGTH_SHORT);
                 matchedDeviceRecyclerViewAdapter.dataInsert(userInformationBean);
                 if (distance <= 5000 && first) {
                     Log.d("sendmess", String.valueOf("==========================="));
 //                    notificationHelper.sendMessage(userInformationBean, friendBeanList.get(0).getMemorandum());
                 }
-            }else{
+            } else {
                 unmatchedDeviceRecyclerViewAdapter.dataInsert(userInformationBean);
             }
         }
+
         @Override
         public void onFail(int status) {
-            Log.d("intomatched","success");
+            Log.d("intomatched", "success");
             //unmatchedDeviceRecyclerViewAdapter.dataInsert(userInformationBean);
         }
     };
@@ -146,19 +168,33 @@ public class BlueToothHelper {
     private AcceptThreadHelper acceptThread;
 
     private NotificationService notificationService = null;
+
+    private LocationManager locationManager;
+
     public BlueToothHelper(Activity activity) {
         DBHelper dbHelper = new DBHelper(activity);
         this.userInformationDAO = new UserInformationDAO(dbHelper);
+        this.timelineDAO = new TimelineDAO(dbHelper);
         this.activity = activity;
     }
+
     public BlueToothHelper(NotificationService notificationService) {
-        Log.e("service ","BlueToothHelper");
+        Log.e("service ", "BlueToothHelper");
         DBHelper dbHelper = new DBHelper(notificationService);
+
+        locationManager = (LocationManager) notificationService.getSystemService(Context.LOCATION_SERVICE);
+        if (ActivityCompat.checkSelfPermission(notificationService, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(notificationService, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, RequestCode.REQUEST_GPS);
+            return;
+        }
+        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 0, locationListener);
+
         this.userInformationDAO = new UserInformationDAO(dbHelper);
+        this.timelineDAO = new TimelineDAO(dbHelper);
         this.notificationService = notificationService;
     }
 
-    public void settingFilter(){
+    public void settingFilter() {
         filter = null;
         filter = new IntentFilter();
         filter.addAction(BluetoothDevice.ACTION_FOUND);
@@ -167,8 +203,8 @@ public class BlueToothHelper {
         filter.addAction(BluetoothAdapter.ACTION_STATE_CHANGED);
     }
 
-    public void searchBlueToothInBackground(){
-        Log.e("service ","searchBlueToothInBackground");
+    public void searchBlueToothInBackground() {
+        Log.e("service ", "searchBlueToothInBackground");
         settingFilter();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             NotificationChannel CHANNEL_1_ID =
@@ -178,9 +214,10 @@ public class BlueToothHelper {
 
         }
         notificationHelper = new NotificationHelper(notificationService);
-        notificationService.registerReceiver(backgroundReceiver,filter);
+        notificationService.registerReceiver(backgroundReceiver, filter);
         mBluetoothAdapter.startDiscovery();
     }
+
     public void searchBlueTooth(UserInformationDAO userInformationDAO, MatchedDeviceRecyclerViewAdapter matchedDeviceRecyclerViewAdapter, UnmatchedDeviceRecyclerViewAdapter unmatchedDeviceRecyclerViewAdapter) {
 
         this.matchedDeviceRecyclerViewAdapter = matchedDeviceRecyclerViewAdapter;
@@ -217,23 +254,20 @@ public class BlueToothHelper {
                 TextView search_title = activity.findViewById(R.id.search_title);
                 search_title.setText("搜尋中...");
                 // 從intent中獲取裝置
-                Log.d("intocode",action);
+                Log.d("intocode", action);
                 BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
-                Log.e("blueToothsearch",device.getAddress());
-                    short rssi = intent.getExtras().getShort(BluetoothDevice.EXTRA_RSSI);
-                    int iRssi = abs(rssi);
-                    // 將藍芽訊號強度換算為距離
-                    double power = (iRssi - 59) / 25.0;
+                Log.e("blueToothsearch", device.getAddress());
+                short rssi = intent.getExtras().getShort(BluetoothDevice.EXTRA_RSSI);
+                int iRssi = abs(rssi);
+                // 將藍芽訊號強度換算為距離
+                double power = (iRssi - 59) / 25.0;
 //                        String distance = new Formatter().format("%.2f", pow(10, power)).toString();
-                    distance = (int) pow(10, power);
-                    String searchAddress = device.getAddress();
-                    first = excludeRepeat(searchAddress);
-                    if(first) {
-                        AsyncTasKHelper.execute(getByIdResponseListener, searchAddress);
-                    }
-
-
-
+                distance = (int) pow(10, power);
+                String searchAddress = device.getAddress();
+                first = excludeRepeat(searchAddress);
+                if (first) {
+                    AsyncTasKHelper.execute(getByIdResponseListener, searchAddress);
+                }
 
 
             } else if (BluetoothAdapter.ACTION_DISCOVERY_FINISHED.equals(action)) {
@@ -269,7 +303,7 @@ public class BlueToothHelper {
 
         @Override
         public void onReceive(Context context, Intent intent) {
-            Log.e("testbackground","success");
+            Log.e("testbackground", "success");
 
             // 收到的廣播型別
             String action = intent.getAction();
@@ -308,6 +342,7 @@ public class BlueToothHelper {
 
 
     };
+
 
     public void startBuleTooth() {
         mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
@@ -354,16 +389,15 @@ public class BlueToothHelper {
 // 開始搜尋
         mBluetoothAdapter.startDiscovery();
     }
-    public void openBlueTooth(){
+
+    public void openBlueTooth() {
         Intent enable = new Intent(BluetoothAdapter.ACTION_REQUEST_DISCOVERABLE);
         enable.putExtra(
                 BluetoothAdapter.EXTRA_DISCOVERABLE_DURATION,
                 3600);
-        activity.startActivityForResult(enable,RequestCode.REQUEST_DISCOVERABLE);
+        activity.startActivityForResult(enable, RequestCode.REQUEST_DISCOVERABLE);
 //        activity.unregisterReceiver(receiver);
     }
-
-
 
     private Handler mBLHandler = new Handler() {
         @Override
@@ -379,19 +413,21 @@ public class BlueToothHelper {
         }
     };
 
+
     public void activityResult(int requestCode, int resultCode, Intent data) {
 
 
-        if(requestCode == RequestCode.REQUEST_DISCOVERABLE){
+        if (requestCode == RequestCode.REQUEST_DISCOVERABLE) {
 
-            if(!mBluetoothAdapter.isEnabled()){
+            if (!mBluetoothAdapter.isEnabled()) {
                 Toast.makeText(activity, "開啟藍芽位置才可搜尋附近藍牙裝置，拒絕將無法使用本應用程式。", Toast.LENGTH_LONG).show();
                 openBlueTooth();
-            }else{
+            } else {
                 Toast.makeText(activity, "已開啟藍牙", Toast.LENGTH_LONG).show();
             }
         }
     }//onActivityResult
+
     public void requestPermissionsResult(int requestCode, int[] grantResults) {
         if (requestCode == RequestCode.REQUEST_LOCATION) {
             // 因為這個 method 會帶回任何權限視窗的結果，所以我們要用 requestCode 來判斷這是哪一個權限
@@ -429,11 +465,11 @@ public class BlueToothHelper {
 
         int permissionCheck = ContextCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_COARSE_LOCATION);
         if (permissionCheck == PackageManager.PERMISSION_GRANTED && mBluetoothAdapter.isEnabled()) {
-                System.out.println("mBluetoothAdapter.isEnabled() : " + mBluetoothAdapter.isEnabled());
-                Intent intent = new Intent();
-                intent.setClass(activity, AddIntroductionActivity.class);
-                activity.startActivity(intent);
-                return true;
+            System.out.println("mBluetoothAdapter.isEnabled() : " + mBluetoothAdapter.isEnabled());
+            Intent intent = new Intent();
+            intent.setClass(activity, AddIntroductionActivity.class);
+            activity.startActivity(intent);
+            return true;
 
         } else {
             return false;
@@ -465,11 +501,12 @@ public class BlueToothHelper {
 
         return bluetoothMacAddress;
     }
+
     public String getUserId() {
         String bluetoothMacAddress = getMyBuleTooth();
         String userId = "";
-        System.out.println("======================"+bluetoothMacAddress+"================");
-        if(bluetoothMacAddress!=null && !bluetoothMacAddress.equals("02:00:00:00:00:00")){
+        System.out.println("======================" + bluetoothMacAddress + "================");
+        if (bluetoothMacAddress != null && !bluetoothMacAddress.equals("02:00:00:00:00:00")) {
             userId = userInformationDAO.getId(bluetoothMacAddress);
         }
         System.out.println(userId);
@@ -523,9 +560,9 @@ public class BlueToothHelper {
                 }
             }
 
-                String message = getUserId();
-                outputStream.write(message.getBytes("UTF-8"));
-                FriendBean friendBean = new FriendBean();
+            String message = getUserId();
+            outputStream.write(message.getBytes("UTF-8"));
+            FriendBean friendBean = new FriendBean();
             friendBean.setMatchmakerId(getUserId());
             friendBean.setFriendId(userInformationDAO.getId(matchedAddress));
             AsyncTasKHelper.execute(addResponseListener, friendBean);
@@ -542,19 +579,22 @@ public class BlueToothHelper {
         acceptThread = new AcceptThreadHelper(mBluetoothAdapter, MY_UUID, activity, handler);
         acceptThread.start();
     }
-    public boolean excludeRepeat(String bluetoothAddress){
+
+    public boolean excludeRepeat(String bluetoothAddress) {
         first = false;
 
-        if(repeatBeanMap.get(bluetoothAddress)==null){
+        if (repeatBeanMap.get(bluetoothAddress) == null) {
             first = true;
             UserInformationBean userInformationBean = new UserInformationBean();
             userInformationBean.setBluetooth(bluetoothAddress);
-            repeatBeanMap.put(bluetoothAddress,userInformationBean);
-        };
+            repeatBeanMap.put(bluetoothAddress, userInformationBean);
+        }
+        ;
 
-        return  first;
+        return first;
     }
-    public void removeMatched(String matchedAddress){
+
+    public void removeMatched(String matchedAddress) {
         BluetoothDevice device = mBluetoothAdapter.getRemoteDevice(matchedAddress);
         try {
             Method m = device.getClass().getMethod("removeBond", (Class[]) null);
@@ -564,43 +604,130 @@ public class BlueToothHelper {
         }
 
     }
+
     private FriendBean backgroundBean;
     private AsyncTasKHelper.OnResponseListener<String, UserInformationBean> backgroundUserInformationResponseListener = new AsyncTasKHelper.OnResponseListener<String, UserInformationBean>() {
         @Override
         public Call<ResponseBody<UserInformationBean>> request(String... blueTooth) {
             return userInformationService.getByBlueTooth(blueTooth[0]);
         }
+
         public void onSuccess(UserInformationBean responseBean) {
-            Log.d("blueToothSearch","success");
+            Log.d("blueToothSearch", "success");
             String searchId = responseBean.getUserId();
             backgroundBeanMap.remove(searchId);
-            backgroundBeanMap.put(searchId,responseBean);
+            backgroundBeanMap.put(searchId, responseBean);
             backgroundBean = new FriendBean();
             backgroundBean.setMatchmakerId(getUserId());
             backgroundBean.setFriendId(backgroundBeanMap.get(searchId).getUserId());
             AsyncTasKHelper.execute(backgroundMatchedResponseListener, backgroundBean);
         }
+
         @Override
         public void onFail(int status) {
 
-        };
+        }
+
+        ;
     };
+
     private AsyncTasKHelper.OnResponseListener<FriendBean, List<FriendBean>> backgroundMatchedResponseListener = new AsyncTasKHelper.OnResponseListener<FriendBean, List<FriendBean>>() {
         @Override
         public Call<ResponseBody<List<FriendBean>>> request(FriendBean... friendBeans) {
             return matchedService.search(friendBeans[0]);
         }
+
         @Override
         public void onSuccess(List<FriendBean> friendBeanList) {
             FriendBean friendBean = friendBeanList.get(0);
             UserInformationBean userInformationBean = backgroundBeanMap.get(friendBean.getFriendId());
             if (friendBeanList.size() > 1 || (friendBeanList.size() == 1 && (friendBeanList.get(0).getCreateDate() != null && !friendBeanList.get(0).equals("")))) {
 
-                if (backgroundDistance <= 10000 ) {
-                    Log.d("sendmess", String.valueOf("==========================="));
+                if (backgroundDistance <= 10000) {
+                    if (ActivityCompat.checkSelfPermission(notificationService, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(notificationService, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                        // TODO: Consider calling
+                        //    ActivityCompat#requestPermissions
+                        // here to request the missing permissions, and then overriding
+                        //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                        //                                          int[] grantResults)
+                        // to handle the case where the user grants the permission. See the documentation
+                        // for ActivityCompat#requestPermissions for more details.
+                        return;
+                    }
+
+                    //更新位置
+                    locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
+                    Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+                    TimelineBean timelineBean = new TimelineBean();
+                    timelineBean.setFriendId(friendBean.getFriendId());
+                    timelineBean.setMatchmakerId(friendBean.getMatchmakerId());
+                    Geocoder gc = new Geocoder(notificationService, Locale.TRADITIONAL_CHINESE);
+
+
+
+                    try {
+                            longitude = location.getLongitude();        //取得經度
+                            latitude = location.getLatitude();
+                        List<Address> lstAddress = gc.getFromLocation(latitude, longitude, 1);
+                        Toast.makeText(
+                                notificationService.getBaseContext(),
+                                lstAddress.get(0).getAddressLine(0), Toast.LENGTH_SHORT).show();
+                        timelineBean.setPlace(lstAddress.get(0).getAddressLine(0));
+                        locationManager.removeUpdates(locationListener);
+                    }catch (Exception e){
+                        e.printStackTrace();
+                        timelineBean.setPlace("室內");
+                    }
+//                    if (!Geocoder.isPresent()){ //Since: API Level 9
+//                        returnAddress = "Sorry! Geocoder service not Present.";
+//                    }
+                    timelineBean.setTimelinePropertiesNo(2);
+
+                    timelineBean.setTitle(timelineBean.getPlace());
+                    Log.d("place", timelineBean.getPlace());
+                    AsyncTasKHelper.execute(addTimeline, timelineBean);
                     notificationHelper.sendBackgroundMessage(userInformationBean, friendBeanList.get(0).getRemark());
                 }
             }
+        }
+        @Override
+        public void onFail(int status) {
+            Log.d("intomatched","success");
+            //unmatchedDeviceRecyclerViewAdapter.dataInsert(userInformationBean);
+        }
+    }; private class MyLocationListener implements LocationListener {
+
+        @Override
+        public void onLocationChanged(Location loc) {
+            Toast.makeText(
+                    notificationService,
+                    "Location changed: Lat: " + loc.getLatitude() + " Lng: "
+                            + loc.getLongitude(), Toast.LENGTH_SHORT).show();
+             longitude = loc.getLongitude();
+             latitude =  loc.getLatitude();
+
+
+            /*------- To get city name from coordinates -------- */
+        }
+
+        @Override
+        public void onProviderDisabled(String provider) {}
+
+        @Override
+        public void onProviderEnabled(String provider) {}
+
+        @Override
+        public void onStatusChanged(String provider, int status, Bundle extras) {}
+    }
+    private AsyncTasKHelper.OnResponseListener<TimelineBean, TimelineBean> addTimeline = new AsyncTasKHelper.OnResponseListener<TimelineBean, TimelineBean>() {
+        @Override
+        public Call<ResponseBody<TimelineBean>> request(TimelineBean... timelineBean) {
+            Log.d("addtimeline", timelineBean[0].getPlace());
+            return timelineService.add(timelineBean[0]);
+        }
+        @Override
+        public void onSuccess(TimelineBean timelineBean) {
+                timelineDAO.add(timelineBean);
         }
         @Override
         public void onFail(int status) {
