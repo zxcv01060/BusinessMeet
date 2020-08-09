@@ -3,53 +3,50 @@ package tw.com.businessmeet.dao;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import tw.com.businessmeet.bean.FriendGroupBean;
+import tw.com.businessmeet.helper.DBHelper;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
-import tw.com.businessmeet.bean.FriendBean;
-import tw.com.businessmeet.helper.DBHelper;
-
-public class FriendDAO {
-    private String whereClause = "friend_no = ?";
-    private String tableName = "friend";
-    private String[] column = FriendBean.getColumn();
+public class FriendGroupDAO {
+    private String tableName = "friend_group";
+    private String[] column = FriendGroupBean.getColumn();
+    private String whereClause = column[0] + " = ?";
     private SQLiteDatabase db;
     private SimpleDateFormat dataFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-    public FriendDAO(DBHelper DH){
+    public FriendGroupDAO(DBHelper DH){
         db = DH.getWritableDatabase();
     }
-    private ContentValues putValues(FriendBean friendBean){
+    private ContentValues putValues(FriendGroupBean friendGroupBean){
         ContentValues values = new ContentValues();
-        values.put(column[0],friendBean.getFriendNo());
-        values.put(column[1],friendBean.getMatchmakerId());
-        values.put(column[2],friendBean.getFriendId());
-        values.put(column[3],friendBean.getRemark());
-        values.put(column[4],friendBean.getCreateDate());
-        values.put(column[5],friendBean.getModifyDate());
+        values.put(column[0],friendGroupBean.getFriendGroupNo());
+        values.put(column[1],friendGroupBean.getGroupNo());
+        values.put(column[2],friendGroupBean.getFriendNo());
+        values.put(column[3],friendGroupBean.getCreateDate());
+        values.put(column[4],friendGroupBean.getModifyDate());
         return values;
     }
-    public void add(FriendBean friendBean){
-        if(friendBean.getRemark() == null || friendBean.getRemark().equals("")) friendBean.setRemark("");
-        ContentValues values = putValues(friendBean);
-        values.put(column[4],dataFormat.format(new Date()));
+    public void add(FriendGroupBean friendGroupBean){
+        ContentValues values = putValues(friendGroupBean);
+        values.put("create_date",dataFormat.format(new Date()));
         db.insert(tableName,null,values);
     }
-    public void update(FriendBean friendBean){
-        ContentValues values = putValues(friendBean);
-        values.put(column[5],dataFormat.format(new Date()));
-        db.update(tableName,values,whereClause,new String[]{String.valueOf(friendBean.getFriendNo())});
+    public void update(FriendGroupBean friendGroupBean){
+        ContentValues values = putValues(friendGroupBean);
+        values.put("modify_date",dataFormat.format(new Date()));
+        db.update(tableName,values,whereClause,new String[]{String.valueOf(friendGroupBean.getFriendGroupNo())});
 
     }
 
-    public Cursor search(FriendBean friendBean){
-        String matchmakerId = friendBean.getMatchmakerId();
-        String friendId = friendBean.getFriendId();
-        String[] searchValue = new String[]{matchmakerId,friendId};
+    public Cursor search(FriendGroupBean friendGroupBean){
+        Integer groupNo = friendGroupBean.getGroupNo();
+        Integer friendNo = friendGroupBean.getFriendNo();
+        Integer[] searchValue = new Integer[]{groupNo,friendNo};
         String[] searchColumn = new String[]{column[1],column[2]};
         String where = "";
-        ArrayList<String> args = new ArrayList<>();
+        ArrayList<Integer> args = new ArrayList<>();
         for(int i = 0; i < searchColumn.length; i ++){
             if(!searchValue[i].equals("") && searchValue[i] != null){
                 if(!where.equals("")) where += " and ";

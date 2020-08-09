@@ -3,12 +3,18 @@ package tw.com.businessmeet.bean;
 import java.util.Date;
 
 public class FriendGroupBean {
+
+    private static String[] column = new String[]{"friend_group_no","group_no","friend_no","create_date","modify_date"};
     private Integer friendGroupNo;
     private Integer groupNo;
     private Integer friendNo;
     private String createDate;
     private String modifyDate;
     private Integer statusCode;
+
+    public static String[] getColumn() {
+        return column;
+    }
 
     public Integer getFriendGroupNo() {
         return friendGroupNo;

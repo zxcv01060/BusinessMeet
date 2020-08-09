@@ -3,6 +3,7 @@ package tw.com.businessmeet.bean;
 import java.util.Date;
 
 public class FriendBean {
+    private static String[] column = new String[]{"friend_no","matchmaker_id","friend_id","remark","create_date","modify_date"};
     private Integer friendNo;
     private String matchmakerId;
     private String friendId;
@@ -10,6 +11,11 @@ public class FriendBean {
     private String createDate;
     private String modifyDate;
     private Integer statusCode;
+
+    public static String[] getColumn() {
+        return column;
+    }
+
 
     public Integer getFriendNo() {
         return friendNo;

@@ -3,12 +3,17 @@ package tw.com.businessmeet.bean;
 import java.util.Date;
 
 public class ActivityLabelBean {
+    private static String[] column = new String[]{"activityLabel_no","activity_no","content","create_date","modify_date"};
     private Integer activityLabelNo;
     private Integer activityNo;
     private String content;
     private String createDate;
     private String modifyDate;
     private Integer statusCode;
+
+    public static String[] getColumn() {
+        return column;
+    }
 
     public Integer getActivityLabelNo() {
         return activityLabelNo;

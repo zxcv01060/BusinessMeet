@@ -3,6 +3,8 @@ package tw.com.businessmeet.bean;
 import java.util.Date;
 
 public class UserInformationBean {
+    private static String[] column = new String[]{ "user_id","password","name", "gender","mail","profession","bluetooth","avatar","tel","create_date","modify_date"};
+
     private String userId;
     private String password;
     private String name;
@@ -15,6 +17,10 @@ public class UserInformationBean {
     private String createDate;
     private String modifyDate;
     private Integer statusCode;
+
+    public static String[] getColumn() {
+        return column;
+    }
 
     public String getUserId() {
         return userId;

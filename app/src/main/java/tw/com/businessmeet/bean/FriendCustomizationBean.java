@@ -3,13 +3,18 @@ package tw.com.businessmeet.bean;
 import java.util.Date;
 
 public class FriendCustomizationBean {
+
+    private static String[] column = new String[]{"friend_customization_no","name","friend_no","create_date","modify_date"};
     private Integer friendCustomizationNo;
     private String name;
     private Integer friendNo;
-    private String userId;
     private String createDate;
     private String modifyDate;
     private Integer statusCode;
+
+    public static String[] getColumn() {
+        return column;
+    }
 
     public Integer getFriendCustomizationNo() {
         return friendCustomizationNo;
@@ -35,13 +40,6 @@ public class FriendCustomizationBean {
         this.friendNo = friendNo;
     }
 
-    public String getUserId() {
-        return userId;
-    }
-
-    public void setUserId(String userId) {
-        this.userId = userId;
-    }
 
     public String getCreateDate() {
         return createDate;

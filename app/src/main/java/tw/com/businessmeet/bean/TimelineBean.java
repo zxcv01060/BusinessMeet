@@ -3,6 +3,8 @@ package tw.com.businessmeet.bean;
 import java.util.Date;
 
 public class TimelineBean {
+    private static String[] column = new String[]{"timeline_no","matchmaker_id","friend_id",
+            "place","title","remark","timeline_properties_no","color","create_date","modify_date"};
     private Integer timelineNo;
     private String matchmakerId;
     private String friendId;
@@ -14,6 +16,10 @@ public class TimelineBean {
     private String createDate;
     private String modifyDate;
     private Integer statusCode;
+
+    public static String[] getColumn() {
+        return column;
+    }
 
     public Integer getTimelineNo() {
         return timelineNo;

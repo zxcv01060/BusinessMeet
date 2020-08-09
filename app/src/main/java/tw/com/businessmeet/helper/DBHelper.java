@@ -5,6 +5,9 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 
 public class DBHelper extends SQLiteOpenHelper {
     private final static int _DBVersion = 1;
@@ -72,7 +75,6 @@ public class DBHelper extends SQLiteOpenHelper {
                 "friend_customization_no int    primary key,"+
                 "name    nvarchar(100) not null,"+
                 "friend_no   int not null references "+ _TableName[2] + "(friend_no),"+
-                "user_id varchar(100) not null references "+ _TableName[0] + "(user_id),"+
                 "create_date datetime not null,"+
                 "modify_date datetime    "+
                 ");";
@@ -100,6 +102,11 @@ public class DBHelper extends SQLiteOpenHelper {
                 "modify_date datetime"+
                 ");";
         db.execSQL(SQL);
+        SQL = "insert into "+_TableName[8]+"(timeline_properties_no,name,create_date,modify_date)"+
+                "values(1,'活動',datetime('now'),null)," +
+                "(2,'遇見',datetime('now'),null);";
+        db.execSQL(SQL);
+
         SQL = "create table if not exists "+ _TableName[9] + "("+
                 "timeline_no int  primary key,"+
                 "matchmaker_id  varchar(100) not null references "+ _TableName[0] + "(user_id),  "+
@@ -141,7 +148,7 @@ public class DBHelper extends SQLiteOpenHelper {
                 "problem_report_no   int  primary key,"+
                 "content nvarchar(3000) not null ,"+
                 "user_id varchar(100) not null references "+ _TableName[0] + "(user_id),"+
-                "status varchar(3))," +
+                "status varchar(3)," +
                 "start_date datetime," +
                 "end_date datetime,"+
                 "create_date datetime not null,"+

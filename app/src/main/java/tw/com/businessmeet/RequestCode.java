@@ -5,4 +5,5 @@ public class RequestCode {
     public static final int REQUEST_LOCATION = 2;
     public static final int REQUEST_IMAGE_CAPTURE = 3;
     public static final int REQUEST_DISCOVERABLE = 4;
+    public static final int REQUEST_GPS = 5;
 }
