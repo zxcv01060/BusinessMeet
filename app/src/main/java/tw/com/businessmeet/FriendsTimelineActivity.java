@@ -3,8 +3,13 @@ package tw.com.businessmeet;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import retrofit2.Call;
 import tw.com.businessmeet.bean.FriendBean;
+import tw.com.businessmeet.adapter.FriendsRecyclerViewAdapter;
+import tw.com.businessmeet.adapter.FriendsTimelineRecyclerViewAdapter;
 import tw.com.businessmeet.bean.ResponseBody;
 import tw.com.businessmeet.bean.UserInformationBean;
 import tw.com.businessmeet.dao.FriendDAO;
@@ -25,15 +30,18 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
-public class FriendsTimelineActivity extends AppCompatActivity {
-    private TextView userName, company, position, email, tel, memo;
-    private Button editButton;
+import java.util.ArrayList;
+import java.util.List;
+
+public class FriendsTimelineActivity extends AppCompatActivity implements FriendsTimelineRecyclerViewAdapter.ClickListener {
+    private TextView userName,position;
     private ImageView avatar;
     private UserInformationDAO userInformationDAO;
     private DBHelper DH;
@@ -43,8 +51,12 @@ public class FriendsTimelineActivity extends AppCompatActivity {
     private FriendBean matchedBean = new FriendBean();
     private UserInformationServiceImpl userInformationService = new UserInformationServiceImpl();
     private FriendServiceImpl matchedService = new FriendServiceImpl();
-    private AsyncTasKHelper.OnResponseListener<String, UserInformationBean> userInfoResponseListener = new AsyncTasKHelper.OnResponseListener<String, UserInformationBean>() {
     private Toolbar toolbar;
+    private RecyclerView recyclerViewFriendsTimeline;
+    private FriendsTimelineRecyclerViewAdapter friendsTimelineRecyclerViewAdapter;
+    private List<UserInformationBean> userInformationBeanList = new ArrayList<>();
+    private AsyncTasKHelper.OnResponseListener<String, UserInformationBean> userInfoResponseListener = new AsyncTasKHelper.OnResponseListener<String, UserInformationBean>() {
+
 
         @Override
         public Call<ResponseBody<UserInformationBean>> request(String... userId) {
@@ -63,14 +75,59 @@ public class FriendsTimelineActivity extends AppCompatActivity {
         }
     };
 
+    private AsyncTasKHelper.OnResponseListener<FriendBean, List<FriendBean>> searchResponseListener =
+            new AsyncTasKHelper.OnResponseListener<FriendBean, List<FriendBean>>() {
+                @Override
+                public Call<ResponseBody<List<FriendBean>>> request(FriendBean... matchedBean) {
+
+                    return matchedService.search(matchedBean[0]);
+                }
+
+                @Override
+                public void onSuccess(List<FriendBean> matchedBeanList) {
+                    Log.e("MatchedBean","success");
+                    for(FriendBean matchedBean : matchedBeanList) {
+                        AsyncTasKHelper.execute(getByIdResponseListener,matchedBean.getFriendId());
+                        Log.e("MatchedBean", String.valueOf(matchedBean));
+                        //Log.e("MatchedBean", String.valueOf(matchedBean.getBlueTooth()));
+                    }
+                }
+
+                @Override
+                public void onFail(int status) {
+
+                }
+            };
+
+    private AsyncTasKHelper.OnResponseListener<String,UserInformationBean> getByIdResponseListener =
+            new AsyncTasKHelper.OnResponseListener<String,UserInformationBean>() {
+                @Override
+                public Call<ResponseBody<UserInformationBean>> request(String... blueTooth) {
+
+                    return userInformationService.getById(blueTooth[0]);
+                }
+
+                @Override
+                public void onSuccess(UserInformationBean userInformationBean) {
+                    friendsTimelineRecyclerViewAdapter.dataInsert(userInformationBean);
+                }
+
+                @Override
+                public void onFail(int status) {
+
+                }
+            };
+
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.friends_timeline);
         String friendId = getIntent().getStringExtra("friendId");
         AsyncTasKHelper.execute(userInfoResponseListener, friendId);
         matchedBean.setFriendId(friendId);
+        AsyncTasKHelper.execute(searchResponseListener, matchedBean); //timelineInfor
         blueToothHelper = new BlueToothHelper(this);
         matchedBean.setMatchmakerId(blueToothHelper.getUserId());
+        recyclerViewFriendsTimeline = findViewById(R.id.timeline_view);
 
         userName = (TextView) findViewById(R.id.friends_name);
         position = (TextView) findViewById(R.id.friends_position);
@@ -79,16 +136,30 @@ public class FriendsTimelineActivity extends AppCompatActivity {
         Log.d("timephoto", avatarHelper.toString());
         
         //toolbar
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
         //toolbarMenu    
         toolbar.inflateMenu(R.menu.timeline_toolbarmenu);
-        toolbar.setNavigationIcon(R.drawable.ic_back_16dp);  //back
+        toolbar.setNavigationIcon(R.drawable.ic_arrow_back_ios_24px);  //back
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //do back
+            }
+        });
         toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener(){
 
             @Override
-            public boolean onMenuItemClick(MenuItem item) {
-                return false;
+            public boolean onMenuItemClick(MenuItem item) { //偵測按下去的事件
+                switch (item.getItemId()) {
+                    case R.id.menu_toolbar_search:
+                        Intent intent = new Intent();
+                        intent.setClass(FriendsTimelineActivity.this, EventSearch.class);
+                        startActivity(intent);
+                }
+
+                return true;
             }
+
 
         });
 
@@ -108,19 +179,16 @@ public class FriendsTimelineActivity extends AppCompatActivity {
         AvatarHelper avatarHelper = new AvatarHelper();
         UserInformationBean ufb = new UserInformationBean();
         Cursor result = userInformationDAO.searchAll(ufb);
-
+        createRecyclerViewFriendsTimeline(); //timelineRecycleView
         MenuItem userItem = BVMenu.findItem(R.id.menu_home);
         Bitmap myPhoto = avatarHelper.getImageResource(result.getString(result.getColumnIndex("avatar")));
         userItem.setIcon(new BitmapDrawable(getResources(), myPhoto));
-        Log.d("timephoto1",myPhoto.toString());
 
         if (getIntent().hasExtra("avatar")) {
-            Log.d("timephoto2",avatar.toString());
             ImageView photo = findViewById(R.id.friends_photo);
             Bitmap profilePhoto = BitmapFactory.decodeByteArray(
                     getIntent().getByteArrayExtra("avatar"), 0, getIntent().getByteArrayExtra("avatar").length);
             photo.setImageBitmap(profilePhoto);
-            Log.d("timephoto3", profilePhoto.toString());
         }
     }
 
@@ -131,6 +199,24 @@ public class FriendsTimelineActivity extends AppCompatActivity {
         matchedDAO = new FriendDAO(DH);
 
     }
+    private void createRecyclerViewFriendsTimeline() {
+        recyclerViewFriendsTimeline.setLayoutManager(new LinearLayoutManager(this));
+        friendsTimelineRecyclerViewAdapter = new FriendsTimelineRecyclerViewAdapter(this, this.userInformationBeanList);
+        friendsTimelineRecyclerViewAdapter.setClickListener(this);
+        recyclerViewFriendsTimeline.setAdapter(friendsTimelineRecyclerViewAdapter);
+
+    }
+
+    public void onClick(View view, int position){
+        Intent intent = new Intent();
+        intent.setClass(this,CrateEventActivity.class); //改到活動事件內容
+        Bundle bundle = new Bundle();
+        bundle.putString("blueToothAddress",friendsTimelineRecyclerViewAdapter.getUserInformation(position).getBluetooth());
+        intent.putExtras(bundle);
+        startActivity(intent);
+
+    }
+
 
     //Perform ItemSelectedListener
     private BottomNavigationView.OnNavigationItemSelectedListener navListener =

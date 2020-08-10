@@ -12,7 +12,7 @@
         android:layout_marginStart="23dp"
         android:layout_marginLeft="23dp"
         android:layout_marginTop="52dp"
-        android:text="簡歷"
+        android:text="好友簡歷"
         android:textColor="@color/colorAlmostBlack"
         android:textSize="24sp"
         android:textStyle="bold"
