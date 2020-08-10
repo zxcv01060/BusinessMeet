@@ -150,11 +150,15 @@ public class FriendsTimelineActivity extends AppCompatActivity implements Friend
 
             @Override
             public boolean onMenuItemClick(MenuItem item) { //偵測按下去的事件
+                Intent intent = new Intent();
                 switch (item.getItemId()) {
                     case R.id.menu_toolbar_search:
-                        Intent intent = new Intent();
                         intent.setClass(FriendsTimelineActivity.this, EventSearch.class);
                         startActivity(intent);
+                        break;
+                    case R.id.menu_addevent:
+                        Intent intent1 = intent.setClass(FriendsTimelineActivity.this, CrateEventActivity.class);
+                        startActivity(intent1);
                 }
 
                 return true;
@@ -209,7 +213,7 @@ public class FriendsTimelineActivity extends AppCompatActivity implements Friend
 
     public void onClick(View view, int position){
         Intent intent = new Intent();
-        intent.setClass(this,CrateEventActivity.class); //改到活動事件內容
+        intent.setClass(this,EventActivity.class); //改到活動事件內容
         Bundle bundle = new Bundle();
         bundle.putString("blueToothAddress",friendsTimelineRecyclerViewAdapter.getUserInformation(position).getBluetooth());
         intent.putExtras(bundle);
