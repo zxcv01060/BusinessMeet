@@ -49,7 +49,8 @@ public class AddIntroductionActivity extends AppCompatActivity {
 
                 @Override
                 public void onSuccess(UserInformationBean userInformationBean) {
-
+                    userInformationDAO.add(userInformationBean);
+                    changeToAnotherPage(LoginActivity.class);
                 }
 
                 @Override
@@ -141,7 +142,7 @@ public class AddIntroductionActivity extends AppCompatActivity {
         public void onClick(View v) {
             UserInformationBean ufb = new UserInformationBean();
 
-            ufb.setUserId(blueTooth.getUserId());
+
             ufb.setUserId(userId.getText().toString());
             ufb.setPassword(password.getText().toString());
             ufb.setName(userName.getText().toString());
@@ -151,11 +152,9 @@ public class AddIntroductionActivity extends AppCompatActivity {
             ufb.setTel(tel.getText().toString());
             ufb.setAvatar(avatarHelper.setImageResource(avatar));
             ufb.setBluetooth(blueTooth.getMyBuleTooth());
-
+            ufb.setRoleNo(3);
             if(checkData(ufb)) {
-                userInformationDAO.add(ufb);
                 AsyncTasKHelper.execute(addResponseListener, ufb);
-                changeToAnotherPage(SelfIntroductionActivity.class);
             }
         }
     };

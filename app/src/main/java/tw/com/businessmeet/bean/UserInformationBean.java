@@ -14,6 +14,7 @@ public class UserInformationBean {
     private String bluetooth;
     private String avatar;
     private String tel;
+    private Integer roleNo;
     private String createDate;
     private String modifyDate;
     private Integer statusCode;
@@ -76,6 +77,14 @@ public class UserInformationBean {
 
     public void setTel(String tel) {
         this.tel = tel;
+    }
+
+    public Integer getRoleNo() {
+        return roleNo;
+    }
+
+    public void setRoleNo(Integer roleNo) {
+        this.roleNo = roleNo;
     }
 
     public String getProfession() {

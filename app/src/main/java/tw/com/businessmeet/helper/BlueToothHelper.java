@@ -34,7 +34,6 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
-import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -50,7 +49,6 @@ import retrofit2.Call;
 import tw.com.businessmeet.AddIntroductionActivity;
 import tw.com.businessmeet.R;
 import tw.com.businessmeet.RequestCode;
-import tw.com.businessmeet.SelfIntroductionActivity;
 import tw.com.businessmeet.adapter.UnmatchedDeviceRecyclerViewAdapter;
 import tw.com.businessmeet.adapter.MatchedDeviceRecyclerViewAdapter;
 import tw.com.businessmeet.background.NotificationService;
@@ -64,6 +62,7 @@ import tw.com.businessmeet.dao.UserInformationDAO;
 import tw.com.businessmeet.service.Impl.FriendServiceImpl;
 import tw.com.businessmeet.service.Impl.TimelineServiceImpl;
 import tw.com.businessmeet.service.Impl.UserInformationServiceImpl;
+import tw.com.businessmeet.LoginActivity;
 
 import static java.lang.Math.abs;
 import static java.lang.Math.pow;
@@ -466,8 +465,9 @@ public class BlueToothHelper {
         int permissionCheck = ContextCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_COARSE_LOCATION);
         if (permissionCheck == PackageManager.PERMISSION_GRANTED && mBluetoothAdapter.isEnabled()) {
             System.out.println("mBluetoothAdapter.isEnabled() : " + mBluetoothAdapter.isEnabled());
+            String userId = getUserId();
             Intent intent = new Intent();
-            intent.setClass(activity, AddIntroductionActivity.class);
+            intent.setClass(activity, (userId == "" || userId == null )?AddIntroductionActivity.class:LoginActivity.class);
             activity.startActivity(intent);
             return true;
 
@@ -645,13 +645,7 @@ public class BlueToothHelper {
 
                 if (backgroundDistance <= 10000) {
                     if (ActivityCompat.checkSelfPermission(notificationService, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(notificationService, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                        // TODO: Consider calling
-                        //    ActivityCompat#requestPermissions
-                        // here to request the missing permissions, and then overriding
-                        //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                        //                                          int[] grantResults)
-                        // to handle the case where the user grants the permission. See the documentation
-                        // for ActivityCompat#requestPermissions for more details.
+
                         return;
                     }
 

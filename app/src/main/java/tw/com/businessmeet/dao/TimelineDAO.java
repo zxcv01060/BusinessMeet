@@ -35,7 +35,6 @@ public class TimelineDAO {
     }
     public void add(TimelineBean timelineBean){
         ContentValues values = putValues(timelineBean);
-        values.put("create_date",dataFormat.format(new Date()));
         db.insert(tableName,null,values);
     }
     public void update(TimelineBean timelineBean){
