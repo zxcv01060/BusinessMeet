@@ -29,12 +29,17 @@ public class UserInformationServiceImpl implements UserInformationService{
     }
 
     @Override
-    public  Call<ResponseBody<Empty>> update(UserInformationBean userinformationBean) {
+    public  Call<ResponseBody<UserInformationBean>> update(UserInformationBean userinformationBean) {
         return userInformationAPI.update(userinformationBean);
     }
 
     @Override
-    public Call<ResponseBody<UserInformationBean>> getById(String blueTooth) {
-        return userInformationAPI.getById(blueTooth);
+    public Call<ResponseBody<UserInformationBean>> getById(String userId) {
+        return userInformationAPI.getById(userId);
+    }
+
+    @Override
+    public Call<ResponseBody<UserInformationBean>> getByBlueTooth(String bluetooth) {
+        return userInformationAPI.getByBlueTooth(bluetooth);
     }
 }

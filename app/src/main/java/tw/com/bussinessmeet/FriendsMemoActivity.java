@@ -1,11 +1,9 @@
 package tw.com.bussinessmeet;
 
-import android.bluetooth.BluetoothA2dp;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
@@ -14,36 +12,34 @@ import java.util.List;
 import androidx.appcompat.app.AppCompatActivity;
 
 import retrofit2.Call;
-import tw.com.bussinessmeet.bean.Empty;
+import tw.com.bussinessmeet.bean.FriendBean;
 import tw.com.bussinessmeet.bean.ResponseBody;
-import tw.com.bussinessmeet.bean.UserInformationBean;
-import tw.com.bussinessmeet.dao.MatchedDAO;
-import tw.com.bussinessmeet.dao.UserInformationDAO;
+import tw.com.bussinessmeet.dao.FriendDAO;
 import tw.com.bussinessmeet.helper.AsyncTasKHelper;
 import tw.com.bussinessmeet.helper.BlueToothHelper;
 import tw.com.bussinessmeet.helper.DBHelper;
 import tw.com.bussinessmeet.service.Impl.MatchedServiceImpl;
-import tw.com.bussinessmeet.bean.MatchedBean;
 
 
 public class FriendsMemoActivity extends AppCompatActivity {
     private TextView memo;
-    private String blueToothAddress;
+    private String friendId;
     private ImageButton editProfileConfirmButtom;
     private BlueToothHelper blueToothHelper;
     private MatchedServiceImpl matchedService = new MatchedServiceImpl();
-    private AsyncTasKHelper.OnResponseListener<MatchedBean, Empty> updateResponseListener = new AsyncTasKHelper.OnResponseListener<MatchedBean, Empty>() {
+    private AsyncTasKHelper.OnResponseListener<FriendBean, FriendBean> updateResponseListener = new AsyncTasKHelper.OnResponseListener<FriendBean, FriendBean>() {
         @Override
-        public Call<ResponseBody<Empty>> request(MatchedBean... matchedBeans) {
-            return matchedService.update(matchedBeans[0]);
+        public Call<ResponseBody<FriendBean>> request(FriendBean... friendBeans) {
+            return matchedService.update(friendBeans[0]);
         }
 
         @Override
-        public void onSuccess(Empty empty) {
+        public void onSuccess(FriendBean friendBean) {
+            friendDAO.update(friendBean);
             Intent intent = new Intent();
             intent.setClass(FriendsMemoActivity.this, FriendsIntroductionActivity.class);
             Bundle bundle = new Bundle();
-            bundle.putString("blueToothAddress",blueToothAddress);
+            bundle.putString("friendId",friendBean.getFriendId());
             intent.putExtras(bundle);
             startActivity(intent);
         }
@@ -53,15 +49,16 @@ public class FriendsMemoActivity extends AppCompatActivity {
 
         }
     };
-    private AsyncTasKHelper.OnResponseListener<MatchedBean, List<MatchedBean>> searchResponseListener = new AsyncTasKHelper.OnResponseListener<MatchedBean, List<MatchedBean>>() {
+    private AsyncTasKHelper.OnResponseListener<FriendBean, List<FriendBean>> searchResponseListener = new AsyncTasKHelper.OnResponseListener<FriendBean, List<FriendBean>>() {
         @Override
-        public Call<ResponseBody<List<MatchedBean>>> request(MatchedBean... matchedBeans) {
-            return matchedService.search(matchedBeans[0]);
+        public Call<ResponseBody<List<FriendBean>>> request(FriendBean... friendBeans) {
+            return matchedService.search(friendBeans[0]);
         }
 
         @Override
-        public void onSuccess(List<MatchedBean> matchedBeanList) {
-            memo.append(matchedBeanList.get(0).getMemorandum());
+        public void onSuccess(List<FriendBean> friendBeanList) {
+            if(friendBeanList.get(0).getRemark()!=null)
+                memo.append(friendBeanList.get(0).getRemark());
         }
 
         @Override
@@ -70,39 +67,38 @@ public class FriendsMemoActivity extends AppCompatActivity {
         }
     };
     private DBHelper DH;
-    private MatchedDAO matchedDAO;
+    private FriendDAO friendDAO;
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.friends_edit_introduction);
 
-        blueToothAddress = getIntent().getStringExtra("blueToothAddress");
+        friendId = getIntent().getStringExtra("friendId");
 //        Log.d("memo", blueToothAddress);
         blueToothHelper = new BlueToothHelper(this);
         memo = (TextView) findViewById(R.id.friends_memo);
         editProfileConfirmButtom = (ImageButton) findViewById(R.id.editProfileConfirmButtom);
         editProfileConfirmButtom.setOnClickListener(editConfirmClick);
-        MatchedBean matchedBean = new MatchedBean();
-        matchedBean.setBlueTooth(blueToothHelper.getMyBuleTooth());
-        matchedBean.setMatchedBlueTooth(blueToothAddress);
-        AsyncTasKHelper.execute(searchResponseListener,matchedBean);
+        FriendBean friendBean = new FriendBean();
+        friendBean.setMatchmakerId(blueToothHelper.getUserId());
+        friendBean.setFriendId(friendId);
+        AsyncTasKHelper.execute(searchResponseListener,friendBean);
         openDB();
     }
     private void openDB() {
         DH = new DBHelper(this);
-        matchedDAO = new MatchedDAO(DH);
+        friendDAO = new FriendDAO(DH);
     }
     public View.OnClickListener editConfirmClick = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            MatchedBean matchedBean = new MatchedBean();
-            matchedBean.setBlueTooth(blueToothHelper.getMyBuleTooth());
-            Log.e("getMyBuleTooth()",blueToothHelper.getMyBuleTooth());
-            Log.e("getMatchedBuleTooth()",blueToothAddress);
-            matchedBean.setMatchedBlueTooth(blueToothAddress);
-            matchedBean.setMemorandum(memo.getText().toString());
+            FriendBean friendBean = new FriendBean();
+            friendBean.setMatchmakerId(blueToothHelper.getUserId());
+            Log.e("getMyBuleTooth()",blueToothHelper.getUserId());
+            friendBean.setFriendId(friendId);
+            friendBean.setRemark(memo.getText().toString());
             Log.d("String.valueOf",String.valueOf(memo.getText()));
-            AsyncTasKHelper.execute(updateResponseListener,matchedBean);
-            matchedDAO.update(matchedBean);
+            AsyncTasKHelper.execute(updateResponseListener,friendBean);
+            friendDAO.update(friendBean);
 
         }
     };

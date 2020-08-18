@@ -40,7 +40,7 @@ public class UnmatchedDeviceRecyclerViewAdapter extends RecyclerView.Adapter<Unm
     @Override
     public void onBindViewHolder(@NonNull UnmatchedDeviceRecyclerViewAdapter.ViewHolder holder, int position) {
         UserInformationBean ufb = userInformationBeanList.get(position);
-        holder.bindInformation(ufb.getUserName(),ufb.getAvatar());
+        holder.bindInformation(ufb.getName(),ufb.getAvatar());
 
     }
 
@@ -86,7 +86,7 @@ public class UnmatchedDeviceRecyclerViewAdapter extends RecyclerView.Adapter<Unm
         return userInformationBeanList.get(position);
     }
     public void dataInsert(UserInformationBean userInformationBean){
-        Log.d("resultDataInsert",userInformationBean.getBlueTooth());
+        Log.d("resultDataInsert",userInformationBean.getBluetooth());
         userInformationBeanList.add(userInformationBean);
         notifyItemInserted(getItemCount());
     }

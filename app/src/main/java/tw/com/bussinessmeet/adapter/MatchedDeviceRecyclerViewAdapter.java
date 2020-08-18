@@ -43,7 +43,7 @@ public class MatchedDeviceRecyclerViewAdapter extends RecyclerView.Adapter<Match
         ufb = userInformationBeanList.get(position);
         AvatarHelper avatarHelper = new AvatarHelper();
         Bitmap avatar = avatarHelper.getImageResource(ufb.getAvatar());
-        holder.bindInformation(ufb.getUserName(), avatar);
+        holder.bindInformation(ufb.getName(), avatar);
     }
 
     @Override
@@ -85,7 +85,7 @@ public class MatchedDeviceRecyclerViewAdapter extends RecyclerView.Adapter<Match
         this.searchClickListener = searchClickLinster;
     }
     public void dataInsert(UserInformationBean userInformationBean){
-        Log.d("resultDataInsert",userInformationBean.getBlueTooth());
+        Log.d("resultDataInsert",userInformationBean.getBluetooth());
         userInformationBeanList.add(userInformationBean);
         notifyItemInserted(getItemCount());
     }
