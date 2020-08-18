@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="tw.com.bussinessmeet">
+    package="tw.com.businessmeet">
     <!-- 網路許可 -->
     <application
         android:allowBackup="true"
@@ -10,7 +10,17 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".FriendsTimelineActivity" />
+        <activity android:name=".adapter.EventTagRecyclerViewAdapter"></activity>
+        <activity android:name=".EventSearch" />
+        <activity
+            android:name=".ColorSelectActivity"
+            android:theme="@style/AppTheme.PopMe" />
+        <activity android:name=".CrateEventActivity" />
+        <activity android:name=".EditEventActivity" />
+        <activity android:name=".EventActivity" />
+        <activity
+            android:name=".FriendsTimelineActivity"
+            android:parentActivityName=".FriendsActivity" />
         <activity android:name=".BaseActivity" />
         <activity android:name=".NotificationActivity" />
         <activity android:name=".FriendsActivity" />
@@ -30,10 +40,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <service android:name=".background.NotificationService">
 
-        </service>
-    </application> <!-- 網路許可 -->
+        <service android:name=".background.NotificationService" />
+    </application>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -42,6 +51,9 @@
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
