@@ -167,7 +167,7 @@ public class FriendsIntroductionActivity extends AppCompatActivity {
 
     public void changeToFriendsEditIntroductionPage() {
         Intent intent = new Intent();
-        intent.setClass(FriendsIntroductionActivity.this, FriendsMemoActivity.class);
+        intent.setClass(FriendsIntroductionActivity.this, EditFriendsProfileActivity.class);
         Bundle bundle = new Bundle();
         bundle.putString("friendId", getIntent().getStringExtra("friendId"));
         intent.putExtras(bundle);
