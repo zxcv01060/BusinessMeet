@@ -16,13 +16,14 @@ import tw.com.businessmeet.bean.LoginBean;
 import tw.com.businessmeet.bean.ResponseBody;
 import tw.com.businessmeet.bean.UserInformationBean;
 import tw.com.businessmeet.helper.AsyncTasKHelper;
+import tw.com.businessmeet.helper.BlueToothHelper;
 import tw.com.businessmeet.network.ApplicationContext;
 import tw.com.businessmeet.service.Impl.UserInformationServiceImpl;
 
 public class LoginActivity extends AppCompatActivity {
 
 //    private LoginViewModel loginViewModel;
-
+private BlueToothHelper blueToothHelper;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,7 +32,8 @@ public class LoginActivity extends AppCompatActivity {
         System.out.println("App.get() : " + ApplicationContext.get());
 //        loginViewModel = ViewModelProviders.of(this, new LoginViewModelFactory())
 //                .get(LoginViewModel.class);
-
+         blueToothHelper= new BlueToothHelper(this);
+            blueToothHelper.startBuleTooth();
         final EditText usernameEditText = findViewById(R.id.username);
         final EditText passwordEditText = findViewById(R.id.password);
         final Button loginButton = findViewById(R.id.login);
@@ -116,6 +118,8 @@ public class LoginActivity extends AppCompatActivity {
                 UserInformationBean userInformationBean = new UserInformationBean();
                 userInformationBean.setUserId(usernameEditText.getText().toString());
                 userInformationBean.setPassword(passwordEditText.getText().toString());
+                userInformationBean.setBluetooth(blueToothHelper.getMyBuleTooth());
+                System.out.println("userInformationBean.getBluetooth() = " + userInformationBean.getBluetooth());
                 AsyncTasKHelper.execute(login,userInformationBean);
             }
         });
