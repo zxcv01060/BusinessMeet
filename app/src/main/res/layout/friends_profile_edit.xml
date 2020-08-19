@@ -18,16 +18,6 @@
             app:menu="@menu/friends_profile_edit_toolbar"
             app:title="@string/friends_profile_topAppBar" />
 
-    </com.google.android.material.appbar.AppBarLayout>
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/friends_profile_tab"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
-        app:layout_anchor="@id/appBarLayout_top"
-        app:layout_anchorGravity="bottom">
-
         <com.google.android.material.tabs.TabLayout
             android:id="@+id/friends_profile_tabs"
             android:layout_width="match_parent"
@@ -49,6 +39,12 @@
 
         </com.google.android.material.tabs.TabLayout>
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <androidx.viewpager.widget.ViewPager
+        android:id="@+id/viewPager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"></androidx.viewpager.widget.ViewPager>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -1,4 +1,4 @@
-package tw.com.bussinessmeet;
+package tw.com.businessmeet;
 
 import android.content.Intent;
 import android.database.Cursor;
@@ -14,16 +14,16 @@ import android.widget.CompoundButton;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import tw.com.bussinessmeet.bean.UserInformationBean;
+import tw.com.businessmeet.bean.UserInformationBean;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.chip.Chip;
 
-import tw.com.bussinessmeet.helper.AvatarHelper;
-import tw.com.bussinessmeet.helper.DBHelper;
+import tw.com.businessmeet.helper.AvatarHelper;
+import tw.com.businessmeet.helper.DBHelper;
 
 public class FriendsFilterActivity extends AppCompatActivity {
-    private tw.com.bussinessmeet.dao.UserInformationDAO userInformationDAO;
+    private tw.com.businessmeet.dao.UserInformationDAO userInformationDAO;
     private DBHelper DH = null;
 
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,7 +47,7 @@ public class FriendsFilterActivity extends AppCompatActivity {
     private void openDB() {
         Log.d("add", "openDB");
         DH = new DBHelper(this);
-        userInformationDAO = new tw.com.bussinessmeet.dao.UserInformationDAO(DH);
+        userInformationDAO = new tw.com.businessmeet.dao.UserInformationDAO(DH);
         //matchedDAO = new tw.com.bussinessmeet.dao.MatchedDAO(DH);
     }
 

@@ -31,4 +31,7 @@
     <!-- friends_profile_edit_toolbar -->
     <string name="friends_profile_edit_topAppBar_backIcon">返回</string>
     <string name="friends_profile_edit_topAppBar_confirmIcon">確認</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
