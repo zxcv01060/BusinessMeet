@@ -1,12 +1,19 @@
 package tw.com.businessmeet;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 
 /**
@@ -23,6 +30,9 @@ public class EditMemoFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+
+    //floating button
+    private FloatingActionButton floatingActionButton;
 
     public EditMemoFragment() {
         // Required empty public constructor
@@ -56,9 +66,24 @@ public class EditMemoFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_edit_memo, container, false);
+        View view = inflater.inflate(R.layout.fragment_edit_memo, container, false);
+
+        //floating button
+        floatingActionButton = (FloatingActionButton) view.findViewById(R.id.memo_addColumn);
+        floatingActionButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //dialog
+                MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(getContext());
+                builder.setView(R.layout.add_column);
+                builder.show();
+
+            }
+        });
+
+
+        return view;
     }
 }

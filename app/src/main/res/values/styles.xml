@@ -107,13 +107,27 @@
         <item name="android:textColor">@color/grey_60</item>
     </style>
 
+    <!-- edit friends profile floating button -->
+    <style name="floatingButton" parent="Widget.MaterialComponents.ExtendedFloatingActionButton.Icon">
+        <item name="android:layout_margin">16dp</item>
+        <item name="android:layout_gravity">bottom|right</item>
+        <item name="backgroundTint">@color/colorPrimary</item>
+        <item name="tint">@color/white</item>
+    </style>
+
+    <!-- dialog -->
+    <style name="addColumn_input" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="boxStrokeColor">@color/colorPrimary</item>
+        <item name="android:textColorHint">@color/colorPrimary</item>
+    </style>
+
     <style name="AppTheme.PopMe">
         <item name="android:windowIsTranslucent">true</item>
         <item name="android:windowCloseOnTouchOutside">true</item>
     </style>
 
     <!--checkbox-->
-
     <style name="checkbox" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <item name="colorControlNormal">@color/colorPrimary</item>
         <item name="colorControlActivated">@color/colorPrimary</item>

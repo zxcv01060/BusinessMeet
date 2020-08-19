@@ -25,6 +25,7 @@
     <string name="friends_profile_memo_personality">新增個性</string>
 
     <!-- friends_profile_edit_tab -->
+    <string name="friends_edit">編輯</string>
     <string name="friends_profile_information_tab">好友簡歷</string>
     <string name="friends_profile_memo_tab">備註</string>
 
@@ -32,6 +33,11 @@
     <string name="friends_profile_edit_topAppBar_backIcon">返回</string>
     <string name="friends_profile_edit_topAppBar_confirmIcon">確認</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <!-- edit_friends_profile floating button-->
+    <string name="add_column">新增欄位</string>
+
+    <!-- edit_friends_profile dialog -->
+    <string name="confirm">確認</string>
+    <string name="cancel">取消</string>
+
 </resources>

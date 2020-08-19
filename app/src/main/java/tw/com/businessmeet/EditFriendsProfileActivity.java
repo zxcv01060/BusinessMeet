@@ -2,7 +2,6 @@ package tw.com.businessmeet;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.MenuItem;
 import android.view.View;
 
 import androidx.annotation.NonNull;
@@ -14,6 +13,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
 
 import java.util.ArrayList;
@@ -21,11 +21,16 @@ import java.util.List;
 
 public class EditFriendsProfileActivity extends AppCompatActivity {
     private Toolbar toolbar;
+
+    //tab
     private ViewPager viewPager;
     private TabLayout tabLayout;
 
     private EditProfileFragment editProfileFragment;
     private EditMemoFragment editMemoFragment;
+
+    //floating button
+    private FloatingActionButton floatingActionButton;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,12 +51,6 @@ public class EditFriendsProfileActivity extends AppCompatActivity {
             }
         });
 
-//        case R.id.menu_search:
-//        startActivity(new Intent(getApplicationContext()
-//                , SearchActivity.class));
-//        overridePendingTransition(0, 0);
-//        return true;
-
         //tab
         viewPager = findViewById(R.id.viewPager);
         tabLayout = findViewById(R.id.friends_profile_tabs);
@@ -65,6 +64,7 @@ public class EditFriendsProfileActivity extends AppCompatActivity {
         viewPagerAdapter.addFragment(editProfileFragment, "好友資訊");
         viewPagerAdapter.addFragment(editMemoFragment, "備註");
         viewPager.setAdapter(viewPagerAdapter);
+
     }
 
     //tab
