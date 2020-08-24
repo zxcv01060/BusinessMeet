@@ -32,6 +32,7 @@
         <activity android:name=".SelfIntroductionActivity" />
         <activity android:name=".AddIntroductionActivity" />
         <activity android:name=".SearchActivity" />
+        <activity android:name=".AddColumnMemoActivity" />
         <activity android:name=".EditFriendsProfileActivity" />
         <activity android:name=".MainActivity">
             <intent-filter>

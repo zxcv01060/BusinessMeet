@@ -19,7 +19,7 @@
             android:layout_height="wrap_content"
             android:drawableLeft="@drawable/ic_playlist_add_black_24dp"
             android:drawablePadding="10dp"
-            android:text="@string/add_column"
+            android:text="@string/add_column_memo"
             android:textColor="@color/black"
             android:textSize="18sp"
             app:layout_constraintTop_toTopOf="parent" />
@@ -43,19 +43,19 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/addColumn_dialog_confirmButton"
+            android:id="@+id/addColumn_dialog_cancelButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginRight="14dp"
             android:text="@string/cancel"
-            android:textColor="@color/colorPrimary"
-            app:layout_constraintEnd_toStartOf="@id/addColumn_dialog_cancelButton"
+            android:textColor="@color/colorAccent"
+            app:layout_constraintEnd_toStartOf="@id/addColumn_dialog_confirmButton"
             app:layout_constraintTop_toBottomOf="@id/addColumn_dialog_InputBox"
-            app:layout_constraintTop_toTopOf="@id/addColumn_dialog_cancelButton"
+            app:layout_constraintTop_toTopOf="@id/addColumn_dialog_confirmButton"
             app:strokeColor="@color/colorPrimary" />
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/addColumn_dialog_cancelButton"
+            android:id="@+id/addColumn_dialog_confirmButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="18dp"

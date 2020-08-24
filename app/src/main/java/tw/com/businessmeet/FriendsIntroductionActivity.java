@@ -39,6 +39,7 @@ public class FriendsIntroductionActivity extends AppCompatActivity {
     private Button editButton;
     private ImageView avatar;
     private String friendId;
+    private Integer friendNo;
     private UserInformationDAO userInformationDAO;
     private DBHelper DH;
     private AvatarHelper avatarHelper = new AvatarHelper();
@@ -88,6 +89,7 @@ public class FriendsIntroductionActivity extends AppCompatActivity {
         public void onSuccess(List<FriendBean> friendBeanList) {
             System.out.println(friendBeanList.get(0).getRemark() + "=============================");
             System.out.println(friendBeanList.size() + "=============================");
+            friendNo = friendBeanList.get(0).getFriendNo();
             if (friendBeanList.get(0).getRemark() != null)
                 remark.append(friendBeanList.get(0).getRemark());
         }
@@ -170,6 +172,7 @@ public class FriendsIntroductionActivity extends AppCompatActivity {
         intent.setClass(FriendsIntroductionActivity.this, EditFriendsProfileActivity.class);
         Bundle bundle = new Bundle();
         bundle.putString("friendId", getIntent().getStringExtra("friendId"));
+        bundle.putInt("friendNo", friendNo);
         intent.putExtras(bundle);
         startActivity(intent);
     }

@@ -2,6 +2,7 @@ package tw.com.businessmeet;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 
 import androidx.annotation.NonNull;
@@ -46,6 +47,7 @@ public class EditFriendsProfileActivity extends AppCompatActivity {
                 intent.setClass(EditFriendsProfileActivity.this, FriendsIntroductionActivity.class);
                 Bundle bundle = new Bundle();
                 bundle.putString("friendId", getIntent().getStringExtra("friendId"));
+                bundle.putInt("friendNo", getIntent().getIntExtra("friendNo", 0));
                 intent.putExtras(bundle);
                 startActivity(intent);
             }
