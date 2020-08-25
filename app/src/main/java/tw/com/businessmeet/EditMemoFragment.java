@@ -1,6 +1,8 @@
 package tw.com.businessmeet;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -22,11 +24,16 @@ import com.google.android.material.floatingactionbutton.ExtendedFloatingActionBu
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import retrofit2.Call;
+import tw.com.businessmeet.bean.FriendBean;
 import tw.com.businessmeet.bean.FriendCustomizationBean;
 import tw.com.businessmeet.bean.ResponseBody;
 import tw.com.businessmeet.dao.FriendCustomizationDAO;
+import tw.com.businessmeet.dao.FriendDAO;
 import tw.com.businessmeet.helper.AsyncTasKHelper;
+import tw.com.businessmeet.helper.DBHelper;
 import tw.com.businessmeet.service.FriendCustomizationService;
+import tw.com.businessmeet.service.Impl.FriendCustomizationServiceImpl;
+import tw.com.businessmeet.service.Impl.FriendServiceImpl;
 
 
 /**
@@ -47,16 +54,19 @@ public class EditMemoFragment extends Fragment {
     //floating button
     private FloatingActionButton floatingActionButton;
 
-    private Button confirmButton, cancelButton;
+    //dialog
+    private Button confirm, cancel;
     private EditText addColumnMemo;
 
     private FriendCustomizationDAO friendCustomizationDAO;
-    private FriendCustomizationService friendCustomizationService;
+    private DBHelper dh = null;
+    private FriendCustomizationServiceImpl friendCustomizationServiceImpl = new FriendCustomizationServiceImpl();
+    private FriendServiceImpl friendServiceImpl = new FriendServiceImpl();
     private AsyncTasKHelper.OnResponseListener<FriendCustomizationBean, FriendCustomizationBean> addResponseListener =
             new AsyncTasKHelper.OnResponseListener<FriendCustomizationBean, FriendCustomizationBean>() {
                 @Override
                 public Call<ResponseBody<FriendCustomizationBean>> request(FriendCustomizationBean... friendCustomizationBean) {
-                    return friendCustomizationService.add(friendCustomizationBean[0]);
+                    return friendCustomizationServiceImpl.add(friendCustomizationBean[0]);
                 }
 
                 @Override
@@ -66,7 +76,6 @@ public class EditMemoFragment extends Fragment {
 
                 @Override
                 public void onFail(int status) {
-
                 }
             };
 
@@ -105,21 +114,53 @@ public class EditMemoFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_edit_memo, container, false);
-        Log.d("EditMemoFragment", "friendNo:" + getActivity().getIntent().getIntExtra("friendNo", 0));
         //floating button
         floatingActionButton = (FloatingActionButton) view.findViewById(R.id.memo_addColumn);
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //dialog)
-                Intent intent = new Intent(getActivity(), AddColumnMemoActivity.class);
-                Bundle bundle = new Bundle();
-                bundle.putString("friendId", getActivity().getIntent().getStringExtra("friendId"));
-                bundle.putInt("friendNo", getActivity().getIntent().getIntExtra("friendNo", 0));
-                intent.putExtras(bundle);
-                startActivity(intent);
+                //dialog
+                Log.d("EditMemoFragment", "friendNo:" + getActivity().getIntent().getIntExtra("friendNo", 0));
+                LayoutInflater inflater = getActivity().getLayoutInflater();
+                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                View view = inflater.inflate(R.layout.add_column, null);
+                builder.setView(view);
+                builder.create();
+                AlertDialog alertDialog = builder.show();
+
+                addColumnMemo = (EditText) view.findViewById(R.id.addColumn_dialog_Input);
+                confirm = (Button) view.findViewById(R.id.addColumn_dialog_confirmButton);
+                confirm.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        FriendCustomizationBean fcb = new FriendCustomizationBean();
+                        fcb.setName(addColumnMemo.getText().toString());
+                        FriendBean fb = new FriendBean();
+                        fcb.setFriendNo(getActivity().getIntent().getIntExtra("friendNo", 0));
+                        openDB();
+                        friendCustomizationDAO.add(fcb);
+                        AsyncTasKHelper.execute(addResponseListener, fcb);
+                        if (alertDialog.isShowing()) {
+                            alertDialog.dismiss();
+                        }
+                    }
+                });
+                cancel = (Button) view.findViewById(R.id.addColumn_dialog_cancelButton);
+                cancel.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (alertDialog.isShowing()) {
+                            alertDialog.dismiss();
+                        }
+                    }
+                });
             }
         });
         return view;
+    }
+
+    private void openDB() {
+        dh = new DBHelper(getContext());
+        friendCustomizationDAO = new FriendCustomizationDAO(dh);
     }
 }
