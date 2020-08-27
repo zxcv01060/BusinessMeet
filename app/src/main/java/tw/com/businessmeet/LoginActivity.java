@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import retrofit2.Call;
 import tw.com.businessmeet.background.NotificationService;
@@ -33,7 +34,7 @@ private BlueToothHelper blueToothHelper;
 //        loginViewModel = ViewModelProviders.of(this, new LoginViewModelFactory())
 //                .get(LoginViewModel.class);
          blueToothHelper= new BlueToothHelper(this);
-            blueToothHelper.startBuleTooth();
+         blueToothHelper.startBuleTooth();
         final EditText usernameEditText = findViewById(R.id.username);
         final EditText passwordEditText = findViewById(R.id.password);
         final Button loginButton = findViewById(R.id.login);
@@ -141,7 +142,10 @@ private BlueToothHelper blueToothHelper;
             System.out.println("identty : " + loginBean.getIdentity() );
         }
         @Override
-        public void onFail(int status) {
+        public void onFail(int status,String message) {
+            if(status == 401){
+                Toast.makeText(getApplicationContext(),"帳號密碼錯誤",Toast.LENGTH_LONG).show();
+            }
             Log.d("intomatched","success");
             //unmatchedDeviceRecyclerViewAdapter.dataInsert(userInformationBean);
         }

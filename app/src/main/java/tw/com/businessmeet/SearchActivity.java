@@ -101,7 +101,7 @@ public class SearchActivity extends AppCompatActivity implements MatchedDeviceRe
                 }
 
                 @Override
-                public void onFail(int status) {
+                public void onFail(int status,String message) {
 
                 }
             };

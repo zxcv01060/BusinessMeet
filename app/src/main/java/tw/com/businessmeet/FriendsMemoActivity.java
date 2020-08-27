@@ -45,7 +45,7 @@ public class FriendsMemoActivity extends AppCompatActivity {
         }
 
         @Override
-        public void onFail(int status) {
+        public void onFail(int status,String message) {
 
         }
     };
@@ -62,7 +62,7 @@ public class FriendsMemoActivity extends AppCompatActivity {
         }
 
         @Override
-        public void onFail(int status) {
+        public void onFail(int status,String message) {
 
         }
     };

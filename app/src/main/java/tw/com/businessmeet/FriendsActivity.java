@@ -67,8 +67,12 @@ public class FriendsActivity extends AppCompatActivity implements FriendsRecycle
                 }
 
                 @Override
-                public void onFail(int status) {
-
+                public void onFail(int status,String message) {
+//                    if(status == 500){
+//                        Intent intent = new Intent();
+//                        intent.setClass(FriendsActivity.this,LoginActivity.class);
+//                        startActivity(intent);
+//                    }
                 }
             };
     private AsyncTasKHelper.OnResponseListener<String,UserInformationBean> getByIdResponseListener =
@@ -86,7 +90,7 @@ public class FriendsActivity extends AppCompatActivity implements FriendsRecycle
                 }
 
                 @Override
-                public void onFail(int status) {
+                public void onFail(int status,String message) {
 
                 }
             };

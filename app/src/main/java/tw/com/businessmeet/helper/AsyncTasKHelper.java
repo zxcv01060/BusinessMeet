@@ -3,6 +3,9 @@ package tw.com.businessmeet.helper;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.IOException;
 
 import retrofit2.Call;
@@ -24,7 +27,6 @@ public class AsyncTasKHelper<P, R> extends AsyncTask<P, Void, Response<ResponseB
     @Override
     protected Response<ResponseBody<R>> doInBackground(P... ps) {
         try {
-            Log.d("response","printtttt");
             return onResponseListener.request(ps).execute();
         } catch (IOException e) {
             e.printStackTrace();
@@ -35,16 +37,30 @@ public class AsyncTasKHelper<P, R> extends AsyncTask<P, Void, Response<ResponseB
     @Override
     protected void onPostExecute(Response<ResponseBody<R>> response) {
         super.onPostExecute(response);
+        System.out.println("response : " + response);
+        System.out.println("response.isSuccessful : " + response.isSuccessful());
+        System.out.println("response.message() = " + response.message());
+        System.out.println("response.code() : " + response.code());
         if (response != null && response.isSuccessful()) {
             ResponseBody<R> body = response.body();
             System.out.println("response : " + body.getMessage());
             if (body.getSuccess()) {
                 onResponseListener.onSuccess(body.getData());
             } else {
-                onResponseListener.onFail(1);
+                onResponseListener.onFail(1,body.getMessage());
             }
         } else {
-            onResponseListener.onFail(response != null ? response.code() : 500);
+            try {
+                JSONObject errorBody = new JSONObject(response.errorBody().string());
+                System.out.println("errorBody = " + errorBody);
+
+                System.out.println("errorBody.getJSONObject(\"text\").getString(\"message\") = " + errorBody.getString("message"));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            onResponseListener.onFail(response != null ? response.code() : 500,(response!=null?"":"") );
         }
     }
 
@@ -55,7 +71,7 @@ public class AsyncTasKHelper<P, R> extends AsyncTask<P, Void, Response<ResponseB
 
         void onSuccess(R r);
 
-        void onFail(int status);
+        void onFail(int status,String message);
     }
 }
 

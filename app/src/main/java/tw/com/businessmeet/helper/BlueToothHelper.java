@@ -35,6 +35,7 @@ import java.io.OutputStream;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -49,6 +50,7 @@ import retrofit2.Call;
 import tw.com.businessmeet.AddIntroductionActivity;
 import tw.com.businessmeet.R;
 import tw.com.businessmeet.RequestCode;
+import tw.com.businessmeet.SelfIntroductionActivity;
 import tw.com.businessmeet.adapter.UnmatchedDeviceRecyclerViewAdapter;
 import tw.com.businessmeet.adapter.MatchedDeviceRecyclerViewAdapter;
 import tw.com.businessmeet.background.NotificationService;
@@ -59,6 +61,7 @@ import tw.com.businessmeet.bean.UserInformationBean;
 import tw.com.businessmeet.dao.FriendDAO;
 import tw.com.businessmeet.dao.TimelineDAO;
 import tw.com.businessmeet.dao.UserInformationDAO;
+import tw.com.businessmeet.network.ApplicationContext;
 import tw.com.businessmeet.service.Impl.FriendServiceImpl;
 import tw.com.businessmeet.service.Impl.TimelineServiceImpl;
 import tw.com.businessmeet.service.Impl.UserInformationServiceImpl;
@@ -117,7 +120,7 @@ public class BlueToothHelper {
         }
 
         @Override
-        public void onFail(int status) {
+        public void onFail(int status,String message) {
 
         }
 
@@ -147,7 +150,7 @@ public class BlueToothHelper {
         }
 
         @Override
-        public void onFail(int status) {
+        public void onFail(int status,String message) {
             Log.d("intomatched", "success");
             //unmatchedDeviceRecyclerViewAdapter.dataInsert(userInformationBean);
         }
@@ -467,8 +470,14 @@ public class BlueToothHelper {
             System.out.println("mBluetoothAdapter.isEnabled() : " + mBluetoothAdapter.isEnabled());
             String userId = getUserId();
             Intent intent = new Intent();
-            intent.setClass(activity, (userId == "" || userId == null )?AddIntroductionActivity.class:LoginActivity.class);
-            activity.startActivity(intent);
+            if(userId == "" || userId == null ){
+                intent.setClass(activity,AddIntroductionActivity.class);
+                activity.startActivity(intent);
+            }else{
+                AsyncTasKHelper.execute(getLoginStatus,getUserId());
+
+            }
+
             return true;
 
         } else {
@@ -624,7 +633,7 @@ public class BlueToothHelper {
         }
 
         @Override
-        public void onFail(int status) {
+        public void onFail(int status,String message) {
 
         }
 
@@ -685,7 +694,7 @@ public class BlueToothHelper {
             }
         }
         @Override
-        public void onFail(int status) {
+        public void onFail(int status,String message) {
             Log.d("intomatched","success");
             //unmatchedDeviceRecyclerViewAdapter.dataInsert(userInformationBean);
         }
@@ -724,9 +733,30 @@ public class BlueToothHelper {
                 timelineDAO.add(timelineBean);
         }
         @Override
-        public void onFail(int status) {
+        public void onFail(int status,String message) {
             Log.d("intomatched","success");
             //unmatchedDeviceRecyclerViewAdapter.dataInsert(userInformationBean);
+        }
+    };
+    private AsyncTasKHelper.OnResponseListener<String, UserInformationBean> getLoginStatus = new AsyncTasKHelper.OnResponseListener<String, UserInformationBean>() {
+        @Override
+        public Call<ResponseBody<UserInformationBean>> request(String... userIds) {
+            return userInformationService.getById(userIds[0]);
+        }
+        @Override
+        public void onSuccess(UserInformationBean userInformationBean) {
+            Intent intent = new Intent();
+            intent.setClass(activity,SelfIntroductionActivity.class);
+            activity.startActivity(intent);
+        }
+        @Override
+        public void onFail(int status,String message) {
+            Log.d("intomatched","success");
+            if(status == 401) {
+                Intent intent = new Intent();
+                intent.setClass(activity, LoginActivity.class);
+                activity.startActivity(intent);
+            }
         }
     };
 }
