@@ -6,6 +6,13 @@
     android:layout_height="match_parent"
     tools:context=".EditMemoFragment">
 
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/friends_edit_profile_memo_recycleView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/memo_addColumn"
         style="@style/floatingButton"
