@@ -27,16 +27,17 @@ import tw.com.businessmeet.helper.BlueToothHelper;
 import tw.com.businessmeet.helper.DBHelper;
 
 public class SelfIntroductionActivity extends AppCompatActivity {
-    private TextView userName,profession,gender,email,tel;
+    private TextView userName, profession, gender, email, tel;
     private Button editButton;
     private ImageView avatar;
     private UserInformationDAO userInformationDAO;
-    private  DBHelper DH;
+    private DBHelper DH;
     private AvatarHelper avatarHelper;
-    private BottomNavigationView menu ;
+    private BottomNavigationView menu;
     private BlueToothHelper blueToothHelper;
     private NotificationService notificationService = null;
     private Toolbar toolbar;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,7 +58,7 @@ public class SelfIntroductionActivity extends AppCompatActivity {
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         //toolbarMenu
         toolbar.inflateMenu(R.menu.toolbarmenu);
-        toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener(){
+        toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
 
             @Override
             public boolean onMenuItemClick(MenuItem item) {
@@ -65,7 +66,6 @@ public class SelfIntroductionActivity extends AppCompatActivity {
             }
 
         });
-
 
         openDB();
         searchUserInformation();
@@ -83,16 +83,17 @@ public class SelfIntroductionActivity extends AppCompatActivity {
         bottomNavigationView.setItemIconTintList(null);  //顯示頭像
         AvatarHelper avatarHelper = new AvatarHelper();
         blueToothHelper.startBuleTooth();
-        Log.d("seedmess","ness");
+        Log.d("seedmess", "ness");
         Cursor result = userInformationDAO.getById(blueToothHelper.getUserId());
-        Log.e("result",String.valueOf(result));
+        Log.e("result", String.valueOf(result));
 
         MenuItem userItem = BVMenu.findItem(R.id.menu_home);
         Bitmap myPhoto = avatarHelper.getImageResource(result.getString(result.getColumnIndex("avatar")));
         userItem.setIcon(new BitmapDrawable(getResources(), myPhoto));
-        startBackgroundService();
+
     }
-//    private ServiceConnection notificationServiceConnect = new ServiceConnection() {
+
+    //    private ServiceConnection notificationServiceConnect = new ServiceConnection() {
 //        @Override
 //        public void onServiceConnected(ComponentName name, IBinder service) {
 //            notificationService = ((NotificationService.LocalBinder)service).getService();
@@ -103,12 +104,8 @@ public class SelfIntroductionActivity extends AppCompatActivity {
 //
 //        }
 //    };
-    private void startBackgroundService(){
 
-        Intent it = new Intent(SelfIntroductionActivity.this, NotificationService.class);
-        stopService(it);
-        startService(it);
-    }
+
     private void openDB(){
         Log.d("add","openDB");
         DH = new DBHelper(this);

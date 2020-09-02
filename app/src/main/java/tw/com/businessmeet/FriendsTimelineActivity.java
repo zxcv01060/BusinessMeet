@@ -71,7 +71,7 @@ public class FriendsTimelineActivity extends AppCompatActivity implements Friend
         }
 
         @Override
-        public void onFail(int status) {
+        public void onFail(int status,String message) {
         }
     };
 

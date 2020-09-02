@@ -6,6 +6,7 @@ public class ResponseBody<D> {
     @SerializedName("result")
     boolean success;
     D data;
+    String message;
 
     public boolean getSuccess() {
         return success;
@@ -21,5 +22,13 @@ public class ResponseBody<D> {
 
     public void setData(D data) {
         this.data = data;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
     }
 }

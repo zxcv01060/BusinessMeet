@@ -12,7 +12,7 @@ import java.util.Date;
 public class DBHelper extends SQLiteOpenHelper {
     private final static int _DBVersion = 1;
     private final static String _DBName = "BeMet.db";
-    private final static String[] _TableName = new String[]{"user_information","user_customization","friend","groups","friend_group","friend_customization","friend_label","friend_remark","timeline_properties","timeline","activity_label","activity_remind","activity_invite","problem_report"};
+    private final static String[] _TableName = new String[]{"user_information","user_customization","friend","groups","friend_group","friend_customization","friend_label","friend_remark","timeline_properties","timeline","activity_label","activity_remind","activity_invite","problem_report","user_role"};
 
     public DBHelper(Context context) {
             super(context, _DBName, null, _DBVersion);
@@ -32,6 +32,7 @@ public class DBHelper extends SQLiteOpenHelper {
                 "profession  nvarchar(100) not null,"+
                 "avatar varchar(1000) not null,"+
                 "tel varchar(20), " +
+                "role_no int not null,"+
                 "bluetooth varchar(17) not null,"+
                 "create_date datetime not null,"+
                 "modify_date datetime"+
@@ -154,6 +155,14 @@ public class DBHelper extends SQLiteOpenHelper {
                 "create_date datetime not null,"+
                 "modify_date datetime"+
                 ");";
+        db.execSQL(SQL);
+        SQL = "create table if not exists "+ _TableName[14] + "("+
+                "role_no int primary key,"+
+                "role_name varchar(10)" +
+                ");";
+        db.execSQL(SQL);
+        SQL = "insert into "+_TableName[14]+"(role_no,role_name)"+
+                "values(1,'admin'),(2,'manage'),(3,'user');";
         db.execSQL(SQL);
     }
 

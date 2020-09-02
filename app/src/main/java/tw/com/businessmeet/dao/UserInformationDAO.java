@@ -32,32 +32,36 @@ public class UserInformationDAO {
         String tel = userInformationBean.getTel();
         String avatar = userInformationBean.getAvatar();
         String bluetooth = userInformationBean.getBluetooth();
+        Integer roleNo = userInformationBean.getRoleNo();
         if(userId != null && !userId.equals("")){
-            values.put("user_id", userInformationBean.getUserId());
+            values.put("user_id", userId);
         }
         if(password != null && !password.equals("")){
-            values.put("password", userInformationBean.getPassword());
+            values.put("password", password);
         }
         if(name != null && !name.equals("")){
-            values.put("name", userInformationBean.getName());
+            values.put("name", name);
         }
         if(mail != null && !mail.equals("")){
-            values.put("mail",userInformationBean.getMail());
+            values.put("mail",mail);
         }
         if(gender != null && !gender.equals("")){
-            values.put("gender",userInformationBean.getGender());
+            values.put("gender",gender);
         }
         if(profession != null && !profession.equals("")){
-            values.put("profession", userInformationBean.getProfession());
+            values.put("profession", profession);
         }
         if(tel != null && !tel.equals("")){
-            values.put("tel",userInformationBean.getTel());
+            values.put("tel",tel);
         }
         if(avatar != null && !avatar.equals("")) {
-            values.put("avatar", userInformationBean.getAvatar());
+            values.put("avatar", avatar);
         }
         if(bluetooth != null && !bluetooth.equals("")){
-            values.put("bluetooth", userInformationBean.getBluetooth());
+            values.put("bluetooth", bluetooth);
+        }
+        if(roleNo != null && roleNo!=0){
+            values.put("role_no", roleNo);
         }
        
         return  values;

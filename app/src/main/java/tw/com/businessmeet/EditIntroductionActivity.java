@@ -54,7 +54,7 @@ public class EditIntroductionActivity extends AppCompatActivity {
                 }
 
                 @Override
-                public void onFail(int status) {
+                public void onFail(int status,String message) {
 
                 }
             };

@@ -4,8 +4,11 @@ import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
+import retrofit2.http.Field;
 import retrofit2.http.POST;
 import retrofit2.http.Path;
+import tw.com.businessmeet.bean.Empty;
+import tw.com.businessmeet.bean.LoginBean;
 import tw.com.businessmeet.bean.ResponseBody;
 import tw.com.businessmeet.bean.UserInformationBean;
 
@@ -21,4 +24,6 @@ public interface UserInformationService {
     Call<ResponseBody<UserInformationBean>> getById(@Path("userId") String userId);
     @POST(baseRoute+"getBluetooth/{bluetooth}")
     Call<ResponseBody<UserInformationBean>> getByBlueTooth(@Path("bluetooth") String bluetooth);
+    @POST("login")
+    Call<ResponseBody<LoginBean>> login(@Body UserInformationBean userInformationBean);
 }
