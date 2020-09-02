@@ -5,6 +5,19 @@
     <string name="position">職稱</string>
     <string name="email">信箱</string>
     <string name="tel">電話</string>
+
+    <!-- friends_profile -->
+    <string name="friends_profile_topAppBar_timeline">時間軸</string>
+    <string name="friends_profile_topAppBar">好友簡歷</string>
+
+    <string name="friends_profile_information_idTitle">ID : " "</string>
+    <string name="friends_profile_information_edit">編輯</string>
+    <string name="friends_profile_information_delete">刪除</string>
+
+    <string name="friends_profile_information_genderTitle">性別</string>
+    <string name="friends_profile_information_occupationTitle">職業</string>
+    <string name="friends_profile_information_emailTitle">信箱</string>
+    <string name="friends_profile_information_phoneTitle">電話</string>
     <string name="title_activity_login">LoginActivity</string>
     <string name="prompt_email">Email</string>
     <string name="prompt_password">Password</string>

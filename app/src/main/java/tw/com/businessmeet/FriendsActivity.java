@@ -16,6 +16,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
@@ -30,17 +31,20 @@ import tw.com.businessmeet.bean.UserInformationBean;
 import tw.com.businessmeet.helper.AsyncTasKHelper;
 import tw.com.businessmeet.helper.BlueToothHelper;
 import tw.com.businessmeet.service.Impl.FriendServiceImpl;
+import tw.com.businessmeet.service.Impl.FriendServiceImpl;
 import tw.com.businessmeet.service.Impl.UserInformationServiceImpl;
 import tw.com.businessmeet.dao.FriendDAO;
 import tw.com.businessmeet.dao.UserInformationDAO;
 import tw.com.businessmeet.helper.AvatarHelper;
 import tw.com.businessmeet.helper.DBHelper;
+
 public class FriendsActivity extends AppCompatActivity implements FriendsRecyclerViewAdapter.ClickListener {
     private Button button;
     private UserInformationDAO userInformationDAO;
     private DBHelper DH = null;
+    private TextView searchbar;
     private FriendDAO friendDAO;
-    private FriendServiceImpl matchedService = new FriendServiceImpl() ;
+    private FriendServiceImpl friendService = new FriendServiceImpl();
     private UserInformationServiceImpl userInformationService = new UserInformationServiceImpl();
     private BlueToothHelper blueToothHelper;
     private RecyclerView recyclerViewFriends;
@@ -51,17 +55,17 @@ public class FriendsActivity extends AppCompatActivity implements FriendsRecycle
                 @Override
                 public Call<ResponseBody<List<FriendBean>>> request(FriendBean... friendBean) {
 
-                    return matchedService.search(friendBean[0]);
+                    return friendService.search(friendBean[0]);
                 }
 
                 @Override
                 public void onSuccess(List<FriendBean> friendBeanList) {
-                    Log.e("FriendBean","success");
+                    Log.e("FriendBean", "success");
                     if (friendBeanList.size() > 1 || (friendBeanList.size() == 1 && (friendBeanList.get(0).getCreateDate() != null && !friendBeanList.get(0).equals("")))) {
 
-                        for(FriendBean friendBean : friendBeanList) {
-                        AsyncTasKHelper.execute(getByIdResponseListener, friendBean.getFriendId());
-                        Log.e("FriendBean", String.valueOf(friendBean));
+                        for (FriendBean friendBean : friendBeanList) {
+                            AsyncTasKHelper.execute(getByIdResponseListener, friendBean.getFriendId());
+                            Log.e("FriendBean", String.valueOf(friendBean));
                         }
                     }
                 }
@@ -75,8 +79,8 @@ public class FriendsActivity extends AppCompatActivity implements FriendsRecycle
 //                    }
                 }
             };
-    private AsyncTasKHelper.OnResponseListener<String,UserInformationBean> getByIdResponseListener =
-            new AsyncTasKHelper.OnResponseListener<String,UserInformationBean>() {
+    private AsyncTasKHelper.OnResponseListener<String, UserInformationBean> getByIdResponseListener =
+            new AsyncTasKHelper.OnResponseListener<String, UserInformationBean>() {
                 @Override
                 public Call<ResponseBody<UserInformationBean>> request(String... userId) {
 
@@ -85,7 +89,7 @@ public class FriendsActivity extends AppCompatActivity implements FriendsRecycle
 
                 @Override
                 public void onSuccess(UserInformationBean userInformationBean) {
-                    Log.e("FriendBean","user");
+                    Log.e("FriendBean", "user");
                     friendsRecyclerViewAdapter.dataInsert(userInformationBean);
                 }
 
@@ -94,11 +98,14 @@ public class FriendsActivity extends AppCompatActivity implements FriendsRecycle
 
                 }
             };
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.friends);
         recyclerViewFriends = findViewById(R.id.friendsView);
+        searchbar = (TextView) findViewById(R.id.event_searchbar);
+        searchbar.setOnClickListener(searchbarClick);
         //bottomNavigationView
         //Initialize And Assign Variable
         openDB();
@@ -111,7 +118,7 @@ public class FriendsActivity extends AppCompatActivity implements FriendsRecycle
         AvatarHelper avatarHelper = new AvatarHelper();
         UserInformationBean ufb = new UserInformationBean();
         Cursor result = userInformationDAO.searchAll(ufb);
-        Log.e("result",String.valueOf(result));
+        Log.e("result", String.valueOf(result));
 
         MenuItem userItem = BVMenu.findItem(R.id.menu_home);
         Bitmap myPhoto = avatarHelper.getImageResource(result.getString(result.getColumnIndex("avatar")));
@@ -120,16 +127,16 @@ public class FriendsActivity extends AppCompatActivity implements FriendsRecycle
         blueToothHelper = new BlueToothHelper(this);
         FriendBean friendBean = new FriendBean();
         friendBean.setMatchmakerId(blueToothHelper.getUserId());
-        AsyncTasKHelper.execute(searchResponseListener,friendBean);
-
+        AsyncTasKHelper.execute(searchResponseListener, friendBean);
     }
-    private void openDB(){
-        Log.d("add","openDB");
+
+    private void openDB() {
+        Log.d("add", "openDB");
         DH = new DBHelper(this);
         userInformationDAO = new UserInformationDAO(DH);
         friendDAO = new FriendDAO(DH);
-
     }
+
     private void createRecyclerViewFriends() {
         recyclerViewFriends.setLayoutManager(new LinearLayoutManager(this));
         friendsRecyclerViewAdapter = new FriendsRecyclerViewAdapter(this, this.userInformationBeanList);
@@ -139,11 +146,12 @@ public class FriendsActivity extends AppCompatActivity implements FriendsRecycle
         recyclerViewFriends.addItemDecoration(dividerItemDecoration);
         Log.d("resultMainAdapter", String.valueOf(friendsRecyclerViewAdapter.getItemCount()));
     }
-    public void onClick(View view, int position){
+
+    public void onClick(View view, int position) {
         Intent intent = new Intent();
-        intent.setClass(this,FriendsTimelineActivity.class);
+        intent.setClass(this, FriendsTimelineActivity.class);
         Bundle bundle = new Bundle();
-        bundle.putString("friendId",friendsRecyclerViewAdapter.getUserInformation(position).getUserId());
+        bundle.putString("friendId", friendsRecyclerViewAdapter.getUserInformation(position).getUserId());
         intent.putExtras(bundle);
         startActivity(intent);
 
@@ -160,30 +168,45 @@ public class FriendsActivity extends AppCompatActivity implements FriendsRecycle
 
     }*/
     }
+
+    public View.OnClickListener searchbarClick = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            changeToFriendsSearchActivityPage();
+        }
+    };
+
+    public void changeToFriendsSearchActivityPage() {
+        Intent intent = new Intent();
+        intent.setClass(FriendsActivity.this, FriendsSearchActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putString("blueToothAddress", getIntent().getStringExtra("blueToothAddress"));
+        intent.putExtras(bundle);
+        startActivity(intent);
+    }
+
     //Perform ItemSelectedListener
     BottomNavigationView.OnNavigationItemSelectedListener navListener =
             (new BottomNavigationView.OnNavigationItemSelectedListener() {
                 @Override
-        public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-            switch (menuItem.getItemId()){
-                case R.id.menu_home:
-                    startActivity(new Intent(getApplicationContext()
-                            ,SelfIntroductionActivity.class));
-                    overridePendingTransition(0,0);
-                    return true;
-                case R.id.menu_search:
-                    startActivity(new Intent(getApplicationContext()
-                            ,SearchActivity.class));
-                    overridePendingTransition(0,0);
-                    return true;
-                case R.id.menu_friends:
-                    return true;
-            }
-            return false;
-        }
-    });
-
-
+                public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+                    switch (menuItem.getItemId()) {
+                        case R.id.menu_home:
+                            startActivity(new Intent(getApplicationContext()
+                                    , SelfIntroductionActivity.class));
+                            overridePendingTransition(0, 0);
+                            return true;
+                        case R.id.menu_search:
+                            startActivity(new Intent(getApplicationContext()
+                                    , SearchActivity.class));
+                            overridePendingTransition(0, 0);
+                            return true;
+                        case R.id.menu_friends:
+                            return true;
+                    }
+                    return false;
+                }
+            });
 
 
 }

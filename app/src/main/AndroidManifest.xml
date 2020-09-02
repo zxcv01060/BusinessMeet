@@ -20,16 +20,28 @@
         android:networkSecurityConfig="@xml/network_security_config"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.AppCompat.Light.NoActionBar">
+        android:theme="@style/AppTheme">
+        <activity android:name=".adapter.EventTagRecyclerViewAdapter"></activity>
+        <activity android:name=".EventSearch" />
+        <activity
+            android:name=".ColorSelectActivity"
+            android:theme="@style/AppTheme.PopMe" />
+        <activity android:name=".CrateEventActivity" />
+        <activity android:name=".EditEventActivity" />
+        <activity android:name=".EventActivity" />
+        <activity
+            android:name=".FriendsTimelineActivity"
+            android:parentActivityName=".FriendsActivity" />
         <activity
             android:name=".LoginActivity"
             android:label="@string/title_activity_login"></activity>
-        <activity android:name=".FriendsTimelineActivity" />
         <activity android:name=".BaseActivity" />
         <activity android:name=".NotificationActivity" />
         <activity android:name=".FriendsActivity" />
         <activity android:name=".FriendsIntroductionActivity" />
         <activity android:name=".FriendsMemoActivity" />
+        <activity android:name=".FriendsSearchActivity" />
+        <activity android:name=".FriendsFilterActivity" />
         <activity android:name=".EditIntroductionActivity" />
         <activity android:name=".SelfIntroductionActivity" />
         <activity android:name=".AddIntroductionActivity" />
@@ -44,5 +56,7 @@
 
         <service android:name=".background.NotificationService"></service>
     </application>
+
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
 </manifest>
