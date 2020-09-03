@@ -34,8 +34,8 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
-import java.util.Calendar;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -61,9 +61,11 @@ import tw.com.businessmeet.bean.UserInformationBean;
 import tw.com.businessmeet.dao.FriendDAO;
 import tw.com.businessmeet.dao.TimelineDAO;
 import tw.com.businessmeet.dao.UserInformationDAO;
+import tw.com.businessmeet.network.ApplicationContext;
 import tw.com.businessmeet.service.Impl.FriendServiceImpl;
 import tw.com.businessmeet.service.Impl.TimelineServiceImpl;
 import tw.com.businessmeet.service.Impl.UserInformationServiceImpl;
+import tw.com.businessmeet.LoginActivity;
 
 import static java.lang.Math.abs;
 import static java.lang.Math.pow;
@@ -118,7 +120,7 @@ public class BlueToothHelper {
         }
 
         @Override
-        public void onFail(int status) {
+        public void onFail(int status,String message) {
 
         }
 
@@ -148,7 +150,7 @@ public class BlueToothHelper {
         }
 
         @Override
-        public void onFail(int status) {
+        public void onFail(int status,String message) {
             Log.d("intomatched", "success");
             //unmatchedDeviceRecyclerViewAdapter.dataInsert(userInformationBean);
         }
@@ -466,9 +468,16 @@ public class BlueToothHelper {
         int permissionCheck = ContextCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_COARSE_LOCATION);
         if (permissionCheck == PackageManager.PERMISSION_GRANTED && mBluetoothAdapter.isEnabled()) {
             System.out.println("mBluetoothAdapter.isEnabled() : " + mBluetoothAdapter.isEnabled());
+            String userId = getUserId();
             Intent intent = new Intent();
-            intent.setClass(activity, AddIntroductionActivity.class);
-            activity.startActivity(intent);
+            if(userId == "" || userId == null ){
+                intent.setClass(activity,AddIntroductionActivity.class);
+                activity.startActivity(intent);
+            }else{
+                AsyncTasKHelper.execute(getLoginStatus,getUserId());
+
+            }
+
             return true;
 
         } else {
@@ -624,7 +633,7 @@ public class BlueToothHelper {
         }
 
         @Override
-        public void onFail(int status) {
+        public void onFail(int status,String message) {
 
         }
 
@@ -645,13 +654,7 @@ public class BlueToothHelper {
 
                 if (backgroundDistance <= 10000) {
                     if (ActivityCompat.checkSelfPermission(notificationService, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(notificationService, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                        // TODO: Consider calling
-                        //    ActivityCompat#requestPermissions
-                        // here to request the missing permissions, and then overriding
-                        //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                        //                                          int[] grantResults)
-                        // to handle the case where the user grants the permission. See the documentation
-                        // for ActivityCompat#requestPermissions for more details.
+
                         return;
                     }
 
@@ -691,7 +694,7 @@ public class BlueToothHelper {
             }
         }
         @Override
-        public void onFail(int status) {
+        public void onFail(int status,String message) {
             Log.d("intomatched","success");
             //unmatchedDeviceRecyclerViewAdapter.dataInsert(userInformationBean);
         }
@@ -730,9 +733,30 @@ public class BlueToothHelper {
                 timelineDAO.add(timelineBean);
         }
         @Override
-        public void onFail(int status) {
+        public void onFail(int status,String message) {
             Log.d("intomatched","success");
             //unmatchedDeviceRecyclerViewAdapter.dataInsert(userInformationBean);
+        }
+    };
+    private AsyncTasKHelper.OnResponseListener<String, UserInformationBean> getLoginStatus = new AsyncTasKHelper.OnResponseListener<String, UserInformationBean>() {
+        @Override
+        public Call<ResponseBody<UserInformationBean>> request(String... userIds) {
+            return userInformationService.getById(userIds[0]);
+        }
+        @Override
+        public void onSuccess(UserInformationBean userInformationBean) {
+            Intent intent = new Intent();
+            intent.setClass(activity,SelfIntroductionActivity.class);
+            activity.startActivity(intent);
+        }
+        @Override
+        public void onFail(int status,String message) {
+            Log.d("intomatched","success");
+            if(status == 401) {
+                Intent intent = new Intent();
+                intent.setClass(activity, LoginActivity.class);
+                activity.startActivity(intent);
+            }
         }
     };
 }

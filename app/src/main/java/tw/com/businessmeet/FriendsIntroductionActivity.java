@@ -75,7 +75,7 @@ public class FriendsIntroductionActivity extends AppCompatActivity {
         }
 
         @Override
-        public void onFail(int status) {
+        public void onFail(int status,String message) {
         }
     };
 
@@ -95,7 +95,7 @@ public class FriendsIntroductionActivity extends AppCompatActivity {
         }
 
         @Override
-        public void onFail(int status) {
+        public void onFail(int status,String message) {
 
         }
     };

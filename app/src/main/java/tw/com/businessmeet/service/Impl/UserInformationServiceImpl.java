@@ -3,6 +3,8 @@ package tw.com.businessmeet.service.Impl;
 import java.util.List;
 
 import retrofit2.Call;
+import tw.com.businessmeet.bean.Empty;
+import tw.com.businessmeet.bean.LoginBean;
 import tw.com.businessmeet.bean.ResponseBody;
 import tw.com.businessmeet.bean.UserInformationBean;
 import tw.com.businessmeet.service.UserInformationService;
@@ -35,5 +37,10 @@ public class UserInformationServiceImpl implements UserInformationService{
     @Override
     public Call<ResponseBody<UserInformationBean>> getByBlueTooth(String bluetooth) {
         return userInformationAPI.getByBlueTooth(bluetooth);
+    }
+
+    @Override
+    public Call<ResponseBody<LoginBean>> login(UserInformationBean userInformationBean) {
+        return userInformationAPI.login(userInformationBean);
     }
 }

@@ -8,6 +8,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import tw.com.businessmeet.helper.BlueToothHelper;
+import tw.com.businessmeet.network.ApplicationContext;
 
 //https://codertw.com/android-%E9%96%8B%E7%99%BC/332688/
 public class MainActivity extends AppCompatActivity  {
@@ -17,6 +18,7 @@ public class MainActivity extends AppCompatActivity  {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        ApplicationContext.getInstance().init(getApplicationContext());
         blueToothHelper = new BlueToothHelper(this);
         blueToothHelper.startBuleTooth();
         blueToothHelper.openGPS(this);
