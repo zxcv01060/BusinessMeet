@@ -75,7 +75,7 @@ public class EditMemoFragment extends Fragment {
                 }
 
                 @Override
-                public void onFail(int status) {
+                public void onFail(int status, String message) {
                 }
             };
 
@@ -98,7 +98,7 @@ public class EditMemoFragment extends Fragment {
         }
 
         @Override
-        public void onFail(int status) {
+        public void onFail(int status, String message) {
         }
     };
 
