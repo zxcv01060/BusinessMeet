@@ -55,7 +55,7 @@ public class FriendsSearchActivity extends AppCompatActivity {
         Log.d("add", "openDB");
         DH = new DBHelper(this);
         userInformationDAO = new tw.com.businessmeet.dao.UserInformationDAO(DH);
-        //matchedDAO = new tw.com.businessmeet.dao.MatchedDAO(DH);
+        //matchedDAO = new tw.com.bussinessmeet.dao.MatchedDAO(DH);
     }
 
     public View.OnClickListener backFriendsClick = new View.OnClickListener() {
