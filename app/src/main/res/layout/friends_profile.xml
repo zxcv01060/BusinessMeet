@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    style="@style/AppTheme"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appBarLayout_top"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent">
 
         <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/friends_profile_topAppBar"
@@ -20,219 +20,230 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/friends_profile_information_major"
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
-        android:background="@color/white"
-        app:layout_anchor="@id/appBarLayout_top"
-        app:layout_anchorGravity="bottom">
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@+id/linearLayout"
+        app:layout_constraintTop_toBottomOf="@id/appBarLayout_top">
 
-        <TextView
-            android:id="@+id/friends_profile_information_name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="26dp"
-            android:layout_marginTop="16dp"
-            android:text="陳雅儒"
-            android:textColor="@color/colorPrimary"
-            android:textSize="24sp"
-            android:textStyle="bold"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@id/friends_profile_information_major" />
-
-        <TextView
-            android:id="@+id/friends_profile_information_idTitle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="2dp"
-            android:text="@string/friends_profile_information_idTitle"
-            android:textColor="@color/grey_60"
-            android:textSize="16dp"
-            app:layout_constraintStart_toStartOf="@id/friends_profile_information_name"
-            app:layout_constraintTop_toBottomOf="@id/friends_profile_information_name" />
-
-        <TextView
-            android:id="@+id/friends_profile_information_id"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="RubyChen1226"
-            android:textColor="@color/grey_60"
-            android:textSize="16dp"
-            app:layout_constraintStart_toEndOf="@id/friends_profile_information_idTitle"
-            app:layout_constraintTop_toTopOf="@id/friends_profile_information_idTitle" />
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/friends_profile_information_edit"
-            style="@style/button"
-            android:layout_marginTop="12dp"
-            android:layout_marginBottom="16dp"
-            android:background="@drawable/button_radius_solid"
-            android:text="@string/friends_profile_information_edit"
-            android:textColor="@color/colorPrimaryDark"
-            app:layout_constraintBottom_toBottomOf="@id/friends_profile_information_major"
-            app:layout_constraintStart_toStartOf="@id/friends_profile_information_idTitle"
-            app:layout_constraintTop_toBottomOf="@id/friends_profile_information_idTitle" />
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/friends_profile_information_delete"
-            style="@style/button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp"
-            android:background="@drawable/button_radius_solid_red"
-            android:text="@string/friends_profile_information_delete"
-            android:textColor="@color/colorAccent"
-            app:layout_constraintStart_toEndOf="@id/friends_profile_information_edit"
-            app:layout_constraintTop_toTopOf="@id/friends_profile_information_edit" />
-
-        <ImageView
-            android:id="@+id/friends_profile_information_photo"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:layout_marginRight="26dp"
-            app:layout_constraintBottom_toBottomOf="@id/friends_profile_information_edit"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@id/friends_profile_information_name"
-            app:srcCompat="@drawable/avatar" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/friends_profile_information_basic"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
-        android:background="@color/white"
-        app:layout_anchor="@id/friends_profile_information_major"
-        app:layout_anchorGravity="bottom">
-
-        <TextView
-            android:id="@+id/splitLine"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/friends_profile_information"
             android:layout_width="match_parent"
-            android:layout_height="16dp"
-            android:background="@color/grey_96"
-            app:layout_constraintBottom_toTopOf="@id/friends_profile_information_genderTitle"
-            app:layout_constraintTop_toTopOf="@id/friends_profile_information_basic" />
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toTopOf="@id/linearLayout"
+            app:layout_constraintTop_toBottomOf="@id/appBarLayout_top">
 
-        <TextView
-            android:id="@+id/friends_profile_information_genderTitle"
-            style="@style/friends_profile_information_basic_title"
-            android:layout_marginLeft="16dp"
-            android:layout_marginTop="16dp"
-            android:text="@string/friends_profile_information_genderTitle"
-            app:layout_constraintBottom_toTopOf="@id/friends_profile_information_gender"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/splitLine" />
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/friends_profile_information_major"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:background="@color/white"
+                app:layout_constraintTop_toTopOf="@id/friends_profile_information">
 
-        <TextView
-            android:id="@+id/friends_profile_information_gender"
-            style="@style/input"
-            app:layout_constraintStart_toStartOf="@id/friends_profile_information_genderTitle"
-            app:layout_constraintTop_toBottomOf="@id/friends_profile_information_genderTitle" />
+                <TextView
+                    android:id="@+id/friends_profile_information_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="26dp"
+                    android:layout_marginTop="16dp"
+                    android:text=""
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="24sp"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="@id/friends_profile_information_major" />
 
-        <TextView
-            android:id="@+id/friends_profile_information_occupationTitle"
-            style="@style/friends_profile_information_basic_title"
-            android:text="@string/friends_profile_information_occupationTitle"
-            app:layout_constraintStart_toStartOf="@id/friends_profile_information_genderTitle"
-            app:layout_constraintTop_toBottomOf="@id/friends_profile_information_gender" />
+                <TextView
+                    android:id="@+id/friends_profile_information_idTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:text="@string/friends_profile_information_idTitle"
+                    android:textColor="@color/grey_60"
+                    android:textSize="16dp"
+                    app:layout_constraintStart_toStartOf="@id/friends_profile_information_name"
+                    app:layout_constraintTop_toBottomOf="@id/friends_profile_information_name" />
 
-        <TextView
-            android:id="@+id/friends_profile_information_occupation"
-            style="@style/input"
-            app:layout_constraintStart_toStartOf="@id/friends_profile_information_genderTitle"
-            app:layout_constraintTop_toBottomOf="@id/friends_profile_information_occupationTitle" />
+                <TextView
+                    android:id="@+id/friends_profile_information_id"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=""
+                    android:textColor="@color/grey_60"
+                    android:textSize="16dp"
+                    app:layout_constraintStart_toEndOf="@id/friends_profile_information_idTitle"
+                    app:layout_constraintTop_toTopOf="@id/friends_profile_information_idTitle" />
 
-        <TextView
-            android:id="@+id/friends_profile_information_emailTitle"
-            style="@style/friends_profile_information_basic_title"
-            android:text="@string/friends_profile_information_emailTitle"
-            app:layout_constraintStart_toStartOf="@id/friends_profile_information_genderTitle"
-            app:layout_constraintTop_toBottomOf="@id/friends_profile_information_occupation" />
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/friends_profile_information_edit"
+                    style="@style/button"
+                    android:layout_marginTop="12dp"
+                    android:layout_marginBottom="16dp"
+                    android:text="@string/friends_profile_information_edit"
+                    android:textColor="@color/colorPrimary"
+                    app:layout_constraintBottom_toBottomOf="@id/friends_profile_information_major"
+                    app:layout_constraintStart_toStartOf="@id/friends_profile_information_idTitle"
+                    app:layout_constraintTop_toBottomOf="@id/friends_profile_information_idTitle" />
 
-        <TextView
-            android:id="@+id/friends_profile_information_email"
-            style="@style/input"
-            app:layout_constraintStart_toStartOf="@id/friends_profile_information_genderTitle"
-            app:layout_constraintTop_toBottomOf="@id/friends_profile_information_emailTitle" />
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/friends_profile_information_delete"
+                    style="@style/button"
+                    android:layout_marginLeft="20dp"
+                    android:text="@string/friends_profile_information_delete"
+                    android:textColor="@color/colorAccent"
+                    app:layout_constraintStart_toEndOf="@id/friends_profile_information_edit"
+                    app:layout_constraintTop_toTopOf="@id/friends_profile_information_edit" />
 
-        <TextView
-            android:id="@+id/friends_profile_information_phoneTitle"
-            style="@style/friends_profile_information_basic_title"
-            android:text="@string/friends_profile_information_phoneTitle"
-            app:layout_constraintStart_toStartOf="@id/friends_profile_information_genderTitle"
-            app:layout_constraintTop_toBottomOf="@id/friends_profile_information_email" />
+                <ImageView
+                    android:id="@+id/friends_profile_information_photo"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:layout_marginRight="26dp"
+                    app:layout_constraintBottom_toBottomOf="@id/friends_profile_information_edit"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="@id/friends_profile_information_name"
+                    app:srcCompat="@drawable/avatar" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <TextView
-            android:id="@+id/friends_profile_information_phone"
-            style="@style/input"
-            android:layout_marginBottom="16dp"
-            app:layout_constraintBottom_toBottomOf="@id/friends_profile_information_basic"
-            app:layout_constraintStart_toStartOf="@id/friends_profile_information_genderTitle"
-            app:layout_constraintTop_toBottomOf="@id/friends_profile_information_phoneTitle" />
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/friends_profile_information_basic"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:background="@color/white"
+                app:layout_constraintTop_toBottomOf="@id/friends_profile_information_major">
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+                <TextView
+                    android:id="@+id/splitLine"
+                    android:layout_width="match_parent"
+                    android:layout_height="16dp"
+                    android:background="@color/grey_96"
+                    app:layout_constraintBottom_toTopOf="@id/friends_profile_information_genderTitle"
+                    app:layout_constraintTop_toTopOf="@id/friends_profile_information_basic" />
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/friends_profile_information_memo"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
-        android:background="@color/white"
-        app:layout_anchor="@id/friends_profile_information_basic"
-        app:layout_anchorGravity="bottom">
+                <TextView
+                    android:id="@+id/friends_profile_information_genderTitle"
+                    style="@style/friends_profile_information_basic_title"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginTop="16dp"
+                    android:text="@string/friends_profile_information_genderTitle"
+                    app:layout_constraintBottom_toTopOf="@id/friends_profile_information_gender"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/splitLine" />
 
-        <TextView
-            android:id="@+id/splitLine2"
-            android:layout_width="match_parent"
-            android:layout_height="16dp"
-            android:background="@color/grey_96"
-            app:layout_constraintBottom_toTopOf="@id/friends_profile_information_favorite"
-            app:layout_constraintTop_toTopOf="@id/friends_profile_information_memo" />
+                <TextView
+                    android:id="@+id/friends_profile_information_gender"
+                    style="@style/input"
+                    app:layout_constraintStart_toStartOf="@id/friends_profile_information_genderTitle"
+                    app:layout_constraintTop_toBottomOf="@id/friends_profile_information_genderTitle" />
 
-        <TextView
-            android:id="@+id/friends_profile_information_favorite"
-            style="@style/friends_profile_information_memo_title"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="16dp"
-            android:drawableLeft="@drawable/ic_favorite_border_black_24dp"
-            android:drawablePadding="6dp"
-            android:text="新增喜好"
-            app:layout_constraintTop_toBottomOf="@id/splitLine2" />
+                <TextView
+                    android:id="@+id/friends_profile_information_occupationTitle"
+                    style="@style/friends_profile_information_basic_title"
+                    android:text="@string/friends_profile_information_occupationTitle"
+                    app:layout_constraintStart_toStartOf="@id/friends_profile_information_genderTitle"
+                    app:layout_constraintTop_toBottomOf="@id/friends_profile_information_gender" />
 
-        <TextView
-            android:id="@+id/friends_profile_information_limit"
-            style="@style/friends_profile_information_memo_title"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="16dp"
-            android:drawableLeft="@drawable/ic_do_not_disturb_black_24dp"
-            android:drawablePadding="6dp"
-            android:text="新增禁忌"
-            app:layout_constraintTop_toBottomOf="@id/friends_profile_information_favorite" />
+                <TextView
+                    android:id="@+id/friends_profile_information_occupation"
+                    style="@style/input"
+                    app:layout_constraintStart_toStartOf="@id/friends_profile_information_genderTitle"
+                    app:layout_constraintTop_toBottomOf="@id/friends_profile_information_occupationTitle" />
 
-        <TextView
-            android:id="@+id/friends_profile_information_personality"
-            style="@style/friends_profile_information_memo_title"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="16dp"
-            android:drawableLeft="@drawable/ic_person_black_24dp"
-            android:drawablePadding="6dp"
-            android:text="新增禁忌"
-            android:layout_marginBottom="16dp"
-            app:layout_constraintTop_toBottomOf="@id/friends_profile_information_limit"
-            app:layout_constraintBottom_toBottomOf="@id/friends_profile_information_memo"/>
+                <TextView
+                    android:id="@+id/friends_profile_information_emailTitle"
+                    style="@style/friends_profile_information_basic_title"
+                    android:text="@string/friends_profile_information_emailTitle"
+                    app:layout_constraintStart_toStartOf="@id/friends_profile_information_genderTitle"
+                    app:layout_constraintTop_toBottomOf="@id/friends_profile_information_occupation" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+                <TextView
+                    android:id="@+id/friends_profile_information_email"
+                    style="@style/input"
+                    app:layout_constraintStart_toStartOf="@id/friends_profile_information_genderTitle"
+                    app:layout_constraintTop_toBottomOf="@id/friends_profile_information_emailTitle" />
+
+                <TextView
+                    android:id="@+id/friends_profile_information_phoneTitle"
+                    style="@style/friends_profile_information_basic_title"
+                    android:text="@string/friends_profile_information_phoneTitle"
+                    app:layout_constraintStart_toStartOf="@id/friends_profile_information_genderTitle"
+                    app:layout_constraintTop_toBottomOf="@id/friends_profile_information_email" />
+
+                <TextView
+                    android:id="@+id/friends_profile_information_phone"
+                    style="@style/input"
+                    android:layout_marginBottom="16dp"
+                    app:layout_constraintBottom_toBottomOf="@id/friends_profile_information_basic"
+                    app:layout_constraintStart_toStartOf="@id/friends_profile_information_genderTitle"
+                    app:layout_constraintTop_toBottomOf="@id/friends_profile_information_phoneTitle" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/friends_profile_information_memo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:background="@color/white"
+                app:layout_constraintTop_toBottomOf="@id/friends_profile_information_basic">
+
+                <TextView
+                    android:id="@+id/splitLine2"
+                    android:layout_width="match_parent"
+                    android:layout_height="16dp"
+                    android:background="@color/grey_96"
+                    app:layout_constraintBottom_toTopOf="@id/friends_profile_information_favorite"
+                    app:layout_constraintTop_toTopOf="@id/friends_profile_information_memo" />
+
+                <TextView
+                    android:id="@+id/friends_profile_information_favorite"
+                    style="@style/friends_profile_information_memo_title"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="16dp"
+                    android:drawableLeft="@drawable/ic_favorite_border_black_24dp"
+                    android:drawablePadding="6dp"
+                    android:text="@string/friends_profile_memo_favorite"
+                    app:layout_constraintTop_toBottomOf="@id/splitLine2" />
+
+                <TextView
+                    android:id="@+id/friends_profile_information_limit"
+                    style="@style/friends_profile_information_memo_title"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="16dp"
+                    android:drawableLeft="@drawable/ic_do_not_disturb_black_24dp"
+                    android:drawablePadding="6dp"
+                    android:text="@string/friends_profile_memo_limit"
+                    app:layout_constraintTop_toBottomOf="@id/friends_profile_information_favorite" />
+
+                <TextView
+                    android:id="@+id/friends_profile_information_personality"
+                    style="@style/friends_profile_information_memo_title"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginBottom="16dp"
+                    android:drawableLeft="@drawable/ic_person_black_24dp"
+                    android:drawablePadding="6dp"
+                    android:text="@string/friends_profile_memo_personality"
+                    app:layout_constraintBottom_toBottomOf="@id/friends_profile_information_memo"
+                    app:layout_constraintTop_toBottomOf="@id/friends_profile_information_limit" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.core.widget.NestedScrollView>
 
     <LinearLayout
         android:id="@+id/linearLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom">
+        android:layout_gravity="bottom"
+        app:layout_constraintBottom_toBottomOf="parent">
 
         <com.google.android.material.bottomnavigation.BottomNavigationView
             android:id="@+id/bottom_navigation"
@@ -244,5 +255,4 @@
             app:menu="@menu/menu_navigation" />
     </LinearLayout>
 
-
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

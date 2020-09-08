@@ -8,6 +8,7 @@
     <color name="colorSearchGray">#E6E3E3</color>
     <color name="white">#FFFFFF</color>
     <color name="black">#000000</color>
+    <color name="trasparent">#00000000</color>
 
     <color name="timelineGreen">#ECF2F1</color>
     <color name="timelineYellow">#FDF2D2</color>

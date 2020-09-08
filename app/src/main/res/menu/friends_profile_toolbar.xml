@@ -2,10 +2,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/timeline"
-        android:contentDescription="@string/friends_profile_topAppBar"
+        android:id="@+id/friends_profile_timelineIcon"
         android:icon="@drawable/ic_calendar_add_thin_24dp"
-        android:title="@string/friends_profile_topAppBar_timeline"
+        android:title="@string/friends_profile_topAppBar_timelineIcon"
         app:showAsAction="ifRoom" />
 
 </menu>
