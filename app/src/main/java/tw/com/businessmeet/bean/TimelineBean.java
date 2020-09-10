@@ -13,6 +13,7 @@ public class TimelineBean {
     private String remark;
     private Integer timelinePropertiesNo;
     private String color;
+    private String activityDate;
     private String createDate;
     private String modifyDate;
     private Integer statusCode;
@@ -83,6 +84,14 @@ public class TimelineBean {
 
     public void setColor(String color) {
         this.color = color;
+    }
+
+    public String getActivityDate() {
+        return activityDate;
+    }
+
+    public void setActivityDate(String activityDate) {
+        this.activityDate = activityDate;
     }
 
     public String getCreateDate() {
