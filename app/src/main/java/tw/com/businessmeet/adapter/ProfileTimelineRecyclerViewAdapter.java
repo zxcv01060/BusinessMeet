@@ -1,7 +1,6 @@
 package tw.com.businessmeet.adapter;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,17 +10,15 @@ import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-import tw.com.businessmeet.FriendsTimelineActivity;
 import tw.com.businessmeet.R;
 import tw.com.businessmeet.bean.UserInformationBean;
-import tw.com.businessmeet.helper.AvatarHelper;
 
-public class FriendsTimelineRecyclerViewAdapter extends RecyclerView.Adapter<FriendsTimelineRecyclerViewAdapter.ViewHolder> {
+public class ProfileTimelineRecyclerViewAdapter extends RecyclerView.Adapter<ProfileTimelineRecyclerViewAdapter.ViewHolder> {
     private LayoutInflater layoutInflater;
     private Context context;
     private List<UserInformationBean> userInformationBeanList;
     private ClickListener clickListener;
-    public FriendsTimelineRecyclerViewAdapter(Context context, List<UserInformationBean> userInformationBeanList) {
+    public ProfileTimelineRecyclerViewAdapter(Context context, List<UserInformationBean> userInformationBeanList) {
         this.layoutInflater = LayoutInflater.from(context);
         this.context = context;
         this.userInformationBeanList = userInformationBeanList;
@@ -30,12 +27,12 @@ public class FriendsTimelineRecyclerViewAdapter extends RecyclerView.Adapter<Fri
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = layoutInflater.inflate(R.layout.recycler_view_row_friends_timeline, parent,false);
+        View view = layoutInflater.inflate(R.layout.recycler_view_row_profile_timeline, parent,false);
         return new ViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull FriendsTimelineRecyclerViewAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull ProfileTimelineRecyclerViewAdapter.ViewHolder holder, int position) {
         //holder.profile_event_place.setText("八大");
         UserInformationBean ufb = userInformationBeanList.get(position);
         holder.bindInformation(ufb.getName(),ufb.getProfession());
@@ -50,19 +47,19 @@ public class FriendsTimelineRecyclerViewAdapter extends RecyclerView.Adapter<Fri
 
 
     public class ViewHolder extends  RecyclerView.ViewHolder implements View.OnClickListener {
-        TextView friends_place;
-        TextView friends_date;
+        TextView profile_event_place;
+        TextView profile_event_date;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            friends_date = itemView.findViewById(R.id.friends_date);
-            friends_place = itemView.findViewById(R.id.friends_place);
+            profile_event_date = itemView.findViewById(R.id.profile_event_date);
+            profile_event_place = itemView.findViewById(R.id.profile_event_place);
             itemView.setOnClickListener(this);
         }
 
         void bindInformation(String userName,String userCompany){
-            friends_date.setText(userName);
-            friends_place.setText(userCompany);
+            profile_event_date.setText(userName);
+            profile_event_place.setText(userCompany);
         }
 
         @Override
