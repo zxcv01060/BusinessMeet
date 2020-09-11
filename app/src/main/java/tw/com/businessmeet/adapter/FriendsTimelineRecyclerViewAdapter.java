@@ -38,9 +38,8 @@ public class FriendsTimelineRecyclerViewAdapter extends RecyclerView.Adapter<Fri
     public void onBindViewHolder(@NonNull FriendsTimelineRecyclerViewAdapter.ViewHolder holder, int position) {
         //holder.friends_place.setText("八大");
         TimelineBean tlb = timelineBeanList.get(position);
-        System.out.println(tlb.getCreateDate());
-        holder.bindInformation(tlb.getTimelinePropertiesNo()==1?tlb.getActivityDate():tlb.getCreateDate(),tlb.getPlace());
 
+        holder.bindInformation(tlb.getTimelinePropertiesNo()==1?tlb.getStartDate():tlb.getCreateDateStr(),tlb.getPlace());
     }
 
     @Override

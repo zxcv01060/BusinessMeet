@@ -1,6 +1,7 @@
 package tw.com.businessmeet.bean;
 
 import java.util.Date;
+import java.util.List;
 
 public class TimelineBean {
     private static String[] column = new String[]{"timeline_no","matchmaker_id","friend_id",
@@ -14,8 +15,12 @@ public class TimelineBean {
     private Integer timelinePropertiesNo;
     private String color;
     private String activityDate;
-    private String createDate;
+    private String createDateStr;
     private String modifyDate;
+    private String startDate;
+    private String endDate;
+    private List<ActivityLabelBean> activityLabelBeanList;
+    private List<ActivityInviteBean> activityInviteBeanList;
     private Integer statusCode;
 
     public static String[] getColumn() {
@@ -94,12 +99,12 @@ public class TimelineBean {
         this.activityDate = activityDate;
     }
 
-    public String getCreateDate() {
-        return createDate;
+    public String getCreateDateStr() {
+        return createDateStr;
     }
 
-    public void setCreateDate(String createDate) {
-        this.createDate = createDate;
+    public void setCreateDateStr(String createDateStr) {
+        this.createDateStr = createDateStr;
     }
 
     public String getModifyDate() {
@@ -108,6 +113,38 @@ public class TimelineBean {
 
     public void setModifyDate(String modifyDate) {
         this.modifyDate = modifyDate;
+    }
+
+    public String getStartDate() {
+        return startDate;
+    }
+
+    public void setStartDate(String startDate) {
+        this.startDate = startDate;
+    }
+
+    public String getEndDate() {
+        return endDate;
+    }
+
+    public void setEndDate(String endDate) {
+        this.endDate = endDate;
+    }
+
+    public List<ActivityLabelBean> getActivityLabelBeanList() {
+        return activityLabelBeanList;
+    }
+
+    public void setActivityLabelBeanList(List<ActivityLabelBean> activityLabelBeanList) {
+        this.activityLabelBeanList = activityLabelBeanList;
+    }
+
+    public List<ActivityInviteBean> getActivityInviteBeanList() {
+        return activityInviteBeanList;
+    }
+
+    public void setActivityInviteBeanList(List<ActivityInviteBean> activityInviteBeanList) {
+        this.activityInviteBeanList = activityInviteBeanList;
     }
 
     public Integer getStatusCode() {
