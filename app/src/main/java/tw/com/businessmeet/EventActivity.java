@@ -4,8 +4,10 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
@@ -92,7 +94,35 @@ public class EventActivity extends AppCompatActivity {
         toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener(){
 
                 @Override
-                public boolean onMenuItemClick(MenuItem item) { //偵測按下去的事件
+                public boolean onMenuItemClick(MenuItem item) {
+
+                    switch (item.getItemId()){
+                        case R.id.menu_toolbar_delete:
+//                            System.out.println(item);//偵測按下去的事件
+//                            Intent intent = new Intent();
+//                            intent.setClass(EventActivity.this,EditEventActivity.class);
+//                            startActivity(intent);
+                        case  R.id.menu_toolbar_search:
+                            System.out.println(event.getText().toString());//偵測按下去的事件
+                            Intent intent = new Intent();
+                            intent.setClass(EventActivity.this,EditEventActivity.class);
+                            Bundle bundle = new Bundle();
+                            bundle.putString("title", event.getText().toString());
+                            bundle.putString("place", eventLocation.getText().toString());
+                            bundle.putString("addEventMemo", addEventMemo.getText().toString());
+                            if(tagIcon.getVisibility() == View.GONE) {
+                                bundle.putString("action", "meet");
+                                bundle.putString("eventDate", eventDate.getText().toString());
+                            }else{
+                                bundle.putString("action", "activity");
+
+
+                            }
+                            intent.putExtras(bundle);
+                            startActivity(intent);
+
+
+                    }
                     return false;
                 }
 
