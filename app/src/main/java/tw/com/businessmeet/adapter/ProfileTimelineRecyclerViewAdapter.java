@@ -31,6 +31,7 @@ public class ProfileTimelineRecyclerViewAdapter extends RecyclerView.Adapter<Pro
         return new ViewHolder(view);
     }
 
+    //顯示的內容
     @Override
     public void onBindViewHolder(@NonNull ProfileTimelineRecyclerViewAdapter.ViewHolder holder, int position) {
         //holder.profile_event_place.setText("八大");
