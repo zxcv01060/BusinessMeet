@@ -55,6 +55,69 @@ public class SelfIntroductionActivity extends AppCompatActivity implements Profi
     private ProfileTimelineRecyclerViewAdapter profileTimelineRecyclerViewAdapter;
     private List<UserInformationBean> userInformationBeanList = new ArrayList<>();
 
+//    private AsyncTasKHelper.OnResponseListener<String, UserInformationBean> userInfoResponseListener = new AsyncTasKHelper.OnResponseListener<String, UserInformationBean>() {
+//
+//
+//        @Override
+//        public Call<ResponseBody<UserInformationBean>> request(String... userId) {
+//            return userInformationService.getById(userId[0]);
+//        }
+//
+//        @Override
+//        public void onSuccess(UserInformationBean userInformationBean) {
+//            userName.append(userInformationBean.getName());
+//            position.append(userInformationBean.getProfession());
+//            avatar.setImageBitmap(avatarHelper.getImageResource(userInformationBean.getAvatar()));
+//        }
+//
+//        @Override
+//        public void onFail(int status,String message) {
+//        }
+//    };
+
+//    private AsyncTasKHelper.OnResponseListener<UserInformationBean, List<UserInformationBean>> searchResponseListener =
+//            new AsyncTasKHelper.OnResponseListener<UserInformationBean, List<UserInformationBean>>() {
+//                @Override
+//                public Call<ResponseBody<List<UserInformationBean>>> request(UserInformationBean... userInformationBeans) {
+//
+//                    return userInformationService.search(userInformationBean[0]);
+//                }
+//
+//                @Override
+//                public void onSuccess(List<UserInformationBean> userInformationBeanList) {
+//                    Log.e("MatchedBean","success");
+//                    for(UserInformationBean userInformationBean : userInformationBeanList) {
+//                        AsyncTasKHelper.execute(getByIdResponseListener,userInformationBean.getUserId());
+//                        Log.e("MatchedBean", String.valueOf(userInformationBean));
+//                        //Log.e("MatchedBean", String.valueOf(matchedBean.getBlueTooth()));
+//                    }
+//                }
+//
+//                @Override
+//                public void onFail(int status, String message) {
+//
+//                }
+//            };
+
+    private AsyncTasKHelper.OnResponseListener<String,UserInformationBean> getByIdResponseListener =
+            new AsyncTasKHelper.OnResponseListener<String,UserInformationBean>() {
+                @Override
+                public Call<ResponseBody<UserInformationBean>> request(String... blueTooth) {
+
+                    return userInformationService.getById(blueTooth[0]);
+                }
+
+                @Override
+                public void onSuccess(UserInformationBean userInformationBean) {
+                    profileTimelineRecyclerViewAdapter.dataInsert(userInformationBean);
+                }
+
+                @Override
+                public void onFail(int status, String message) {
+
+                }
+            };
+
 
 
     @Override
@@ -94,13 +157,10 @@ public class SelfIntroductionActivity extends AppCompatActivity implements Profi
         //Set Home
         bottomNavigationView.setSelectedItemId(R.id.menu_home);
         bottomNavigationView.setOnNavigationItemSelectedListener(navListener);
-
-
         Menu BVMenu = bottomNavigationView.getMenu();
         bottomNavigationView.setItemIconTintList(null);  //顯示頭像
         AvatarHelper avatarHelper = new AvatarHelper();
         createRecyclerViewProfileTimeline();
-        blueToothHelper.startBuleTooth();
         Log.d("seedmess", "ness");
         Cursor result = userInformationDAO.getById(blueToothHelper.getUserId());
         Log.e("result", String.valueOf(result));
